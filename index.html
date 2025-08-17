@@ -9,22 +9,23 @@
       --blue-mid:   #3b82f6;
       --blue-dark:  #1e3a8a;
     }
-    body { margin:0; font-family: Arial, sans-serif; background: var(--blue-light); color: var(--blue-dark); }
-    header { background: var(--blue-mid); color: white; padding: 20px; text-align: center; }
+    body { margin:0; font-family: Arial, sans-serif; background: var(--blue-light); color: var(--blue-dark); scroll-behavior: smooth; }
+    header { background: var(--blue-mid); color: white; padding: 15px; text-align: center; position: sticky; top:0; z-index: 1000; }
+    nav { background: var(--blue-dark); padding:10px; text-align:center; position: sticky; top:60px; z-index: 999; }
+    nav a { color:white; margin:0 15px; text-decoration:none; font-weight:bold; }
+    nav a:hover { text-decoration:underline; }
     .hero { background:url('https://images.pexels.com/photos/399187/pexels-photo-399187.jpeg') center/cover no-repeat; height:250px; display:flex; align-items:center; justify-content:center; color:white; font-size:2rem; font-weight:bold; text-shadow:2px 2px 4px #000; }
-    .intro { padding:20px; text-align:center; }
     main { padding:20px; }
-    h2 { border-bottom: 2px solid var(--blue-mid); padding-bottom: 5px; margin-top:30px; }
+    h2 { border-bottom: 2px solid var(--blue-mid); padding-bottom: 5px; margin-top:40px; }
     .grid { display:flex; gap:20px; flex-wrap:wrap; }
     .card { background:white; border-radius:8px; padding:15px; flex:1; min-width:250px; cursor:pointer; }
     .card img { width:100%; border-radius:6px; }
     footer { background: var(--blue-mid); color:white; text-align:center; padding:15px; margin-top:20px; }
     a { color: var(--blue-dark); font-weight: bold; text-decoration: none; }
     a:hover { text-decoration: underline; }
-    #news-page, #product-page, #all-news-page, #all-products-page { display:none; padding:20px; }
+    #news-page, #product-page { display:none; padding:20px; }
     #news-page img, #product-page img { max-width:100%; border-radius:8px; margin-bottom:15px; }
-    .back-btn { display:inline-block; margin-bottom:15px; background:var(--blue-mid); color:white; padding:8px 14px; border-radius:6px; cursor:pointer; }
-    .see-all { display:block; margin-top:15px; text-align:center; background:var(--blue-mid); color:white; padding:8px 14px; border-radius:6px; cursor:pointer; width:150px; margin-left:auto; margin-right:auto; }
+    #back-btn, #back-btn-product { display:inline-block; margin-bottom:15px; background:var(--blue-mid); color:white; padding:8px 14px; border-radius:6px; cursor:pointer; }
   </style>
 </head>
 <body>
@@ -32,32 +33,45 @@
     <h1>WalcottinoTV</h1>
   </header>
 
-  <div class="hero">Your Gateway to Sports</div>
+  <!-- NAVIGATION -->
+  <nav>
+    <a href="#home">Home</a>
+    <a href="#news">News</a>
+    <a href="#products">Products</a>
+    <a href="#promotion">Promotion</a>
+    <a href="#about">About</a>
+  </nav>
 
-  <!-- HOME -->
+  <div class="hero" id="home">Your Gateway to Sports</div>
+
   <main id="home-page">
-
-    <!-- INTRO -->
-    <div class="intro">
-      <p>Get the latest global, African, and Nigerian sports news updated every 2 hours. Explore our curated sportswear collection and stay connected with WalcottinoTV.</p>
-    </div>
-
-    <!-- FEATURED NEWS -->
-    <section>
-      <h2>Featured News</h2>
+    <!-- NEWS -->
+    <section id="news">
+      <h2>Latest News</h2>
       <div class="grid" id="news-preview"></div>
-      <div class="see-all" onclick="showAllNews()">See All News</div>
     </section>
 
-    <!-- FEATURED PRODUCTS -->
-    <section>
-      <h2>Featured Products</h2>
+    <!-- PRODUCTS -->
+    <section id="products">
+      <h2>Sportswear</h2>
       <div class="grid" id="product-preview"></div>
-      <div class="see-all" onclick="showAllProducts()">See All Products</div>
+    </section>
+
+    <!-- PROMOTION -->
+    <section id="promotion">
+      <h2>Promotion</h2>
+      <p>WalcottinoTV promotes local talents to the international stage.  
+      Fill the form below to submit your details.</p>
+      <form>
+        <input type="text" placeholder="Full Name" required><br><br>
+        <input type="email" placeholder="Email" required><br><br>
+        <textarea placeholder="Skill set (e.g. football, athletics)" required></textarea><br><br>
+        <button type="submit">Submit</button>
+      </form>
     </section>
 
     <!-- ABOUT -->
-    <section>
+    <section id="about">
       <h2>About WalcottinoTV</h2>
       <p>WalcottinoTV is your go-to destination for the freshest sports news from around the globe—delivered automatically every two hours so you're always in the game. While 80% of our coverage is global, 10% highlights African sports and 10% focuses on Nigeria, connecting local heroes to international fans.</p>
     </section>
@@ -83,7 +97,7 @@
 
   <!-- FULL NEWS PAGE -->
   <div id="news-page">
-    <span class="back-btn" onclick="goHome()">⬅ Back to Home</span>
+    <span id="back-btn">⬅ Back</span>
     <h2 id="news-title"></h2>
     <img id="news-image" src="" alt="news">
     <p id="news-content"></p>
@@ -91,58 +105,30 @@
 
   <!-- FULL PRODUCT PAGE -->
   <div id="product-page">
-    <span class="back-btn" onclick="goHome()">⬅ Back to Home</span>
+    <span id="back-btn-product">⬅ Back</span>
     <h2 id="product-title"></h2>
     <img id="product-image" src="" alt="product">
-    <p id="product-description"></p>
     <p id="product-price"></p>
-  </div>
-
-  <!-- ALL NEWS LISTING PAGE -->
-  <div id="all-news-page">
-    <span class="back-btn" onclick="goHome()">⬅ Back to Home</span>
-    <h2>All News</h2>
-    <div class="grid" id="all-news-list"></div>
-  </div>
-
-  <!-- ALL PRODUCTS LISTING PAGE -->
-  <div id="all-products-page">
-    <span class="back-btn" onclick="goHome()">⬅ Back to Home</span>
-    <h2>All Products</h2>
-    <div class="grid" id="all-products-list"></div>
   </div>
 
   <footer>&copy; 2025 WalcottinoTV</footer>
 
   <script>
-  // --------- PRODUCTS (10 sample) ---------
+  // --------- PRODUCTS ---------
   const products = [
-    {name:"Basic Sports Tee", price:"$15", desc:"Lightweight and breathable sports tee for all workouts.", img:"https://via.placeholder.com/200x150?text=Sports+Tee"},
-    {name:"Running Headband", price:"$8", desc:"Keep sweat out of your eyes with this comfy headband.", img:"https://via.placeholder.com/200x150?text=Headband"},
-    {name:"Soccer Socks", price:"$12", desc:"Durable, comfortable socks for every match.", img:"https://via.placeholder.com/200x150?text=Socks"},
-    {name:"Training Shorts", price:"$18", desc:"Flexible shorts designed for peak performance.", img:"https://via.placeholder.com/200x150?text=Shorts"},
-    {name:"Water Bottle", price:"$10", desc:"Stay hydrated with this BPA-free sports bottle.", img:"https://via.placeholder.com/200x150?text=Water+Bottle"},
-    {name:"Wristbands", price:"$6", desc:"Sweat-absorbing wristbands for athletes.", img:"https://via.placeholder.com/200x150?text=Wristbands"},
-    {name:"Cap", price:"$14", desc:"Sun-protective cap for outdoor training.", img:"https://via.placeholder.com/200x150?text=Cap"},
-    {name:"Knee Guards", price:"$19", desc:"Protective knee pads for contact sports.", img:"https://via.placeholder.com/200x150?text=Knee+Guards"},
-    {name:"Gym Gloves", price:"$16", desc:"Non-slip gloves for strength training.", img:"https://via.placeholder.com/200x150?text=Gym+Gloves"},
-    {name:"Shin Guards", price:"$20", desc:"Essential protection for football players.", img:"https://via.placeholder.com/200x150?text=Shin+Guards"}
+    {name:"Basic Sports Tee", price:"$15", img:"https://via.placeholder.com/200x150?text=Sports+Tee"},
+    {name:"Running Headband", price:"$8", img:"https://via.placeholder.com/200x150?text=Headband"},
+    {name:"Soccer Socks", price:"$12", img:"https://via.placeholder.com/200x150?text=Socks"},
+    {name:"Training Shorts", price:"$18", img:"https://via.placeholder.com/200x150?text=Shorts"},
+    {name:"Water Bottle", price:"$10", img:"https://via.placeholder.com/200x150?text=Water+Bottle"},
+    {name:"Wristbands", price:"$6", img:"https://via.placeholder.com/200x150?text=Wristbands"}
   ];
+  let productData = [];
 
   function loadProducts() {
+    productData = products;
     const preview = document.getElementById("product-preview");
-    preview.innerHTML = products.slice(0,4).map((p,i) => `
-      <div class="card" onclick="openProduct(${i})">
-        <img src="${p.img}" alt="${p.name}">
-        <h3>${p.name}</h3><p>${p.price}</p>
-      </div>`).join("");
-  }
-
-  function showAllProducts() {
-    document.getElementById("home-page").style.display = "none";
-    document.getElementById("all-news-page").style.display = "none";
-    document.getElementById("all-products-page").style.display = "block";
-    document.getElementById("all-products-list").innerHTML = products.map((p,i)=>`
+    preview.innerHTML = productData.map((p,i) => `
       <div class="card" onclick="openProduct(${i})">
         <img src="${p.img}" alt="${p.name}">
         <h3>${p.name}</h3><p>${p.price}</p>
@@ -150,44 +136,34 @@
   }
 
   function openProduct(index) {
-    const p = products[index];
-    document.getElementById("home-page").style.display = "none";
-    document.getElementById("all-products-page").style.display = "none";
-    document.getElementById("news-page").style.display = "none";
-    document.getElementById("product-page").style.display = "block";
+    const p = productData[index];
+    document.getElementById("home-page").style.display="none";
+    document.getElementById("product-page").style.display="block";
     document.getElementById("product-title").innerText = p.name;
     document.getElementById("product-image").src = p.img;
-    document.getElementById("product-description").innerText = p.desc;
-    document.getElementById("product-price").innerText = "Price: " + p.price;
+    document.getElementById("product-price").innerText = p.price;
   }
+  document.getElementById("back-btn-product").onclick=()=>{
+    document.getElementById("product-page").style.display="none";
+    document.getElementById("home-page").style.display="block";
+  };
 
   // --------- NEWS ---------
   let newsData = [];
-
   async function fetchRSS(url) {
     const api = "https://api.rss2json.com/v1/api.json?rss_url=" + encodeURIComponent(url);
     const res = await fetch(api);
     const data = await res.json();
     return data.items || [];
   }
-
   async function fetchNews() {
     const globalRSS = "http://www.espn.com/espn/rss/news";
     const africaRSS = "https://feeds.bbci.co.uk/news/world/africa/rss.xml";
     const nigeriaRSS = "https://www.completesports.com/feed/";
-
     const [global, africa, nigeria] = await Promise.all([
-      fetchRSS(globalRSS),
-      fetchRSS(africaRSS),
-      fetchRSS(nigeriaRSS)
+      fetchRSS(globalRSS), fetchRSS(africaRSS), fetchRSS(nigeriaRSS)
     ]);
-
-    newsData = [
-      ...global.slice(0, 3),
-      ...africa.slice(0, 1),
-      ...nigeria.slice(0, 1)
-    ];
-
+    newsData = [...global.slice(0,3), ...africa.slice(0,1), ...nigeria.slice(0,1)];
     const preview = document.getElementById("news-preview");
     preview.innerHTML = newsData.map((a,i) => `
       <div class="card" onclick="openNews(${i})">
@@ -196,41 +172,22 @@
         <p>${a.description.substring(0,100)}...</p>
       </div>`).join("");
   }
-
-  function showAllNews() {
-    document.getElementById("home-page").style.display = "none";
-    document.getElementById("all-products-page").style.display = "none";
-    document.getElementById("all-news-page").style.display = "block";
-    document.getElementById("all-news-list").innerHTML = newsData.map((a,i)=>`
-      <div class="card" onclick="openNews(${i})">
-        <img src="${a.enclosure?.link || 'https://via.placeholder.com/400x200?text=Sports+News'}" alt="news">
-        <h3>${a.title}</h3>
-        <p>${a.description.substring(0,100)}...</p>
-      </div>`).join("");
-  }
-
   function openNews(index) {
     const article = newsData[index];
-    document.getElementById("home-page").style.display = "none";
-    document.getElementById("all-news-page").style.display = "none";
-    document.getElementById("product-page").style.display = "none";
-    document.getElementById("news-page").style.display = "block";
-    document.getElementById("news-title").innerText = article.title;
-    document.getElementById("news-image").src = article.enclosure?.link || 'https://via.placeholder.com/600x300?text=Sports+News';
-    document.getElementById("news-content").innerHTML = article.content || article.description;
+    document.getElementById("home-page").style.display="none";
+    document.getElementById("news-page").style.display="block";
+    document.getElementById("news-title").innerText=article.title;
+    document.getElementById("news-image").src=article.enclosure?.link || 'https://via.placeholder.com/600x300?text=Sports+News';
+    document.getElementById("news-content").innerHTML=article.content || article.description;
   }
-
-  function goHome() {
-    document.getElementById("news-page").style.display = "none";
-    document.getElementById("product-page").style.display = "none";
-    document.getElementById("all-news-page").style.display = "none";
-    document.getElementById("all-products-page").style.display = "none";
-    document.getElementById("home-page").style.display = "block";
-  }
+  document.getElementById("back-btn").onclick=()=>{
+    document.getElementById("news-page").style.display="none";
+    document.getElementById("home-page").style.display="block";
+  };
 
   loadProducts();
   fetchNews();
-  setInterval(fetchNews, 2*60*60*1000);
+  setInterval(fetchNews,2*60*60*1000);
   </script>
 </body>
 </html>
