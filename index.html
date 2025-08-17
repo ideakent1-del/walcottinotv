@@ -12,17 +12,19 @@
     body { margin:0; font-family: Arial, sans-serif; background: var(--blue-light); color: var(--blue-dark); }
     header { background: var(--blue-mid); color: white; padding: 20px; text-align: center; }
     .hero { background:url('https://images.pexels.com/photos/399187/pexels-photo-399187.jpeg') center/cover no-repeat; height:250px; display:flex; align-items:center; justify-content:center; color:white; font-size:2rem; font-weight:bold; text-shadow:2px 2px 4px #000; }
+    .intro { padding:20px; text-align:center; }
     main { padding:20px; }
-    h2 { border-bottom: 2px solid var(--blue-mid); padding-bottom: 5px; }
+    h2 { border-bottom: 2px solid var(--blue-mid); padding-bottom: 5px; margin-top:30px; }
     .grid { display:flex; gap:20px; flex-wrap:wrap; }
     .card { background:white; border-radius:8px; padding:15px; flex:1; min-width:250px; cursor:pointer; }
     .card img { width:100%; border-radius:6px; }
     footer { background: var(--blue-mid); color:white; text-align:center; padding:15px; margin-top:20px; }
     a { color: var(--blue-dark); font-weight: bold; text-decoration: none; }
     a:hover { text-decoration: underline; }
-    #news-page, #product-page { display:none; padding:20px; }
+    #news-page, #product-page, #all-news-page, #all-products-page { display:none; padding:20px; }
     #news-page img, #product-page img { max-width:100%; border-radius:8px; margin-bottom:15px; }
     .back-btn { display:inline-block; margin-bottom:15px; background:var(--blue-mid); color:white; padding:8px 14px; border-radius:6px; cursor:pointer; }
+    .see-all { display:block; margin-top:15px; text-align:center; background:var(--blue-mid); color:white; padding:8px 14px; border-radius:6px; cursor:pointer; width:150px; margin-left:auto; margin-right:auto; }
   </style>
 </head>
 <body>
@@ -34,16 +36,24 @@
 
   <!-- HOME -->
   <main id="home-page">
-    <!-- NEWS -->
+
+    <!-- INTRO -->
+    <div class="intro">
+      <p>Get the latest global, African, and Nigerian sports news updated every 2 hours. Explore our curated sportswear collection and stay connected with WalcottinoTV.</p>
+    </div>
+
+    <!-- FEATURED NEWS -->
     <section>
-      <h2>Latest News</h2>
+      <h2>Featured News</h2>
       <div class="grid" id="news-preview"></div>
+      <div class="see-all" onclick="showAllNews()">See All News</div>
     </section>
 
-    <!-- PRODUCTS -->
+    <!-- FEATURED PRODUCTS -->
     <section>
-      <h2>Sportswear</h2>
+      <h2>Featured Products</h2>
       <div class="grid" id="product-preview"></div>
+      <div class="see-all" onclick="showAllProducts()">See All Products</div>
     </section>
 
     <!-- ABOUT -->
@@ -88,6 +98,20 @@
     <p id="product-price"></p>
   </div>
 
+  <!-- ALL NEWS LISTING PAGE -->
+  <div id="all-news-page">
+    <span class="back-btn" onclick="goHome()">⬅ Back to Home</span>
+    <h2>All News</h2>
+    <div class="grid" id="all-news-list"></div>
+  </div>
+
+  <!-- ALL PRODUCTS LISTING PAGE -->
+  <div id="all-products-page">
+    <span class="back-btn" onclick="goHome()">⬅ Back to Home</span>
+    <h2>All Products</h2>
+    <div class="grid" id="all-products-list"></div>
+  </div>
+
   <footer>&copy; 2025 WalcottinoTV</footer>
 
   <script>
@@ -107,7 +131,18 @@
 
   function loadProducts() {
     const preview = document.getElementById("product-preview");
-    preview.innerHTML = products.map((p,i) => `
+    preview.innerHTML = products.slice(0,4).map((p,i) => `
+      <div class="card" onclick="openProduct(${i})">
+        <img src="${p.img}" alt="${p.name}">
+        <h3>${p.name}</h3><p>${p.price}</p>
+      </div>`).join("");
+  }
+
+  function showAllProducts() {
+    document.getElementById("home-page").style.display = "none";
+    document.getElementById("all-news-page").style.display = "none";
+    document.getElementById("all-products-page").style.display = "block";
+    document.getElementById("all-products-list").innerHTML = products.map((p,i)=>`
       <div class="card" onclick="openProduct(${i})">
         <img src="${p.img}" alt="${p.name}">
         <h3>${p.name}</h3><p>${p.price}</p>
@@ -117,6 +152,7 @@
   function openProduct(index) {
     const p = products[index];
     document.getElementById("home-page").style.display = "none";
+    document.getElementById("all-products-page").style.display = "none";
     document.getElementById("news-page").style.display = "none";
     document.getElementById("product-page").style.display = "block";
     document.getElementById("product-title").innerText = p.name;
@@ -125,7 +161,7 @@
     document.getElementById("product-price").innerText = "Price: " + p.price;
   }
 
-  // --------- NEWS (show 5) ---------
+  // --------- NEWS ---------
   let newsData = [];
 
   async function fetchRSS(url) {
@@ -161,9 +197,22 @@
       </div>`).join("");
   }
 
+  function showAllNews() {
+    document.getElementById("home-page").style.display = "none";
+    document.getElementById("all-products-page").style.display = "none";
+    document.getElementById("all-news-page").style.display = "block";
+    document.getElementById("all-news-list").innerHTML = newsData.map((a,i)=>`
+      <div class="card" onclick="openNews(${i})">
+        <img src="${a.enclosure?.link || 'https://via.placeholder.com/400x200?text=Sports+News'}" alt="news">
+        <h3>${a.title}</h3>
+        <p>${a.description.substring(0,100)}...</p>
+      </div>`).join("");
+  }
+
   function openNews(index) {
     const article = newsData[index];
     document.getElementById("home-page").style.display = "none";
+    document.getElementById("all-news-page").style.display = "none";
     document.getElementById("product-page").style.display = "none";
     document.getElementById("news-page").style.display = "block";
     document.getElementById("news-title").innerText = article.title;
@@ -174,6 +223,8 @@
   function goHome() {
     document.getElementById("news-page").style.display = "none";
     document.getElementById("product-page").style.display = "none";
+    document.getElementById("all-news-page").style.display = "none";
+    document.getElementById("all-products-page").style.display = "none";
     document.getElementById("home-page").style.display = "block";
   }
 
