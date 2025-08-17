@@ -1,237 +1,154 @@
 // walcottinotv.js
-// Single-file full-stack app for Walcottinotv: news (RSS), ads, and a simple site UI.
+// Single-file fullstack sports news + ads platform
 
 const express = require("express");
+const axios = require("axios");
 const Parser = require("rss-parser");
-
 const app = express();
-const parser = new Parser({ timeout: 15000 });
 const PORT = process.env.PORT || 3000;
+const parser = new Parser();
 
-// --- Brand content ---
-const BRAND = {
-  name: "Walcottinotv",
-  mission:
-    "To connect the world to the pulse of sports, uncover the latest stories, and empower local talents to shine globally—while offering high-quality, affordable sportswear.",
-  social: {
-    facebook: "https://www.facebook.com/share/1CSYTgmTX9/",
-    instagram: "https://www.instagram.com/walcotttinotv?igsh=MW44Z2QwY2toN2YyNg==",
-    twitter: "https://x.com/walcotttv2025?t=A--G6KfJcBGf2kz_PAnzlw&s=09",
-  },
-  contact: {
-    phones: ["+2348137208793", "+2349045548253"],
-    address:
-      "B5, Legacy estate Kolapo Ishola GRA, Akobo Ibadan, Oyo State, Nigeria.",
-  },
+// ==== CONFIG ==== //
+const BRAND_NAME = "Walcottinotv";
+const BRAND_MISSION = "To connect the world to the pulse of sports, uncover the latest stories, and empower local talents to shine globally, while offering high-quality, affordable sportswear.";
+
+const SOCIAL_LINKS = {
+  facebook: "https://www.facebook.com/share/1CSYTgmTX9/",
+  instagram: "https://www.instagram.com/walcotttinotv?igsh=MW44Z2QwY2toN2YyNg==",
+  twitter: "https://x.com/walcotttv2025?t=A--G6KfJcBGf2kz_PAnzlw&s=09",
 };
 
-// --- Ads (two slots) ---
-const ADS = [
-  {
-    id: "top-1",
-    slot: "top", // top banner
-    title: "Get Your Game On!",
-    image:
-      "https://images.unsplash.com/photo-1502877338535-766e1452684a?w=1200&q=80&auto=format&fit=crop",
-    link: "https://example.com/shop",
-  },
-  {
-    id: "sidebar-1",
-    slot: "sidebar", // sidebar banner
-    title: "Train Like a Pro",
-    image:
-      "https://images.unsplash.com/photo-1521412644187-c49fa049e84d?w=600&q=80&auto=format&fit=crop",
-    link: "https://example.com/training",
-  },
+const CONTACT = {
+  phones: ["+2348137208793", "+2349045548253"],
+  address: "B5, Legacy Estate, Kolapo Ishola GRA, Akobo Ibadan, Oyo State, Nigeria",
+};
+
+// ==== STATIC ADS ==== //
+const ads = [
+  { id: 1, image: "https://source.unsplash.com/600x150/?football", link: "https://example.com/footballgear" },
+  { id: 2, image: "https://source.unsplash.com/600x150/?sports", link: "https://example.com/sportsoffers" }
 ];
 
-// --- RSS sources (80% global, 10% Africa, 10% Nigeria) ---
-const FEEDS = {
+// ==== RSS SOURCES ==== //
+const RSS_FEEDS = {
   global: [
     "https://www.espn.com/espn/rss/news",
-    "http://feeds.bbci.co.uk/sport/rss.xml",
-    "https://www.skysports.com/rss/12040",
+    "https://www.skysports.com/rss/12040"
   ],
   africa: [
-    "https://www.bbc.com/sport/africa/rss.xml",
-    "https://www.africanews.com/feeds/sport/",
+    "https://www.kickoff.com/rss/news"
   ],
   nigeria: [
-    "https://www.completesports.com/feed/",
-    "https://www.brila.net/feed/",
-  ],
+    "https://www.completesports.com/feed/"
+  ]
 };
-const TOTAL_ITEMS = 30;
-const CACHE_TTL_MS = 60 * 60 * 1000; // 1 hour
-let cachedNews = [];
+
+// ==== CACHE ==== //
+let newsCache = [];
 let lastFetch = 0;
+const CACHE_DURATION = 15 * 60 * 1000; // 15 mins
 
-// --- Helpers ---
-const dedupeByTitle = (arr) => {
-  const seen = new Set();
-  const out = [];
-  for (const it of arr) {
-    const title = (it.title || "").trim();
-    if (!title || seen.has(title)) continue;
-    seen.add(title);
-    out.push(it);
-  }
-  return out;
-};
-const sortByDateDesc = (arr) =>
-  arr.sort((a, b) => new Date(b.pubDate || b.date || 0) - new Date(a.pubDate || a.date || 0));
-
-async function fetchCategory(urls, category) {
-  const all = [];
-  for (const url of urls) {
-    try {
-      const feed = await parser.parseURL(url);
-      if (feed?.items?.length) {
-        for (const it of feed.items) {
-          all.push({
-            title: it.title,
-            link: it.link,
-            pubDate: it.pubDate || it.isoDate || "",
-            category,
-            contentSnippet: it.contentSnippet || it.content || "",
-          });
-        }
-      }
-    } catch (e) {
-      console.warn("RSS error:", category, url, e.message);
-    }
-  }
-  return sortByDateDesc(dedupeByTitle(all));
-}
-
-async function refreshNews() {
+// ==== FUNCTION TO FETCH NEWS ==== //
+async function fetchNews() {
   try {
-    const [g, a, n] = await Promise.all([
-      fetchCategory(FEEDS.global, "Global"),
-      fetchCategory(FEEDS.africa, "Africa"),
-      fetchCategory(FEEDS.nigeria, "Nigeria"),
-    ]);
-
-    const gCount = Math.min(Math.round(TOTAL_ITEMS * 0.8), g.length);
-    const aCount = Math.min(Math.round(TOTAL_ITEMS * 0.1), a.length);
-    const nCount = Math.min(TOTAL_ITEMS - gCount - aCount, n.length);
-
-    let merged = [...g.slice(0, gCount), ...a.slice(0, aCount), ...n.slice(0, nCount)];
-
-    // If fewer than TOTAL_ITEMS, top up from remaining global
-    if (merged.length < TOTAL_ITEMS) {
-      const needed = TOTAL_ITEMS - merged.length;
-      merged = merged.concat(g.slice(gCount, gCount + needed));
+    let allNews = [];
+    for (const [category, urls] of Object.entries(RSS_FEEDS)) {
+      for (const url of urls) {
+        const feed = await parser.parseURL(url);
+        feed.items.forEach(item => {
+          allNews.push({
+            title: item.title,
+            link: item.link,
+            date: item.pubDate,
+            category
+          });
+        });
+      }
     }
+    // Shuffle and categorize percentages
+    const globalNews = allNews.filter(n => n.category === "global").slice(0, Math.floor(allNews.length * 0.8));
+    const africaNews = allNews.filter(n => n.category === "africa").slice(0, Math.floor(allNews.length * 0.1));
+    const nigeriaNews = allNews.filter(n => n.category === "nigeria").slice(0, Math.floor(allNews.length * 0.1));
 
-    cachedNews = dedupeByTitle(merged).slice(0, TOTAL_ITEMS);
+    newsCache = [...globalNews, ...africaNews, ...nigeriaNews].sort((a, b) => new Date(b.date) - new Date(a.date));
     lastFetch = Date.now();
-    console.log(`News updated: ${cachedNews.length} items @ ${new Date().toISOString()}`);
   } catch (err) {
-    console.error("refreshNews failed:", err.message);
+    console.error("Error fetching news:", err.message);
   }
 }
 
-// kick off + hourly refresh
-refreshNews();
-setInterval(refreshNews, CACHE_TTL_MS);
+// ==== MIDDLEWARE ==== //
+app.use(express.json());
 
-// --- API ---
-app.get("/api/news", async (req, res) => {
-  if (!cachedNews.length || Date.now() - lastFetch > CACHE_TTL_MS) {
-    await refreshNews();
-  }
-  res.json({ lastFetch: new Date(lastFetch).toISOString(), items: cachedNews });
-});
-
-app.get("/api/ads", (req, res) => {
-  res.json({ count: ADS.length, items: ADS });
-});
-
-// --- Single-page UI (served from memory) ---
+// ==== ROUTES ==== //
 app.get("/", async (req, res) => {
-  if (!cachedNews.length || Date.now() - lastFetch > CACHE_TTL_MS) {
-    await refreshNews();
-  }
+  if (Date.now() - lastFetch > CACHE_DURATION) await fetchNews();
 
-  const html = `<!doctype html>
-<html lang="en">
-<head>
-<meta charset="utf-8"/>
-<meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>${BRAND.name}</title>
-<style>
-  :root{--blue-900:#002244;--blue-700:#023e8a;--bg:#f4f9ff}
-  body{margin:0;font-family:Inter,Arial,Helvetica,sans-serif;background:var(--bg);color:#1c2736}
-  .header{background:linear-gradient(90deg,var(--blue-700),var(--blue-900));color:#fff;padding:18px 20px;text-align:center}
-  .header h1{margin:0}
-  .muted{opacity:.9}
-  .container{max-width:1100px;margin:24px auto;padding:0 16px}
-  .grid{display:grid;grid-template-columns:1fr 320px;gap:20px}
-  @media(max-width:900px){.grid{grid-template-columns:1fr}}
-  .card{background:#fff;border-radius:10px;padding:16px;box-shadow:0 6px 18px rgba(2,46,91,.06)}
-  .news-item{padding:12px;border-bottom:1px solid #eee}
-  .news-item:last-child{border-bottom:0}
-  .ad{text-align:center}
-  .footer{background:var(--blue-900);color:#fff;text-align:center;padding:18px;margin-top:24px}
-  a{color:var(--blue-700);text-decoration:none}
-</style>
-</head>
-<body>
-<header class="header">
-  <h1>${BRAND.name}</h1>
-  <p class="muted">${BRAND.mission}</p>
-  <p>
-    <a style="color:#fff" href="#news">News</a> •
-    <a style="color:#fff" href="#contact">Contact</a>
-  </p>
-</header>
+  const html = `
+  <!DOCTYPE html>
+  <html>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>${BRAND_NAME}</title>
+    <style>
+      body { font-family: Arial, sans-serif; margin: 0; background: #f4f9ff; color: #222; }
+      header { background: #003366; color: #fff; padding: 20px; text-align: center; }
+      nav a { margin: 0 10px; color: #fff; text-decoration: none; }
+      section { padding: 20px; }
+      h2 { color: #003366; }
+      .news-item { border-bottom: 1px solid #ddd; padding: 10px 0; }
+      .ad { text-align: center; margin: 20px 0; }
+      footer { background: #003366; color: white; text-align: center; padding: 10px; }
+    </style>
+  </head>
+  <body>
+    <header>
+      <h1>${BRAND_NAME}</h1>
+      <p>${BRAND_MISSION}</p>
+      <nav>
+        <a href="#">Home</a>
+        <a href="#news">News</a>
+        <a href="#contact">Contact</a>
+      </nav>
+    </header>
 
-<div class="container">
-  <div class="card ad" style="margin-bottom:16px">
-    ${ADS.filter(a=>a.slot==='top').map(a=>`<a href="${a.link}" target="_blank"><img src="${a.image}" alt="${a.title}" style="max-width:100%"/></a>`).join("")}
-  </div>
-
-  <div class="grid" id="news">
-    <section>
-      <div class="card">
-        <h2>Latest Sports News</h2>
-        ${cachedNews.length ? cachedNews.map(n => `
-          <div class="news-item">
-            <a href="${n.link}" target="_blank">${n.title}</a>
-            <div class="muted" style="font-size:12px">${n.category || ""} • ${n.pubDate ? new Date(n.pubDate).toLocaleString() : ""}</div>
-            <p style="margin-top:8px">${(n.contentSnippet||"").slice(0,200)}</p>
-          </div>
-        `).join("") : "<p>No news available right now. Please check back soon.</p>"}
-      </div>
+    <section id="ads">
+      ${ads.map(ad => `<div class="ad"><a href="${ad.link}" target="_blank"><img src="${ad.image}" width="600" height="150" /></a></div>`).join("")}
     </section>
 
-    <aside>
-      <div class="card ad">
-        ${ADS.filter(a=>a.slot==='sidebar').map(a=>`<a href="${a.link}" target="_blank"><img src="${a.image}" alt="${a.title}" style="width:100%"/></a>`).join("")}
-      </div>
-      <div class="card" style="margin-top:12px" id="contact">
-        <h3>Contact</h3>
-        <p><b>Phones:</b> ${BRAND.contact.phones.join(", ")}</p>
-        <p><b>Address:</b> ${BRAND.contact.address}</p>
-        <p>
-          <a href="${BRAND.social.facebook}" target="_blank">Facebook</a> •
-          <a href="${BRAND.social.instagram}" target="_blank">Instagram</a> •
-          <a href="${BRAND.social.twitter}" target="_blank">Twitter</a>
-        </p>
-      </div>
-    </aside>
-  </div>
-</div>
+    <section id="news">
+      <h2>Latest Sports News</h2>
+      ${newsCache.map(n => `
+        <div class="news-item">
+          <a href="${n.link}" target="_blank">${n.title}</a> <br/>
+          <small>${new Date(n.date).toLocaleString()}</small>
+        </div>
+      `).join("")}
+    </section>
 
-<footer class="footer">© ${new Date().getFullYear()} ${BRAND.name}</footer>
-</body>
-</html>`;
-  res.setHeader("Content-Type", "text/html; charset=utf-8");
+    <section id="contact">
+      <h2>Contact Us</h2>
+      <p><b>Phone:</b> ${CONTACT.phones.join(", ")}</p>
+      <p><b>Address:</b> ${CONTACT.address}</p>
+      <p>
+        <a href="${SOCIAL_LINKS.facebook}" target="_blank">Facebook</a> |
+        <a href="${SOCIAL_LINKS.instagram}" target="_blank">Instagram</a> |
+        <a href="${SOCIAL_LINKS.twitter}" target="_blank">Twitter</a>
+      </p>
+    </section>
+
+    <footer>
+      &copy; ${new Date().getFullYear()} ${BRAND_NAME}. All rights reserved.
+    </footer>
+  </body>
+  </html>
+  `;
   res.send(html);
 });
 
-// --- Start ---
-app.listen(PORT, () => {
-  console.log(`${BRAND.name} is running on port ${PORT}`);
+// ==== START SERVER ==== //
+app.listen(PORT, async () => {
+  console.log(`${BRAND_NAME} running on port ${PORT}`);
+  await fetchNews();
 });
