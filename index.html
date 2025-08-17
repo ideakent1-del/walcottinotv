@@ -1,395 +1,180 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>WalcottinoTV – Global Sports News, Products & Talent Promotion</title>
-<style>
-  :root{
-    --blue-50:#e7f2ff; --blue-200:#bfdbfe; --blue-400:#60a5fa;
-    --blue-600:#2563eb; --blue-800:#1e3a8a; --ink:#0b132b; --card:#ffffff;
-  }
-  *{box-sizing:border-box}
-  body{margin:0;font-family:Inter,system-ui,-apple-system,Segoe UI,Arial,sans-serif;background:var(--blue-50);color:var(--ink)}
-  header{background:linear-gradient(180deg,var(--blue-600),var(--blue-800));color:#fff}
-  .topbar{display:flex;align-items:center;justify-content:space-between;padding:14px 18px;gap:12px}
-  .brand{font-size:1.25rem;font-weight:700;letter-spacing:.5px}
-  nav{display:flex;gap:8px;flex-wrap:wrap}
-  nav a{color:#fff;text-decoration:none;padding:8px 12px;border-radius:999px;opacity:.95}
-  nav a.active,nav a:hover{background:rgba(255,255,255,.18)}
-  .hero{height:300px;display:flex;align-items:center;justify-content:center;text-align:center;
-        background:url('https://images.unsplash.com/photo-1505842465776-3b4953ca4fcb?q=80&w=1600&auto=format&fit=crop') center/cover no-repeat}
-  .hero h1{background:rgba(0,0,0,.45);color:#fff;padding:10px 16px;border-radius:12px}
-  main{max-width:1100px;margin:auto;padding:18px}
-  .hidden{display:none}
-  .section{background:var(--card);border-radius:16px;box-shadow:0 10px 20px rgba(0,0,0,.06);padding:18px;margin:16px 0}
-  .ad{background:linear-gradient(90deg,var(--blue-200),#fff);border:1px dashed var(--blue-400);border-radius:14px;padding:16px;text-align:center;margin:14px 0}
-  /* News list */
-  .news-list{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:14px}
-  .news-card{background:#fff;border:1px solid #eef2ff;border-radius:14px;overflow:hidden;display:flex;flex-direction:column}
-  .news-card img{width:100%;height:150px;object-fit:cover}
-  .news-card .pad{padding:12px}
-  .news-card h3{margin:0 0 6px 0;font-size:1.02rem}
-  .news-meta{font-size:.8rem;color:#445}
-  .btn{background:var(--blue-600);color:#fff;border:none;border-radius:10px;padding:8px 12px;cursor:pointer}
-  .btn.ghost{background:transparent;color:var(--blue-800);border:1px solid var(--blue-400)}
-  .controls{display:flex;gap:8px;align-items:center;justify-content:center;margin-top:12px;flex-wrap:wrap}
-  .pill{padding:6px 10px;border-radius:999px;background:#eef2ff;font-size:.85rem}
-  /* Products */
-  .product-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:14px}
-  .product{background:#fff;border:1px solid #eef2ff;border-radius:14px;overflow:hidden;text-align:center;padding-bottom:12px}
-  .product img{width:100%;height:160px;object-fit:cover}
-  .price{font-weight:700;color:var(--blue-800)}
-  /* Forms */
-  form{display:grid;gap:10px}
-  input,textarea,select{padding:10px;border:1px solid #dbeafe;border-radius:10px;font:inherit;background:#fff}
-  textarea{min-height:110px}
-  /* About & Contact */
-  .contact-list a{color:var(--blue-800);text-decoration:none}
-  footer{padding:20px 16px;text-align:center;color:#133;opacity:.9}
-  .muted{color:#466}
-  /* Router hide/show */
-  [data-route]{display:none}
-  [data-route].active{display:block}
-</style>
+  <meta charset="UTF-8">
+  <title>WalcottinoTV – Sports News</title>
+  <style>
+    :root {
+      --blue-light: #e0f2ff;
+      --blue-mid:   #3b82f6;
+      --blue-dark:  #1e3a8a;
+    }
+    body { background: var(--blue-light); margin: 0; font-family: Arial, sans-serif; color: var(--blue-dark); }
+    header { background: var(--blue-mid); color: white; padding: 20px; text-align: center; }
+    nav a { margin: 0 10px; color: white; font-weight: bold; text-decoration: none; }
+    nav a:hover { text-decoration: underline; }
+    .hero { background:url('https://images.pexels.com/photos/399187/pexels-photo-399187.jpeg') center/cover no-repeat; height:300px; display:flex; align-items:center; justify-content:center; color:white; font-size:2rem; font-weight:bold; text-shadow:2px 2px 4px #000; }
+    main { padding: 20px; }
+    h2 { border-bottom: 2px solid var(--blue-mid); padding-bottom: 5px; }
+    .news-preview, .product-preview { display:flex; gap:20px; flex-wrap:wrap; }
+    .news-item, .product { background:white; padding:15px; border-radius:8px; flex:1; min-width:250px; }
+    .news-item img, .product img { width:100%; border-radius:6px; }
+    .btn { display:inline-block; margin-top:10px; background:var(--blue-mid); color:white; padding:8px 12px; border-radius:6px; text-decoration:none; }
+    footer { background: var(--blue-mid); color:white; text-align:center; padding:15px; margin-top:20px; }
+  </style>
 </head>
 <body>
-
-<header>
-  <div class="topbar">
-    <div class="brand">WalcottinoTV</div>
+  <header>
+    <h1>WalcottinoTV</h1>
     <nav>
-      <a href="#/home" id="nav-home">Home</a>
-      <a href="#/news" id="nav-news">News</a>
-      <a href="#/products" id="nav-products">Products</a>
-      <a href="#/promotion" id="nav-promotion">Promotion</a>
-      <a href="#/about" id="nav-about">About</a>
+      <a href="#home">Home</a>
+      <a href="#news">News</a>
+      <a href="#products">Products</a>
+      <a href="#promote">Promotion</a>
+      <a href="#about">About</a>
     </nav>
-  </div>
-  <div class="hero"><h1>Your Home of Global Sports News</h1></div>
-</header>
+  </header>
 
-<main>
-  <!-- HOME -->
-  <section class="section" data-route="home" id="route-home">
-    <h2>Welcome to WalcottinoTV</h2>
-    <p>
-      Stay updated with authentic sports stories from across the globe (80%),
-      with dedicated coverage for Africa (10%) and Nigeria (10%). We refresh every two hours so you never miss a beat.
-    </p>
-    <div class="ad">Ad Banner – place your ad code here</div>
-    <div class="section">
-      <h3 class="muted">Quick Glance: Latest 5 Headlines</h3>
-      <div id="home-headlines" class="news-list"></div>
-      <div class="controls">
-        <a class="btn" href="#/news">See all news</a>
-      </div>
-    </div>
-  </section>
+  <div class="hero" id="home">Your Gateway to Global & Local Sports</div>
 
-  <!-- NEWS LIST (with pagination 5 per page) -->
-  <section class="section" data-route="news" id="route-news">
-    <h2>Latest Sports News</h2>
-    <p class="muted">Auto-updates every 2 hours • Sources: ESPN (Global), BBC Africa (Africa), Complete Sports Nigeria (Nigeria)</p>
-    <div class="ad">Ad Banner – place your ad code here</div>
-    <div id="news-list" class="news-list"></div>
-    <div class="controls">
-      <button class="btn ghost" id="prev-page">Prev</button>
-      <span class="pill" id="page-indicator">Page 1</span>
-      <button class="btn ghost" id="next-page">Next</button>
-    </div>
-  </section>
+  <main>
+    <!-- NEWS PREVIEW -->
+    <section>
+      <h2>Latest News</h2>
+      <div class="news-preview" id="news-preview"></div>
+      <a href="#news" class="btn">Read More</a>
+    </section>
 
-  <!-- NEWS DETAIL (internal page) -->
-  <section class="section" data-route="news-detail" id="route-news-detail">
-    <button class="btn ghost" onclick="navigate('#/news')">← Back to News</button>
-    <article id="news-article">
-      <!-- Filled by JS: title, image, date, content -->
-    </article>
-  </section>
+    <!-- PRODUCT PREVIEW -->
+    <section>
+      <h2>Sportswear</h2>
+      <div class="product-preview" id="product-preview"></div>
+      <a href="#products" class="btn">View More</a>
+    </section>
 
-  <!-- PRODUCTS (10+ items with images ≤ $20) -->
-  <section class="section" data-route="products" id="route-products">
-    <h2>Sportswear – Affordable & Fresh</h2>
-    <p class="muted">Manually edit this list: open <code>index.html</code> and adjust the <strong>products</strong> array in the script.</p>
-    <div class="ad">Ad Banner – place your ad code here</div>
-    <div class="product-grid" id="product-grid"></div>
-  </section>
+    <!-- ABOUT -->
+    <section id="about">
+      <h2>About WalcottinoTV</h2>
+      <p>WalcottinoTV is your go-to destination for the freshest sports news from around the globe—delivered automatically every two hours so you're always in the game. While 80% of our coverage is global, 10% highlights African sports and 10% focuses on Nigeria, connecting local heroes to international fans.</p>
+    </section>
 
-  <!-- PROMOTION (live consent form) -->
-  <section class="section" data-route="promotion" id="route-promotion">
-    <h2>Promote Your Talent</h2>
-    <p>
-      We spotlight local talents and help them reach the international stage. Fill the consent form below with your details and skill set.
-    </p>
-    <div class="ad">Ad Banner – place your ad code here</div>
-    <form action="https://formsubmit.co/walcottinotv@gmail.com" method="POST">
-      <!-- FormSubmit options -->
-      <input type="hidden" name="_captcha" value="false">
-      <input type="hidden" name="_subject" value="WalcottinoTV Talent Submission">
-      <input type="hidden" name="_template" value="table">
-      <!-- Fields -->
-      <label>Full Name<input name="name" type="text" required placeholder="Your full name"/></label>
-      <label>Email<input name="email" type="email" required placeholder="you@example.com"/></label>
-      <label>Phone<input name="phone" type="tel" placeholder="+234…" /></label>
-      <label>Country<input name="country" type="text" required placeholder="Country"/></label>
-      <label>City/State<input name="city" type="text" placeholder="City / State"/></label>
-      <label>Sport / Skill Set<textarea name="skill" required placeholder="e.g., Football – Striker; Basketball – Point Guard; Athletics – 100m; etc."></textarea></label>
-      <label>Brief Bio / Achievements<textarea name="bio" placeholder="Clubs, medals, competitions…"></textarea></label>
-      <label>Portfolio / Social Links<textarea name="links" placeholder="Instagram, YouTube highlights, etc."></textarea></label>
-      <label>
-        Consent
-        <select name="consent" required>
-          <option value="">Select</option>
-          <option value="I consent to be featured on WalcottinoTV platforms.">I consent to be featured on WalcottinoTV platforms.</option>
-        </select>
-      </label>
-      <button class="btn" type="submit">Submit Talent</button>
-      <small class="muted">By submitting, you confirm the information is accurate and you agree to be contacted.</small>
-    </form>
-  </section>
+    <!-- CONTACT + SOCIAL -->
+    <section id="contact">
+      <h2>Contact Us</h2>
+      <p>Phone: +234 813 720 8793 | +234 904 554 8253</p>
+      <p>Address: B5, Legacy Estate, Kolapo Ishola GRA, Akobo, Ibadan</p>
+      <p>Email: <a href="mailto:walcottinotv@gmail.com">walcottinotv@gmail.com</a></p>
+      <p>
+        <a href="https://www.facebook.com/share/1CSYTgmTX9/" target="_blank">Facebook</a> |
+        <a href="https://www.instagram.com/walcotttinotv?igsh=MW44Z2QwY2toN2YyNg==" target="_blank">Instagram</a> |
+        <a href="https://x.com/walcotttv2025?t=A--G6KfJcBGf2kz_PAnzlw&s=09" target="_blank">X (Twitter)</a>
+      </p>
+    </section>
 
-  <!-- ABOUT (includes Contact + Socials) -->
-  <section class="section" data-route="about" id="route-about">
-    <h2>About WalcottinoTV</h2>
-    <p>
-      WalcottinoTV is your go-to destination for the freshest sports news from around the globe—delivered automatically every two hours so you're always in the game.
-      Our coverage balances <strong>80% global</strong>, <strong>10% African</strong>, and <strong>10% Nigerian</strong> stories. Beyond the headlines,
-      we actively promote local talents to international audiences through features, interviews, and community-driven showcases.
-    </p>
-    <p>
-      Built for speed, clarity, and impact, WalcottinoTV connects fans, brands, and athletes—bridging grassroots brilliance and the world stage.
-    </p>
+    <!-- FULL NEWS PAGE -->
+    <section id="news">
+      <h2>All News</h2>
+      <div id="news-list"></div>
+    </section>
 
-    <h3>Contact</h3>
-    <ul class="contact-list">
-      <li><strong>Phone:</strong> +2348137208793; +2349045548253</li>
-      <li><strong>Address:</strong> B5, legacy estate Kolapo Ishola GRA, Akobo, Ibadan</li>
-      <li><strong>Email:</strong> <a href="mailto:walcottinotv@gmail.com">walcottinotv@gmail.com</a></li>
-      <li><strong>Facebook:</strong> <a target="_blank" href="https://www.facebook.com/share/1CSYTgmTX9/">facebook.com/walcottinotv</a></li>
-      <li><strong>Instagram:</strong> <a target="_blank" href="https://www.instagram.com/walcotttinotv?igsh=MW44Z2QwY2toN2YyNg==">@walcotttinotv</a></li>
-      <li><strong>Twitter (X):</strong> <a target="_blank" href="https://x.com/walcotttv2025?t=A--G6KfJcBGf2kz_PAnzlw&s=09">@walcotttv2025</a></li>
-    </ul>
+    <!-- FULL PRODUCTS PAGE -->
+    <section id="products">
+      <h2>All Products</h2>
+      <div class="product-preview" id="product-list"></div>
+    </section>
 
-    <div class="ad">Ad Banner – place your ad code here</div>
-  </section>
-</main>
+    <!-- PROMOTION FORM -->
+    <section id="promote">
+      <h2>Promote Your Talent</h2>
+      <form action="https://formspree.io/f/yourformid" method="POST">
+        <input type="text" name="name" placeholder="Full Name" required>
+        <input type="email" name="email" placeholder="Email" required>
+        <input type="text" name="country" placeholder="Country" required>
+        <textarea name="skill" placeholder="Skill Set / Sport" required></textarea>
+        <button type="submit">Submit</button>
+      </form>
+    </section>
+  </main>
 
-<footer>© <span id="year"></span> WalcottinoTV</footer>
+  <footer>&copy; 2025 WalcottinoTV</footer>
 
-<script>
-/* ------------------- SPA Router ------------------- */
-function navigate(hash){
-  if(hash) location.hash = hash;
-  const route = (location.hash || '#/home').replace('#/','');
-  document.querySelectorAll('[data-route]').forEach(el=>el.classList.remove('active'));
-  const target = document.getElementById('route-' + (route.startsWith('news/')?'news-detail':route));
-  if(target) target.classList.add('active');
-  document.querySelectorAll('nav a').forEach(a=>a.classList.remove('active'));
-  const nav = document.getElementById('nav-' + (route.startsWith('news/')?'news':route));
-  if(nav) nav.classList.add('active');
+  <script>
+  // --------- PRODUCTS (10 with images) ---------
+  const products = [
+    {name:"Basic Sports Tee", price:"$15", img:"https://via.placeholder.com/200x150?text=Sports+Tee"},
+    {name:"Running Headband", price:"$8", img:"https://via.placeholder.com/200x150?text=Headband"},
+    {name:"Soccer Socks", price:"$12", img:"https://via.placeholder.com/200x150?text=Socks"},
+    {name:"Training Shorts", price:"$18", img:"https://via.placeholder.com/200x150?text=Shorts"},
+    {name:"Gym Gloves", price:"$10", img:"https://via.placeholder.com/200x150?text=Gloves"},
+    {name:"Sports Cap", price:"$9", img:"https://via.placeholder.com/200x150?text=Cap"},
+    {name:"Shin Guards", price:"$14", img:"https://via.placeholder.com/200x150?text=Shin+Guards"},
+    {name:"Basketball Jersey", price:"$20", img:"https://via.placeholder.com/200x150?text=Jersey"},
+    {name:"Sweatband Set", price:"$7", img:"https://via.placeholder.com/200x150?text=Sweatband"},
+    {name:"Water Bottle", price:"$6", img:"https://via.placeholder.com/200x150?text=Bottle"}
+  ];
 
-  // if news detail with id
-  if(route.startsWith('news/')){
-    const id = decodeURIComponent(route.split('/')[1]||'');
-    renderNewsDetail(id);
+  function loadProducts() {
+    const preview = document.getElementById("product-preview");
+    const list = document.getElementById("product-list");
+    preview.innerHTML = products.slice(0,3).map(p => `
+      <div class="product">
+        <img src="${p.img}" alt="${p.name}">
+        <h3>${p.name}</h3><p>${p.price}</p>
+      </div>`).join("");
+    list.innerHTML = products.map(p => `
+      <div class="product">
+        <img src="${p.img}" alt="${p.name}">
+        <h3>${p.name}</h3><p>${p.price}</p>
+      </div>`).join("");
   }
-}
-window.addEventListener('hashchange', ()=>navigate());
-navigate();
 
-/* ------------------- Utilities ------------------- */
-const YEAR_EL = document.getElementById('year'); YEAR_EL.textContent = new Date().getFullYear();
-const PLACEHOLDER = 'https://images.unsplash.com/photo-1517649763962-0c623066013b?q=80&w=1200&auto=format&fit=crop';
+  // --------- NEWS (with images & local view) ---------
+  async function fetchRSS(url) {
+    const api = "https://api.rss2json.com/v1/api.json?rss_url=" + encodeURIComponent(url);
+    const res = await fetch(api);
+    const data = await res.json();
+    return data.items || [];
+  }
 
-function within7Days(dateStr){
-  const d = new Date(dateStr);
-  return (Date.now() - d.getTime()) <= 7*24*60*60*1000;
-}
+  async function fetchNews() {
+    const globalRSS = "http://www.espn.com/espn/rss/news";
+    const africaRSS = "https://feeds.bbci.co.uk/news/world/africa/rss.xml";
+    const nigeriaRSS = "https://www.completesports.com/feed/";
 
-/* ------------------- News Fetch & Build ------------------- */
-const RSS_SOURCES = {
-  global: "http://www.espn.com/espn/rss/news",
-  africa: "https://feeds.bbci.co.uk/news/world/africa/rss.xml",
-  nigeria:"https://www.completesports.com/feed/"
-};
-const RSS_API = (url)=>"https://api.rss2json.com/v1/api.json?rss_url="+encodeURIComponent(url);
-
-let ALL_NEWS = []; // {id,title,image,date,content,source,link}
-
-async function fetchRSS(url){
-  const res = await fetch(RSS_API(url));
-  const data = await res.json();
-  return (data.items||[]).map(it=>({
-    title: it.title,
-    link: it.link,
-    date: it.pubDate || it.pub_date || it.date || new Date().toISOString(),
-    content: (it.content || it.description || '').toString(),
-    image: (it.enclosure && (it.enclosure.link || it.enclosure.url)) || extractImg(it) || PLACEHOLDER
-  }));
-}
-function extractImg(item){
-  // try parse image from content/description
-  const html = (item.content || item.description || '');
-  const m = html.match(/<img[^>]+src="([^"]+)"/i);
-  return m ? m[1] : null;
-}
-
-async function loadNews(){
-  try{
-    // Cache-bust every 2 hours
-    const cacheKey = 'walcotti_news_cache_v1';
-    const tsKey = 'walcotti_news_ts_v1';
-    const last = parseInt(localStorage.getItem(tsKey)||'0',10);
-    const twoHours = 2*60*60*1000;
-    if(Date.now()-last < twoHours){
-      const cached = JSON.parse(localStorage.getItem(cacheKey)||'[]');
-      if(cached.length){ ALL_NEWS = cached; renderNews(); return; }
-    }
-
-    const [g, a, n] = await Promise.all([
-      fetchRSS(RSS_SOURCES.global),
-      fetchRSS(RSS_SOURCES.africa),
-      fetchRSS(RSS_SOURCES.nigeria)
+    const [global, africa, nigeria] = await Promise.all([
+      fetchRSS(globalRSS),
+      fetchRSS(africaRSS),
+      fetchRSS(nigeriaRSS)
     ]);
 
-    // Filter to last 7 days & de-dup by title
-    function uniqByTitle(list){
-      const seen=new Set(); return list.filter(x=>{const t=x.title.trim(); if(seen.has(t)) return false; seen.add(t); return true;});
-    }
-
-    const g7 = uniqByTitle(g.filter(x=>within7Days(x.date)));
-    const a7 = uniqByTitle(a.filter(x=>within7Days(x.date)));
-    const n7 = uniqByTitle(n.filter(x=>within7Days(x.date)));
-
-    // Ensure at least 30 items overall, ratio 24/3/3
-    const globalTake = Math.min(24, g7.length);
-    const africaTake = Math.min(3, a7.length);
-    const nigeriaTake= Math.min(3, n7.length);
-
-    // if any bucket short, top up from global
-    let selected = [
-      ...g7.slice(0, globalTake),
-      ...a7.slice(0, africaTake),
-      ...n7.slice(0, nigeriaTake)
+    const selected = [
+      ...global.slice(0, 24),
+      ...africa.slice(0, 3),
+      ...nigeria.slice(0, 3)
     ];
-    const need = Math.max(30 - selected.length, 0);
-    if(need>0){
-      const more = g7.slice(globalTake, globalTake+need);
-      selected = selected.concat(more);
-    }
 
-    // map with ids
-    ALL_NEWS = selected
-      .sort((a,b)=>new Date(b.date)-new Date(a.date))
-      .map((item, idx)=>({
-        id: String(idx+1) + '-' + encodeURIComponent(item.title.toLowerCase().replace(/\s+/g,'-').slice(0,60)),
-        ...item
-      }));
+    const preview = document.getElementById("news-preview");
+    const list = document.getElementById("news-list");
 
-    localStorage.setItem(cacheKey, JSON.stringify(ALL_NEWS));
-    localStorage.setItem(tsKey, String(Date.now()));
+    preview.innerHTML = selected.slice(0,3).map(a => `
+      <div class="news-item">
+        <img src="${a.enclosure?.link || 'https://via.placeholder.com/400x200?text=Sports+News'}" alt="news">
+        <h3>${a.title}</h3>
+        <p>${a.description.substring(0,100)}...</p>
+      </div>`).join("");
 
-    renderNews();
-  }catch(e){
-    console.error('News fetch error', e);
-    document.getElementById('news-list').innerHTML = '<p>Unable to load news at this time.</p>';
-  }
-}
-
-let currentPage = 1;
-const PER_PAGE = 5;
-
-function renderNews(){
-  // Home top 5
-  const homeList = document.getElementById('home-headlines');
-  if(homeList){
-    homeList.innerHTML = ALL_NEWS.slice(0,5).map(cardTemplate).join('');
+    list.innerHTML = selected.map(a => `
+      <div class="news-item">
+        <img src="${a.enclosure?.link || 'https://via.placeholder.com/400x200?text=Sports+News'}" alt="news">
+        <h3>${a.title}</h3>
+        <small>${new Date(a.pubDate).toLocaleString()}</small>
+        <p>${a.description}</p>
+      </div>`).join("");
   }
 
-  // News list by page
-  renderNewsPage(currentPage);
-}
-
-function cardTemplate(n){
-  return `
-    <div class="news-card">
-      <img src="${n.image || PLACEHOLDER}" alt="news image"/>
-      <div class="pad">
-        <h3>${n.title}</h3>
-        <div class="news-meta">${new Date(n.date).toLocaleString()}</div>
-        <div class="controls" style="justify-content:flex-start;margin-top:10px">
-          <a class="btn" href="#/news/${encodeURIComponent(n.id)}">Read full</a>
-        </div>
-      </div>
-    </div>
-  `;
-}
-
-function renderNewsPage(page){
-  const totalPages = Math.max(1, Math.ceil(ALL_NEWS.length / PER_PAGE));
-  if(page<1) page = 1; if(page>totalPages) page = totalPages;
-  currentPage = page;
-
-  const start = (page-1)*PER_PAGE;
-  const items = ALL_NEWS.slice(start, start+PER_PAGE);
-  const list = document.getElementById('news-list');
-  if(list) list.innerHTML = items.map(cardTemplate).join('');
-
-  const ind = document.getElementById('page-indicator');
-  if(ind) ind.textContent = `Page ${page} of ${totalPages}`;
-
-  const prev = document.getElementById('prev-page');
-  const next = document.getElementById('next-page');
-  if(prev){ prev.disabled = page<=1; prev.onclick=()=>{renderNewsPage(page-1)}}
-  if(next){ next.disabled = page>=totalPages; next.onclick=()=>{renderNewsPage(page+1)}}
-}
-
-function renderNewsDetail(id){
-  const article = document.getElementById('news-article');
-  const n = ALL_NEWS.find(x=>x.id===id);
-  if(!n){ article.innerHTML = '<p>Article not found.</p>'; return; }
-  article.innerHTML = `
-    <h2>${n.title}</h2>
-    <div class="news-meta">${new Date(n.date).toLocaleString()}</div>
-    <img src="${n.image || PLACEHOLDER}" alt="news image" style="width:100%;max-height:420px;object-fit:cover;border-radius:12px;margin:10px 0"/>
-    <div>${n.content || ''}</div>
-    <div class="controls" style="margin-top:14px">
-      <a class="btn ghost" href="${n.link}" target="_blank" rel="noopener">Original source</a>
-    </div>
-  `;
-}
-
-/* Load news now, and every 2 hours */
-loadNews();
-setInterval(loadNews, 2*60*60*1000);
-
-/* ------------------- Products ------------------- */
-const products = [
-  {name:'Classic Sports Tee', price:15, img:'https://images.unsplash.com/photo-1542291026-7eec264c27ff?q=80&w=900&auto=format&fit=crop'},
-  {name:'Breathable Cap', price:10, img:'https://images.unsplash.com/photo-1516478177764-9fe5bd7e9717?q=80&w=900&auto=format&fit=crop'},
-  {name:'Sweat Headband', price:8,  img:'https://images.unsplash.com/photo-1517343985841-f2d2c155f4c5?q=80&w=900&auto=format&fit=crop'},
-  {name:'Soccer Jersey', price:20, img:'https://images.unsplash.com/photo-1522778119026-d647f0596c20?q=80&w=900&auto=format&fit=crop'},
-  {name:'Cushion Socks (Pair)', price:12, img:'https://images.unsplash.com/photo-1543163521-1bf539c55dd2?q=80&w=900&auto=format&fit=crop'},
-  {name:'Training Gloves', price:18, img:'https://images.unsplash.com/photo-1508609349937-5ec4ae374ebf?q=80&w=900&auto=format&fit=crop'},
-  {name:'Sports Shorts', price:16, img:'https://images.unsplash.com/photo-1542291026-7eec264c27ff?q=80&w=900&auto=format&fit=crop'},
-  {name:'Training Shoes', price:20, img:'https://images.unsplash.com/photo-1542291026-7eec264c27ff?q=80&w=900&auto=format&fit=crop'},
-  {name:'Compact Sports Bag', price:20, img:'https://images.unsplash.com/photo-1542293787938-c9e299b88054?q=80&w=900&auto=format&fit=crop'},
-  {name:'Hydro Bottle', price:7, img:'https://images.unsplash.com/photo-1517686469429-8bdb88b9f907?q=80&w=900&auto=format&fit=crop'},
-  {name:'Knee Support Sleeve', price:14, img:'https://images.unsplash.com/photo-1567598508481-65985588e283?q=80&w=900&auto=format&fit=crop'}
-];
-function renderProducts(){
-  const grid = document.getElementById('product-grid');
-  if(!grid) return;
-  grid.innerHTML = products.map(p => `
-    <div class="product">
-      <img src="${p.img}" alt="${p.name}"/>
-      <h4 style="margin:8px 0 4px 0">${p.name}</h4>
-      <div class="price">$${p.price}</div>
-    </div>
-  `).join('');
-}
-renderProducts();
-</script>
+  loadProducts();
+  fetchNews();
+  setInterval(fetchNews, 2*60*60*1000);
+  </script>
 </body>
 </html>
