@@ -1,154 +1,144 @@
-// walcottinotv.js
-// Single-file fullstack sports news + ads platform
-
-const express = require("express");
-const axios = require("axios");
-const Parser = require("rss-parser");
-const app = express();
-const PORT = process.env.PORT || 3000;
-const parser = new Parser();
-
-// ==== CONFIG ==== //
-const BRAND_NAME = "Walcottinotv";
-const BRAND_MISSION = "To connect the world to the pulse of sports, uncover the latest stories, and empower local talents to shine globally, while offering high-quality, affordable sportswear.";
-
-const SOCIAL_LINKS = {
-  facebook: "https://www.facebook.com/share/1CSYTgmTX9/",
-  instagram: "https://www.instagram.com/walcotttinotv?igsh=MW44Z2QwY2toN2YyNg==",
-  twitter: "https://x.com/walcotttv2025?t=A--G6KfJcBGf2kz_PAnzlw&s=09",
-};
-
-const CONTACT = {
-  phones: ["+2348137208793", "+2349045548253"],
-  address: "B5, Legacy Estate, Kolapo Ishola GRA, Akobo Ibadan, Oyo State, Nigeria",
-};
-
-// ==== STATIC ADS ==== //
-const ads = [
-  { id: 1, image: "https://source.unsplash.com/600x150/?football", link: "https://example.com/footballgear" },
-  { id: 2, image: "https://source.unsplash.com/600x150/?sports", link: "https://example.com/sportsoffers" }
-];
-
-// ==== RSS SOURCES ==== //
-const RSS_FEEDS = {
-  global: [
-    "https://www.espn.com/espn/rss/news",
-    "https://www.skysports.com/rss/12040"
-  ],
-  africa: [
-    "https://www.kickoff.com/rss/news"
-  ],
-  nigeria: [
-    "https://www.completesports.com/feed/"
-  ]
-};
-
-// ==== CACHE ==== //
-let newsCache = [];
-let lastFetch = 0;
-const CACHE_DURATION = 15 * 60 * 1000; // 15 mins
-
-// ==== FUNCTION TO FETCH NEWS ==== //
-async function fetchNews() {
-  try {
-    let allNews = [];
-    for (const [category, urls] of Object.entries(RSS_FEEDS)) {
-      for (const url of urls) {
-        const feed = await parser.parseURL(url);
-        feed.items.forEach(item => {
-          allNews.push({
-            title: item.title,
-            link: item.link,
-            date: item.pubDate,
-            category
-          });
-        });
-      }
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>WalcottinoTV – Sports News</title>
+  <style>
+    :root {
+      --blue-light: #e0f2ff;
+      --blue-mid:   #3b82f6;
+      --blue-dark:  #1e3a8a;
     }
-    // Shuffle and categorize percentages
-    const globalNews = allNews.filter(n => n.category === "global").slice(0, Math.floor(allNews.length * 0.8));
-    const africaNews = allNews.filter(n => n.category === "africa").slice(0, Math.floor(allNews.length * 0.1));
-    const nigeriaNews = allNews.filter(n => n.category === "nigeria").slice(0, Math.floor(allNews.length * 0.1));
+    body {
+      background-color: var(--blue-light);
+      color: var(--blue-dark);
+      font-family: Arial, sans-serif;
+      margin: 0; padding: 0;
+    }
+    header, footer {
+      background-color: var(--blue-mid);
+      color: white;
+      padding: 20px;
+      text-align: center;
+    }
+    main { padding: 20px; }
+    a { color: var(--blue-dark); text-decoration: none; }
+    .product-list { display: flex; gap: 20px; flex-wrap: wrap; }
+    .product { background: white; padding: 15px; border-radius: 8px; width: 200px; }
+    .ad-banner { margin: 20px 0; }
+    #news { margin-top: 20px; }
+    .news-item { background: white; padding: 15px; margin-bottom: 10px; border-radius: 6px; }
+    form { background: white; padding: 15px; border-radius: 8px; max-width: 400px; }
+    input, textarea { width: 100%; margin-bottom: 10px; padding: 8px; border-radius: 4px; border: 1px solid #ccc; }
+    button { background: var(--blue-mid); color: white; border: none; padding: 10px 15px; border-radius: 6px; cursor: pointer; }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>WalcottinoTV</h1>
+    <p>Your source for automated global sports news, spotlighting African & Nigerian talent.</p>
+  </header>
 
-    newsCache = [...globalNews, ...africaNews, ...nigeriaNews].sort((a, b) => new Date(b.date) - new Date(a.date));
-    lastFetch = Date.now();
-  } catch (err) {
-    console.error("Error fetching news:", err.message);
-  }
-}
-
-// ==== MIDDLEWARE ==== //
-app.use(express.json());
-
-// ==== ROUTES ==== //
-app.get("/", async (req, res) => {
-  if (Date.now() - lastFetch > CACHE_DURATION) await fetchNews();
-
-  const html = `
-  <!DOCTYPE html>
-  <html>
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>${BRAND_NAME}</title>
-    <style>
-      body { font-family: Arial, sans-serif; margin: 0; background: #f4f9ff; color: #222; }
-      header { background: #003366; color: #fff; padding: 20px; text-align: center; }
-      nav a { margin: 0 10px; color: #fff; text-decoration: none; }
-      section { padding: 20px; }
-      h2 { color: #003366; }
-      .news-item { border-bottom: 1px solid #ddd; padding: 10px 0; }
-      .ad { text-align: center; margin: 20px 0; }
-      footer { background: #003366; color: white; text-align: center; padding: 10px; }
-    </style>
-  </head>
-  <body>
-    <header>
-      <h1>${BRAND_NAME}</h1>
-      <p>${BRAND_MISSION}</p>
-      <nav>
-        <a href="#">Home</a>
-        <a href="#news">News</a>
-        <a href="#contact">Contact</a>
-      </nav>
-    </header>
-
-    <section id="ads">
-      ${ads.map(ad => `<div class="ad"><a href="${ad.link}" target="_blank"><img src="${ad.image}" width="600" height="150" /></a></div>`).join("")}
-    </section>
+  <main>
+    <div class="ad-banner"><div style="background:#ccc; padding:20px;">Ad Banner Placeholder</div></div>
 
     <section id="news">
       <h2>Latest Sports News</h2>
-      ${newsCache.map(n => `
-        <div class="news-item">
-          <a href="${n.link}" target="_blank">${n.title}</a> <br/>
-          <small>${new Date(n.date).toLocaleString()}</small>
-        </div>
-      `).join("")}
+      <div id="news-list"></div>
+    </section>
+
+    <div class="ad-banner"><div style="background:#ccc; padding:20px;">Ad Banner Placeholder</div></div>
+
+    <section id="products">
+      <h2>Sportswear</h2>
+      <div class="product-list">
+        <div class="product"><h3>Basic Sports Tee</h3><p>Price: $15</p></div>
+        <div class="product"><h3>Running Headband</h3><p>Price: $8</p></div>
+        <div class="product"><h3>Soccer Socks (Pair)</h3><p>Price: $12</p></div>
+      </div>
+    </section>
+
+    <section id="promote">
+      <h2>Promote Your Talent</h2>
+      <p>Submit to be featured internationally:</p>
+      <form action="https://formspree.io/f/yourformid" method="POST">
+        <input type="text" name="name" placeholder="Full Name" required>
+        <input type="email" name="email" placeholder="Email" required>
+        <input type="text" name="country" placeholder="Country" required>
+        <textarea name="skill" placeholder="Skill Set / Sport" required></textarea>
+        <button type="submit">Submit</button>
+      </form>
+    </section>
+
+    <div class="ad-banner"><div style="background:#ccc; padding:20px;">Ad Banner Placeholder</div></div>
+
+    <section id="about">
+      <h2>About WalcottinoTV</h2>
+      <p>WalcottinoTV is your go-to destination for the freshest sports news from around the globe—delivered automatically every two hours so you're always in the game. While 80% of our coverage is global, 10% highlights African sports and 10% focuses on Nigeria, connecting local heroes to international fans.</p>
     </section>
 
     <section id="contact">
       <h2>Contact Us</h2>
-      <p><b>Phone:</b> ${CONTACT.phones.join(", ")}</p>
-      <p><b>Address:</b> ${CONTACT.address}</p>
+      <p>Phone: +234 813 720 8793 | +234 904 554 8253</p>
+      <p>Address: B5, Legacy Estate, Kolapo Ishola GRA, Akobo, Ibadan</p>
+      <p>Email: <a href="mailto:walcottinotv@gmail.com">walcottinotv@gmail.com</a></p>
       <p>
-        <a href="${SOCIAL_LINKS.facebook}" target="_blank">Facebook</a> |
-        <a href="${SOCIAL_LINKS.instagram}" target="_blank">Instagram</a> |
-        <a href="${SOCIAL_LINKS.twitter}" target="_blank">Twitter</a>
+        <a href="https://www.facebook.com/share/1CSYTgmTX9/" target="_blank">Facebook</a> |
+        <a href="https://www.instagram.com/walcotttinotv?igsh=MW44Z2QwY2toN2YyNg==" target="_blank">Instagram</a> |
+        <a href="https://x.com/walcotttv2025?t=A--G6KfJcBGf2kz_PAnzlw&s=09" target="_blank">X (Twitter)</a>
       </p>
     </section>
+  </main>
 
-    <footer>
-      &copy; ${new Date().getFullYear()} ${BRAND_NAME}. All rights reserved.
-    </footer>
-  </body>
-  </html>
-  `;
-  res.send(html);
-});
+  <footer>
+    &copy; 2025 WalcottinoTV
+  </footer>
 
-// ==== START SERVER ==== //
-app.listen(PORT, async () => {
-  console.log(`${BRAND_NAME} running on port ${PORT}`);
-  await fetchNews();
-});
+  <script>
+  async function fetchRSS(url) {
+    const api = "https://api.rss2json.com/v1/api.json?rss_url=" + encodeURIComponent(url);
+    const res = await fetch(api);
+    const data = await res.json();
+    return data.items || [];
+  }
+
+  async function fetchNews() {
+    try {
+      // RSS sources
+      const globalRSS = "http://www.espn.com/espn/rss/news";
+      const africaRSS = "https://feeds.bbci.co.uk/news/world/africa/rss.xml";
+      const nigeriaRSS = "https://www.completesports.com/feed/";
+
+      const [global, africa, nigeria] = await Promise.all([
+        fetchRSS(globalRSS),
+        fetchRSS(africaRSS),
+        fetchRSS(nigeriaRSS)
+      ]);
+
+      // Slice according to ratio
+      const selected = [
+        ...global.slice(0, 24),  // 80% of 30
+        ...africa.slice(0, 3),   // 10%
+        ...nigeria.slice(0, 3)   // 10%
+      ];
+
+      // Display
+      const container = document.getElementById('news-list');
+      container.innerHTML = selected.map(a => `
+        <div class="news-item">
+          <h3><a href="${a.link}" target="_blank">${a.title}</a></h3>
+          <small>${new Date(a.pubDate).toLocaleString()}</small>
+          <p>${a.description ? a.description.substring(0,150) + "..." : ""}</p>
+        </div>
+      `).join('');
+    } catch (e) {
+      console.error("Error fetching RSS:", e);
+      document.getElementById('news-list').innerHTML = "<p>Unable to load news at this time.</p>";
+    }
+  }
+
+  fetchNews();
+  setInterval(fetchNews, 2 * 60 * 60 * 1000); // refresh every 2 hours
+  </script>
+</body>
+</html>
