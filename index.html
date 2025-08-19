@@ -90,7 +90,7 @@
   <!-- NEWS LIST (with pagination 5 per page) -->
   <section class="section" data-route="news" id="route-news">
     <h2>Latest Sports News</h2>
-    <p class="muted">Auto-updates every 2 hours • Source: GNews (Sports)</p>
+    <p class="muted">Auto-updates every 2 hours • Sources: ESPN (Global), BBC Africa (Africa), Complete Sports Nigeria (Nigeria)</p>
     <div class="ad">Ad Banner – place your ad code here</div>
     <div id="news-list" class="news-list"></div>
     <div class="controls">
@@ -200,114 +200,86 @@ navigate();
 
 /* ------------------- Utilities ------------------- */
 const YEAR_EL = document.getElementById('year'); YEAR_EL.textContent = new Date().getFullYear();
-const PLACEHOLDER = 'data:image/gif;base64,R0lGODlhAQABAAAAACw='; // transparent 1x1 to ensure "only relevant images"
+const PLACEHOLDER = 'https://images.unsplash.com/photo-1517649763962-0c623066013b?q=80&w=1200&auto=format&fit=crop';
 
 function within7Days(dateStr){
   const d = new Date(dateStr);
   return (Date.now() - d.getTime()) <= 7*24*60*60*1000;
 }
 
-/* =====================================================================
-   NEWS FETCH & BUILD  —  STRICTLY SPORTS via GNews (demo key), images only
-   ===================================================================== */
-const GNEWS_KEY = 'demo';
-const GNEWS_BASE = 'https://gnews.io/api/v4/top-headlines';
-const GNEWS_LANG = 'en';
-
-// We'll pool multiple countries to gather enough fresh sports articles.
-// We keep your paging (5/page), detail page, caching and 2-hour refresh.
-const COUNTRIES_GLOBAL = ['us','gb','ca','au'];   // global mix
-const COUNTRIES_AFRICA = ['za','ke','gh'];        // Africa (non-Nigeria)
-const COUNTRY_NIGERIA  = 'ng';
+/* ------------------- News Fetch & Build ------------------- */
+const RSS_SOURCES = {
+  global: "http://www.espn.com/espn/rss/news",
+  africa: "https://feeds.bbci.co.uk/news/world/africa/rss.xml",
+  nigeria:"https://www.completesports.com/feed/"
+};
+const RSS_API = (url)=>"https://api.rss2json.com/v1/api.json?rss_url="+encodeURIComponent(url);
 
 let ALL_NEWS = []; // {id,title,image,date,content,source,link}
 
-function gnewsUrl(country, max=10){
-  const params = new URLSearchParams({
-    category:'sports',
-    lang:GNEWS_LANG,
-    country,
-    max:String(max),
-    apikey:GNEWS_KEY
-  });
-  return `${GNEWS_BASE}?${params.toString()}`;
-}
-
-async function fetchGNewsCountry(country, max=10){
-  const res = await fetch(gnewsUrl(country, max));
+async function fetchRSS(url){
+  const res = await fetch(RSS_API(url));
   const data = await res.json();
-  const items = Array.isArray(data.articles)? data.articles : [];
-  // Map to internal shape; enforce: within 7 days AND must have an image
-  return items.map(a=>({
-      title: a.title || '',
-      link: a.url || '',
-      date: a.publishedAt || a.date || new Date().toISOString(),
-      content: a.content || a.description || '',
-      image: a.image || null,
-      source: (a.source && a.source.name) || country.toUpperCase()
-    }))
-    .filter(x => x.image && within7Days(x.date));
+  return (data.items||[]).map(it=>({
+    title: it.title,
+    link: it.link,
+    date: it.pubDate || it.pub_date || it.date || new Date().toISOString(),
+    content: (it.content || it.description || '').toString(),
+    image: (it.enclosure && (it.enclosure.link || it.enclosure.url)) || extractImg(it) || PLACEHOLDER
+  }));
 }
-
-async function fetchBucket(countries, perCountry=10){
-  const chunks = await Promise.all(countries.map(c => fetchGNewsCountry(c, perCountry).catch(()=>[])));
-  return chunks.flat();
+function extractImg(item){
+  // try parse image from content/description
+  const html = (item.content || item.description || '');
+  const m = html.match(/<img[^>]+src="([^"]+)"/i);
+  return m ? m[1] : null;
 }
 
 async function loadNews(){
   try{
     // Cache-bust every 2 hours
-    const cacheKey = 'walcotti_news_cache_v2_gnews';
-    const tsKey = 'walcotti_news_ts_v2_gnews';
+    const cacheKey = 'walcotti_news_cache_v1';
+    const tsKey = 'walcotti_news_ts_v1';
     const last = parseInt(localStorage.getItem(tsKey)||'0',10);
     const twoHours = 2*60*60*1000;
-
     if(Date.now()-last < twoHours){
       const cached = JSON.parse(localStorage.getItem(cacheKey)||'[]');
       if(cached.length){ ALL_NEWS = cached; renderNews(); return; }
     }
 
-    // Fetch pools (strictly sports)
-    const [globalPool, africaPool, nigeriaPool] = await Promise.all([
-      fetchBucket(COUNTRIES_GLOBAL, 10),
-      fetchBucket(COUNTRIES_AFRICA, 10),
-      fetchGNewsCountry(COUNTRY_NIGERIA, 10)
+    const [g, a, n] = await Promise.all([
+      fetchRSS(RSS_SOURCES.global),
+      fetchRSS(RSS_SOURCES.africa),
+      fetchRSS(RSS_SOURCES.nigeria)
     ]);
 
-    // De-dup by title (case-insensitive)
-    const uniqByTitle = (list)=>{
-      const seen=new Set();
-      return list.filter(x=>{
-        const k = x.title.trim().toLowerCase();
-        if(seen.has(k)) return false;
-        seen.add(k); return true;
-      });
-    };
+    // Filter to last 7 days & de-dup by title
+    function uniqByTitle(list){
+      const seen=new Set(); return list.filter(x=>{const t=x.title.trim(); if(seen.has(t)) return false; seen.add(t); return true;});
+    }
 
-    const g7 = uniqByTitle(globalPool);
-    const a7 = uniqByTitle(africaPool);
-    const n7 = uniqByTitle(nigeriaPool);
+    const g7 = uniqByTitle(g.filter(x=>within7Days(x.date)));
+    const a7 = uniqByTitle(a.filter(x=>within7Days(x.date)));
+    const n7 = uniqByTitle(n.filter(x=>within7Days(x.date)));
 
-    // Target up to 30 total (you can change these if you want to enforce 80/10/10)
-    const targetTotal = 30;
-    const globalTake  = Math.min(24, g7.length);
-    const africaTake  = Math.min(3,  a7.length);
-    const nigeriaTake = Math.min(3,  n7.length);
+    // Ensure at least 30 items overall, ratio 24/3/3
+    const globalTake = Math.min(24, g7.length);
+    const africaTake = Math.min(3, a7.length);
+    const nigeriaTake= Math.min(3, n7.length);
 
+    // if any bucket short, top up from global
     let selected = [
       ...g7.slice(0, globalTake),
       ...a7.slice(0, africaTake),
       ...n7.slice(0, nigeriaTake)
     ];
-
-    // Top up from global pool if needed
-    const need = Math.max(targetTotal - selected.length, 0);
+    const need = Math.max(30 - selected.length, 0);
     if(need>0){
       const more = g7.slice(globalTake, globalTake+need);
       selected = selected.concat(more);
     }
 
-    // Sort newest first and assign stable IDs
+    // map with ids
     ALL_NEWS = selected
       .sort((a,b)=>new Date(b.date)-new Date(a.date))
       .map((item, idx)=>({
@@ -321,8 +293,7 @@ async function loadNews(){
     renderNews();
   }catch(e){
     console.error('News fetch error', e);
-    const list = document.getElementById('news-list');
-    if(list) list.innerHTML = '<p>Unable to load news at this time.</p>';
+    document.getElementById('news-list').innerHTML = '<p>Unable to load news at this time.</p>';
   }
 }
 
@@ -335,6 +306,7 @@ function renderNews(){
   if(homeList){
     homeList.innerHTML = ALL_NEWS.slice(0,5).map(cardTemplate).join('');
   }
+
   // News list by page
   renderNewsPage(currentPage);
 }
@@ -342,8 +314,82 @@ function renderNews(){
 function cardTemplate(n){
   return `
     <div class="news-card">
-      <img src="${n.image}" alt="news image"/>
+      <img src="${n.image || PLACEHOLDER}" alt="news image"/>
       <div class="pad">
         <h3>${n.title}</h3>
         <div class="news-meta">${new Date(n.date).toLocaleString()}</div>
-        <div class="controls" style="justify-content:flex-start;marg
+        <div class="controls" style="justify-content:flex-start;margin-top:10px">
+          <a class="btn" href="#/news/${encodeURIComponent(n.id)}">Read full</a>
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+function renderNewsPage(page){
+  const totalPages = Math.max(1, Math.ceil(ALL_NEWS.length / PER_PAGE));
+  if(page<1) page = 1; if(page>totalPages) page = totalPages;
+  currentPage = page;
+
+  const start = (page-1)*PER_PAGE;
+  const items = ALL_NEWS.slice(start, start+PER_PAGE);
+  const list = document.getElementById('news-list');
+  if(list) list.innerHTML = items.map(cardTemplate).join('');
+
+  const ind = document.getElementById('page-indicator');
+  if(ind) ind.textContent = `Page ${page} of ${totalPages}`;
+
+  const prev = document.getElementById('prev-page');
+  const next = document.getElementById('next-page');
+  if(prev){ prev.disabled = page<=1; prev.onclick=()=>{renderNewsPage(page-1)}}
+  if(next){ next.disabled = page>=totalPages; next.onclick=()=>{renderNewsPage(page+1)}}
+}
+
+function renderNewsDetail(id){
+  const article = document.getElementById('news-article');
+  const n = ALL_NEWS.find(x=>x.id===id);
+  if(!n){ article.innerHTML = '<p>Article not found.</p>'; return; }
+  article.innerHTML = `
+    <h2>${n.title}</h2>
+    <div class="news-meta">${new Date(n.date).toLocaleString()}</div>
+    <img src="${n.image || PLACEHOLDER}" alt="news image" style="width:100%;max-height:420px;object-fit:cover;border-radius:12px;margin:10px 0"/>
+    <div>${n.content || ''}</div>
+    <div class="controls" style="margin-top:14px">
+      <a class="btn ghost" href="${n.link}" target="_blank" rel="noopener">Original source</a>
+    </div>
+  `;
+}
+
+/* Load news now, and every 2 hours */
+loadNews();
+setInterval(loadNews, 2*60*60*1000);
+
+/* ------------------- Products ------------------- */
+const products = [
+  {name:'Classic Sports Tee', price:15, img:'https://images.unsplash.com/photo-1542291026-7eec264c27ff?q=80&w=900&auto=format&fit=crop'},
+  {name:'Breathable Cap', price:10, img:'https://images.unsplash.com/photo-1516478177764-9fe5bd7e9717?q=80&w=900&auto=format&fit=crop'},
+  {name:'Sweat Headband', price:8,  img:'https://images.unsplash.com/photo-1517343985841-f2d2c155f4c5?q=80&w=900&auto=format&fit=crop'},
+  {name:'Soccer Jersey', price:20, img:'https://images.unsplash.com/photo-1522778119026-d647f0596c20?q=80&w=900&auto=format&fit=crop'},
+  {name:'Cushion Socks (Pair)', price:12, img:'https://images.unsplash.com/photo-1543163521-1bf539c55dd2?q=80&w=900&auto=format&fit=crop'},
+  {name:'Training Gloves', price:18, img:'https://images.unsplash.com/photo-1508609349937-5ec4ae374ebf?q=80&w=900&auto=format&fit=crop'},
+  {name:'Sports Shorts', price:16, img:'https://images.unsplash.com/photo-1542291026-7eec264c27ff?q=80&w=900&auto=format&fit=crop'},
+  {name:'Training Shoes', price:20, img:'https://images.unsplash.com/photo-1542291026-7eec264c27ff?q=80&w=900&auto=format&fit=crop'},
+  {name:'Compact Sports Bag', price:20, img:'https://images.unsplash.com/photo-1542293787938-c9e299b88054?q=80&w=900&auto=format&fit=crop'},
+  {name:'Hydro Bottle', price:7, img:'https://images.unsplash.com/photo-1517686469429-8bdb88b9f907?q=80&w=900&auto=format&fit=crop'},
+  {name:'Knee Support Sleeve', price:14, img:'https://images.unsplash.com/photo-1567598508481-65985588e283?q=80&w=900&auto=format&fit=crop'}
+];
+function renderProducts(){
+  const grid = document.getElementById('product-grid');
+  if(!grid) return;
+  grid.innerHTML = products.map(p => `
+    <div class="product">
+      <img src="${p.img}" alt="${p.name}"/>
+      <h4 style="margin:8px 0 4px 0">${p.name}</h4>
+      <div class="price">$${p.price}</div>
+    </div>
+  `).join('');
+}
+renderProducts();
+</script>
+</body>
+</html>
