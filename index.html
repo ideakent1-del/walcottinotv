@@ -1,177 +1,349 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Walcottinotv - Sports News & Promotion</title>
-  <style>
-    body { margin: 0; font-family: Arial, sans-serif; background: #f4f8ff; color: #222; }
-    header { background: linear-gradient(to right, #003366, #0055a5); color: white; padding: 20px; text-align: center; }
-    header img { max-height: 250px; width: 100%; object-fit: cover; border-radius: 8px; }
-    nav { background: #004080; display: flex; justify-content: center; padding: 10px; }
-    nav a { color: white; margin: 0 15px; text-decoration: none; font-weight: bold; }
-    nav a:hover { text-decoration: underline; }
-
-    section { padding: 40px 20px; max-width: 1200px; margin: auto; }
-    h2 { color: #004080; margin-bottom: 20px; }
-
-    .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; }
-    .card { background: white; padding: 15px; border-radius: 10px; box-shadow: 0 2px 6px rgba(0,0,0,0.1); }
-    .card img { width: 100%; border-radius: 10px; height: 150px; object-fit: cover; }
-    .card h3 { margin: 10px 0; font-size: 18px; }
-    .card p { font-size: 14px; }
-    .button { display: inline-block; margin-top: 10px; padding: 8px 12px; background: #004080; color: white; border-radius: 5px; text-decoration: none; }
-    .button:hover { background: #0066cc; }
-
-    footer { background: #003366; color: white; text-align: center; padding: 20px; }
-    footer a { color: #66b2ff; margin: 0 10px; text-decoration: none; }
-    footer a:hover { text-decoration: underline; }
-
-    /* Ad placeholders */
-    .ad { background: #e6f0ff; border: 2px dashed #004080; padding: 20px; text-align: center; margin: 20px 0; border-radius: 10px; }
-  </style>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>WalcottinoTV – Global Sports News, Products & Talent Promotion</title>
+<style>
+  :root{
+    --blue-50:#e7f2ff; --blue-200:#bfdbfe; --blue-400:#60a5fa;
+    --blue-600:#2563eb; --blue-800:#1e3a8a; --ink:#0b132b; --card:#ffffff;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;font-family:Inter,system-ui,-apple-system,Segoe UI,Arial,sans-serif;background:var(--blue-50);color:var(--ink)}
+  header{background:linear-gradient(180deg,var(--blue-600),var(--blue-800));color:#fff}
+  .topbar{display:flex;align-items:center;justify-content:space-between;padding:14px 18px;gap:12px}
+  .brand{font-size:1.25rem;font-weight:700;letter-spacing:.5px}
+  nav{display:flex;gap:8px;flex-wrap:wrap}
+  nav a{color:#fff;text-decoration:none;padding:8px 12px;border-radius:999px;opacity:.95}
+  nav a.active,nav a:hover{background:rgba(255,255,255,.18)}
+  .hero{height:300px;display:flex;align-items:center;justify-content:center;text-align:center;
+        background:url('https://images.unsplash.com/photo-1505842465776-3b4953ca4fcb?q=80&w=1600&auto=format&fit=crop') center/cover no-repeat}
+  .hero h1{background:rgba(0,0,0,.45);color:#fff;padding:10px 16px;border-radius:12px}
+  main{max-width:1100px;margin:auto;padding:18px}
+  .hidden{display:none}
+  .section{background:var(--card);border-radius:16px;box-shadow:0 10px 20px rgba(0,0,0,.06);padding:18px;margin:16px 0}
+  .ad{background:linear-gradient(90deg,var(--blue-200),#fff);border:1px dashed var(--blue-400);border-radius:14px;padding:16px;text-align:center;margin:14px 0}
+  /* News list */
+  .news-list{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:14px}
+  .news-card{background:#fff;border:1px solid #eef2ff;border-radius:14px;overflow:hidden;display:flex;flex-direction:column}
+  .news-card img{width:100%;height:150px;object-fit:cover}
+  .news-card .pad{padding:12px}
+  .news-card h3{margin:0 0 6px 0;font-size:1.02rem}
+  .news-meta{font-size:.8rem;color:#445}
+  .btn{background:var(--blue-600);color:#fff;border:none;border-radius:10px;padding:8px 12px;cursor:pointer}
+  .btn.ghost{background:transparent;color:var(--blue-800);border:1px solid var(--blue-400)}
+  .controls{display:flex;gap:8px;align-items:center;justify-content:center;margin-top:12px;flex-wrap:wrap}
+  .pill{padding:6px 10px;border-radius:999px;background:#eef2ff;font-size:.85rem}
+  /* Products */
+  .product-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:14px}
+  .product{background:#fff;border:1px solid #eef2ff;border-radius:14px;overflow:hidden;text-align:center;padding-bottom:12px}
+  .product img{width:100%;height:160px;object-fit:cover}
+  .price{font-weight:700;color:var(--blue-800)}
+  /* Forms */
+  form{display:grid;gap:10px}
+  input,textarea,select{padding:10px;border:1px solid #dbeafe;border-radius:10px;font:inherit;background:#fff}
+  textarea{min-height:110px}
+  /* About & Contact */
+  .contact-list a{color:var(--blue-800);text-decoration:none}
+  footer{padding:20px 16px;text-align:center;color:#133;opacity:.9}
+  .muted{color:#466}
+  /* Router hide/show */
+  [data-route]{display:none}
+  [data-route].active{display:block}
+</style>
 </head>
 <body>
 
 <header>
-  <h1>Walcottinotv</h1>
-  <p>Your #1 Source for Sports News, Products & Talent Promotion</p>
-  <img src="https://images.unsplash.com/photo-1505842465776-3d90f616310d" alt="Sports Banner">
+  <div class="topbar">
+    <div class="brand">WalcottinoTV</div>
+    <nav>
+      <a href="#/home" id="nav-home">Home</a>
+      <a href="#/news" id="nav-news">News</a>
+      <a href="#/products" id="nav-products">Products</a>
+      <a href="#/promotion" id="nav-promotion">Promotion</a>
+      <a href="#/about" id="nav-about">About</a>
+    </nav>
+  </div>
+  <div class="hero"><h1>Your Home of Global Sports News</h1></div>
 </header>
 
-<nav>
-  <a href="#home">Home</a>
-  <a href="#news">News</a>
-  <a href="#products">Products</a>
-  <a href="#promotion">Talent Promotion</a>
-  <a href="#about">About</a>
-</nav>
+<main>
+  <!-- HOME -->
+  <section class="section" data-route="home" id="route-home">
+    <h2>Welcome to WalcottinoTV</h2>
+    <p>
+      Stay updated with authentic sports stories from across the globe (80%),
+      with dedicated coverage for Africa (10%) and Nigeria (10%). We refresh every two hours so you never miss a beat.
+    </p>
+    <div class="ad">Ad Banner – place your ad code here</div>
+    <div class="section">
+      <h3 class="muted">Quick Glance: Latest 5 Headlines</h3>
+      <div id="home-headlines" class="news-list"></div>
+      <div class="controls">
+        <a class="btn" href="#/news">See all news</a>
+      </div>
+    </div>
+  </section>
 
-<!-- Home -->
-<section id="home">
-  <h2>Latest Sports News</h2>
-  <div class="grid" id="homeNews"></div>
-  <a href="#news" class="button">See More News</a>
+  <!-- NEWS LIST (with pagination 5 per page) -->
+  <section class="section" data-route="news" id="route-news">
+    <h2>Latest Sports News</h2>
+    <p class="muted">Auto-updates every 2 hours • Source: GNews (Sports)</p>
+    <div class="ad">Ad Banner – place your ad code here</div>
+    <div id="news-list" class="news-list"></div>
+    <div class="controls">
+      <button class="btn ghost" id="prev-page">Prev</button>
+      <span class="pill" id="page-indicator">Page 1</span>
+      <button class="btn ghost" id="next-page">Next</button>
+    </div>
+  </section>
 
-  <h2>Featured Products</h2>
-  <div class="grid" id="homeProducts"></div>
-  <a href="#products" class="button">See More Products</a>
-</section>
+  <!-- NEWS DETAIL (internal page) -->
+  <section class="section" data-route="news-detail" id="route-news-detail">
+    <button class="btn ghost" onclick="navigate('#/news')">← Back to News</button>
+    <article id="news-article">
+      <!-- Filled by JS: title, image, date, content -->
+    </article>
+  </section>
 
-<!-- News -->
-<section id="news">
-  <h2>Sports News</h2>
-  <div id="newsContainer" class="grid"></div>
-</section>
+  <!-- PRODUCTS (10+ items with images ≤ $20) -->
+  <section class="section" data-route="products" id="route-products">
+    <h2>Sportswear – Affordable & Fresh</h2>
+    <p class="muted">Manually edit this list: open <code>index.html</code> and adjust the <strong>products</strong> array in the script.</p>
+    <div class="ad">Ad Banner – place your ad code here</div>
+    <div class="product-grid" id="product-grid"></div>
+  </section>
 
-<!-- Products -->
-<section id="products">
-  <h2>Sports Products</h2>
-  <div class="grid">
-    <div class="card"><img src="https://via.placeholder.com/250x150?text=Football+Jersey" alt=""><h3>Football Jersey</h3><p>$15</p></div>
-    <div class="card"><img src="https://via.placeholder.com/250x150?text=Running+Shoes" alt=""><h3>Running Shoes</h3><p>$20</p></div>
-    <div class="card"><img src="https://via.placeholder.com/250x150?text=Sports+Cap" alt=""><h3>Sports Cap</h3><p>$8</p></div>
-    <div class="card"><img src="https://via.placeholder.com/250x150?text=Training+Shorts" alt=""><h3>Training Shorts</h3><p>$12</p></div>
-    <div class="card"><img src="https://via.placeholder.com/250x150?text=Gym+Gloves" alt=""><h3>Gym Gloves</h3><p>$10</p></div>
-    <div class="card"><img src="https://via.placeholder.com/250x150?text=Water+Bottle" alt=""><h3>Water Bottle</h3><p>$5</p></div>
-    <div class="card"><img src="https://via.placeholder.com/250x150?text=Football+Boots" alt=""><h3>Football Boots</h3><p>$18</p></div>
-    <div class="card"><img src="https://via.placeholder.com/250x150?text=Sports+Bag" alt=""><h3>Sports Bag</h3><p>$16</p></div>
-    <div class="card"><img src="https://via.placeholder.com/250x150?text=Headband" alt=""><h3>Headband</h3><p>$6</p></div>
-    <div class="card"><img src="https://via.placeholder.com/250x150?text=Knee+Pads" alt=""><h3>Knee Pads</h3><p>$14</p></div>
-  </div>
-</section>
+  <!-- PROMOTION (live consent form) -->
+  <section class="section" data-route="promotion" id="route-promotion">
+    <h2>Promote Your Talent</h2>
+    <p>
+      We spotlight local talents and help them reach the international stage. Fill the consent form below with your details and skill set.
+    </p>
+    <div class="ad">Ad Banner – place your ad code here</div>
+    <form action="https://formsubmit.co/walcottinotv@gmail.com" method="POST">
+      <!-- FormSubmit options -->
+      <input type="hidden" name="_captcha" value="false">
+      <input type="hidden" name="_subject" value="WalcottinoTV Talent Submission">
+      <input type="hidden" name="_template" value="table">
+      <!-- Fields -->
+      <label>Full Name<input name="name" type="text" required placeholder="Your full name"/></label>
+      <label>Email<input name="email" type="email" required placeholder="you@example.com"/></label>
+      <label>Phone<input name="phone" type="tel" placeholder="+234…" /></label>
+      <label>Country<input name="country" type="text" required placeholder="Country"/></label>
+      <label>City/State<input name="city" type="text" placeholder="City / State"/></label>
+      <label>Sport / Skill Set<textarea name="skill" required placeholder="e.g., Football – Striker; Basketball – Point Guard; Athletics – 100m; etc."></textarea></label>
+      <label>Brief Bio / Achievements<textarea name="bio" placeholder="Clubs, medals, competitions…"></textarea></label>
+      <label>Portfolio / Social Links<textarea name="links" placeholder="Instagram, YouTube highlights, etc."></textarea></label>
+      <label>
+        Consent
+        <select name="consent" required>
+          <option value="">Select</option>
+          <option value="I consent to be featured on WalcottinoTV platforms.">I consent to be featured on WalcottinoTV platforms.</option>
+        </select>
+      </label>
+      <button class="btn" type="submit">Submit Talent</button>
+      <small class="muted">By submitting, you confirm the information is accurate and you agree to be contacted.</small>
+    </form>
+  </section>
 
-<!-- Talent Promotion -->
-<section id="promotion">
-  <h2>Promote Your Talent</h2>
-  <form>
-    <label>Name:</label><br><input type="text" required><br>
-    <label>Email:</label><br><input type="email" required><br>
-    <label>Skill Set:</label><br><textarea required></textarea><br>
-    <button type="submit" class="button">Submit</button>
-  </form>
-</section>
+  <!-- ABOUT (includes Contact + Socials) -->
+  <section class="section" data-route="about" id="route-about">
+    <h2>About WalcottinoTV</h2>
+    <p>
+      WalcottinoTV is your go-to destination for the freshest sports news from around the globe—delivered automatically every two hours so you're always in the game.
+      Our coverage balances <strong>80% global</strong>, <strong>10% African</strong>, and <strong>10% Nigerian</strong> stories. Beyond the headlines,
+      we actively promote local talents to international audiences through features, interviews, and community-driven showcases.
+    </p>
+    <p>
+      Built for speed, clarity, and impact, WalcottinoTV connects fans, brands, and athletes—bridging grassroots brilliance and the world stage.
+    </p>
 
-<!-- About -->
-<section id="about">
-  <h2>About Walcottinotv</h2>
-  <p>Walcottinotv is dedicated to delivering the latest global, African, and Nigerian sports news. 
-     Beyond news, we showcase sports products and provide a platform to promote local talents to the international stage. 
-     Our mission is to bridge passion, talent, and opportunity in the world of sports.</p>
+    <h3>Contact</h3>
+    <ul class="contact-list">
+      <li><strong>Phone:</strong> +2348137208793; +2349045548253</li>
+      <li><strong>Address:</strong> B5, legacy estate Kolapo Ishola GRA, Akobo, Ibadan</li>
+      <li><strong>Email:</strong> <a href="mailto:walcottinotv@gmail.com">walcottinotv@gmail.com</a></li>
+      <li><strong>Facebook:</strong> <a target="_blank" href="https://www.facebook.com/share/1CSYTgmTX9/">facebook.com/walcottinotv</a></li>
+      <li><strong>Instagram:</strong> <a target="_blank" href="https://www.instagram.com/walcotttinotv?igsh=MW44Z2QwY2toN2YyNg==">@walcotttinotv</a></li>
+      <li><strong>Twitter (X):</strong> <a target="_blank" href="https://x.com/walcotttv2025?t=A--G6KfJcBGf2kz_PAnzlw&s=09">@walcotttv2025</a></li>
+    </ul>
 
-  <h3>Contact Us</h3>
-  <p>Phone: +2348137208793, +2349045548253<br>
-     Address: B5, Legacy Estate, Kolapo Ishola GRA, Akobo Ibadan<br>
-     Email: walcottinotv@gmail.com</p>
+    <div class="ad">Ad Banner – place your ad code here</div>
+  </section>
+</main>
 
-  <h3>Follow Us</h3>
-  <p>
-    <a href="https://www.facebook.com/share/1CSYTgmTX9/" target="_blank">Facebook</a> |
-    <a href="https://www.instagram.com/walcotttinotv?igsh=MW44Z2QwY2toN2YyNg==" target="_blank">Instagram</a> |
-    <a href="https://x.com/walcotttv2025?t=A--G6KfJcBGf2kz_PAnzlw&s=09" target="_blank">Twitter (X)</a>
-  </p>
-</section>
-
-<footer>
-  <p>&copy; 2025 Walcottinotv. All Rights Reserved.</p>
-</footer>
+<footer>© <span id="year"></span> WalcottinoTV</footer>
 
 <script>
-  const apiUrl = "https://gnews.io/api/v4/top-headlines?category=sports&lang=en&country=us&max=30&apikey=demo";
-  const newsContainer = document.getElementById("newsContainer");
-  const homeNews = document.getElementById("homeNews");
+/* ------------------- SPA Router ------------------- */
+function navigate(hash){
+  if(hash) location.hash = hash;
+  const route = (location.hash || '#/home').replace('#/','');
+  document.querySelectorAll('[data-route]').forEach(el=>el.classList.remove('active'));
+  const target = document.getElementById('route-' + (route.startsWith('news/')?'news-detail':route));
+  if(target) target.classList.add('active');
+  document.querySelectorAll('nav a').forEach(a=>a.classList.remove('active'));
+  const nav = document.getElementById('nav-' + (route.startsWith('news/')?'news':route));
+  if(nav) nav.classList.add('active');
 
-  async function fetchNews() {
-    let cache = localStorage.getItem("sportsNews");
-    let timestamp = localStorage.getItem("newsTimestamp");
-    let now = Date.now();
+  // if news detail with id
+  if(route.startsWith('news/')){
+    const id = decodeURIComponent(route.split('/')[1]||'');
+    renderNewsDetail(id);
+  }
+}
+window.addEventListener('hashchange', ()=>navigate());
+navigate();
 
-    if (cache && timestamp && now - timestamp < 2 * 60 * 60 * 1000) {
-      renderNews(JSON.parse(cache));
-    } else {
-      let res = await fetch(apiUrl);
-      let data = await res.json();
-      localStorage.setItem("sportsNews", JSON.stringify(data.articles));
-      localStorage.setItem("newsTimestamp", now);
-      renderNews(data.articles);
+/* ------------------- Utilities ------------------- */
+const YEAR_EL = document.getElementById('year'); YEAR_EL.textContent = new Date().getFullYear();
+const PLACEHOLDER = 'data:image/gif;base64,R0lGODlhAQABAAAAACw='; // transparent 1x1 to ensure "only relevant images"
+
+function within7Days(dateStr){
+  const d = new Date(dateStr);
+  return (Date.now() - d.getTime()) <= 7*24*60*60*1000;
+}
+
+/* =====================================================================
+   NEWS FETCH & BUILD  —  STRICTLY SPORTS via GNews (demo key), images only
+   ===================================================================== */
+const GNEWS_KEY = 'demo';
+const GNEWS_BASE = 'https://gnews.io/api/v4/top-headlines';
+const GNEWS_LANG = 'en';
+
+// We'll pool multiple countries to gather enough fresh sports articles.
+// We keep your paging (5/page), detail page, caching and 2-hour refresh.
+const COUNTRIES_GLOBAL = ['us','gb','ca','au'];   // global mix
+const COUNTRIES_AFRICA = ['za','ke','gh'];        // Africa (non-Nigeria)
+const COUNTRY_NIGERIA  = 'ng';
+
+let ALL_NEWS = []; // {id,title,image,date,content,source,link}
+
+function gnewsUrl(country, max=10){
+  const params = new URLSearchParams({
+    category:'sports',
+    lang:GNEWS_LANG,
+    country,
+    max:String(max),
+    apikey:GNEWS_KEY
+  });
+  return `${GNEWS_BASE}?${params.toString()}`;
+}
+
+async function fetchGNewsCountry(country, max=10){
+  const res = await fetch(gnewsUrl(country, max));
+  const data = await res.json();
+  const items = Array.isArray(data.articles)? data.articles : [];
+  // Map to internal shape; enforce: within 7 days AND must have an image
+  return items.map(a=>({
+      title: a.title || '',
+      link: a.url || '',
+      date: a.publishedAt || a.date || new Date().toISOString(),
+      content: a.content || a.description || '',
+      image: a.image || null,
+      source: (a.source && a.source.name) || country.toUpperCase()
+    }))
+    .filter(x => x.image && within7Days(x.date));
+}
+
+async function fetchBucket(countries, perCountry=10){
+  const chunks = await Promise.all(countries.map(c => fetchGNewsCountry(c, perCountry).catch(()=>[])));
+  return chunks.flat();
+}
+
+async function loadNews(){
+  try{
+    // Cache-bust every 2 hours
+    const cacheKey = 'walcotti_news_cache_v2_gnews';
+    const tsKey = 'walcotti_news_ts_v2_gnews';
+    const last = parseInt(localStorage.getItem(tsKey)||'0',10);
+    const twoHours = 2*60*60*1000;
+
+    if(Date.now()-last < twoHours){
+      const cached = JSON.parse(localStorage.getItem(cacheKey)||'[]');
+      if(cached.length){ ALL_NEWS = cached; renderNews(); return; }
     }
+
+    // Fetch pools (strictly sports)
+    const [globalPool, africaPool, nigeriaPool] = await Promise.all([
+      fetchBucket(COUNTRIES_GLOBAL, 10),
+      fetchBucket(COUNTRIES_AFRICA, 10),
+      fetchGNewsCountry(COUNTRY_NIGERIA, 10)
+    ]);
+
+    // De-dup by title (case-insensitive)
+    const uniqByTitle = (list)=>{
+      const seen=new Set();
+      return list.filter(x=>{
+        const k = x.title.trim().toLowerCase();
+        if(seen.has(k)) return false;
+        seen.add(k); return true;
+      });
+    };
+
+    const g7 = uniqByTitle(globalPool);
+    const a7 = uniqByTitle(africaPool);
+    const n7 = uniqByTitle(nigeriaPool);
+
+    // Target up to 30 total (you can change these if you want to enforce 80/10/10)
+    const targetTotal = 30;
+    const globalTake  = Math.min(24, g7.length);
+    const africaTake  = Math.min(3,  a7.length);
+    const nigeriaTake = Math.min(3,  n7.length);
+
+    let selected = [
+      ...g7.slice(0, globalTake),
+      ...a7.slice(0, africaTake),
+      ...n7.slice(0, nigeriaTake)
+    ];
+
+    // Top up from global pool if needed
+    const need = Math.max(targetTotal - selected.length, 0);
+    if(need>0){
+      const more = g7.slice(globalTake, globalTake+need);
+      selected = selected.concat(more);
+    }
+
+    // Sort newest first and assign stable IDs
+    ALL_NEWS = selected
+      .sort((a,b)=>new Date(b.date)-new Date(a.date))
+      .map((item, idx)=>({
+        id: String(idx+1) + '-' + encodeURIComponent(item.title.toLowerCase().replace(/\s+/g,'-').slice(0,60)),
+        ...item
+      }));
+
+    localStorage.setItem(cacheKey, JSON.stringify(ALL_NEWS));
+    localStorage.setItem(tsKey, String(Date.now()));
+
+    renderNews();
+  }catch(e){
+    console.error('News fetch error', e);
+    const list = document.getElementById('news-list');
+    if(list) list.innerHTML = '<p>Unable to load news at this time.</p>';
   }
+}
 
-  function renderNews(articles) {
-    newsContainer.innerHTML = "";
-    homeNews.innerHTML = "";
-    articles.forEach((a, i) => {
-      let card = document.createElement("div");
-      card.className = "card";
-      card.innerHTML = `
-        <img src="${a.image || 'https://via.placeholder.com/250x150'}" alt="">
-        <h3>${a.title}</h3>
-        <p>${a.description || ''}</p>
-        <a href="#" class="button" onclick="showFullNews('${encodeURIComponent(JSON.stringify(a))}')">Read More</a>
-      `;
-      newsContainer.appendChild(card);
+let currentPage = 1;
+const PER_PAGE = 5;
 
-      if (i < 4) {
-        let homeCard = card.cloneNode(true);
-        homeNews.appendChild(homeCard);
-      }
-    });
+function renderNews(){
+  // Home top 5
+  const homeList = document.getElementById('home-headlines');
+  if(homeList){
+    homeList.innerHTML = ALL_NEWS.slice(0,5).map(cardTemplate).join('');
   }
+  // News list by page
+  renderNewsPage(currentPage);
+}
 
-  function showFullNews(articleStr) {
-    let a = JSON.parse(decodeURIComponent(articleStr));
-    newsContainer.innerHTML = `
-      <div class="card">
-        <img src="${a.image || 'https://via.placeholder.com/250x150'}" alt="">
-        <h2>${a.title}</h2>
-        <p>${a.content || a.description || "Full article not available."}</p>
-        <a href="#news" class="button" onclick="fetchNews()">Back to News</a>
-      </div>
-    `;
-  }
-
-  fetchNews();
-</script>
-
-</body>
-</html>
+function cardTemplate(n){
+  return `
+    <div class="news-card">
+      <img src="${n.image}" alt="news image"/>
+      <div class="pad">
+        <h3>${n.title}</h3>
+        <div class="news-meta">${new Date(n.date).toLocaleString()}</div>
+        <div class="controls" style="justify-content:flex-start;marg
