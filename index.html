@@ -1,1010 +1,134 @@
-
 ```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SportPro - Sports News, Apparel & Talent Promotion</title>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <style>
-        :root {
-            --primary-blue: #0a2c5d;
-            --secondary-blue: #1e5799;
-            --accent-blue: #3498db;
-            --light-blue: #e6f0ff;
-            --dark-text: #333333;
-            --light-text: #ffffff;
-            --gray-bg: #f5f7fa;
-            --border-color: #dde6ef;
-        }
-        
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        
-        body {
-            font-family: 'Open Sans', sans-serif;
-            color: var(--dark-text);
-            line-height: 1.6;
-            background-color: #fff;
-        }
-        
-        h1, h2, h3, h4, h5, h6 {
-            font-family: 'Montserrat', sans-serif;
-            font-weight: 700;
-            margin-bottom: 1rem;
-            color: var(--primary-blue);
-        }
-        
-        .container {
-            width: 100%;
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 20px;
-        }
-        
-        /* Header Styles */
-        header {
-            background: linear-gradient(to right, var(--primary-blue), var(--secondary-blue));
-            color: var(--light-text);
-            padding: 1rem 0;
-            position: sticky;
-            top: 0;
-            z-index: 100;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-        }
-        
-        .header-container {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        
-        .logo {
-            font-size: 1.8rem;
-            font-weight: 700;
-            color: var(--light-text);
-            text-decoration: none;
-            display: flex;
-            align-items: center;
-        }
-        
-        .logo span {
-            color: var(--accent-blue);
-        }
-        
-        nav ul {
-            display: flex;
-            list-style: none;
-        }
-        
-        nav ul li {
-            margin-left: 1.5rem;
-        }
-        
-        nav ul li a {
-            color: var(--light-text);
-            text-decoration: none;
-            font-weight: 500;
-            transition: color 0.3s;
-            padding: 0.5rem 0;
-            position: relative;
-        }
-        
-        nav ul li a:after {
-            content: '';
-            position: absolute;
-            width: 0;
-            height: 2px;
-            bottom: 0;
-            left: 0;
-            background-color: var(--accent-blue);
-            transition: width 0.3s;
-        }
-        
-        nav ul li a:hover:after {
-            width: 100%;
-        }
-        
-        nav ul li a:hover {
-            color: var(--accent-blue);
-        }
-        
-        .mobile-menu-btn {
-            display: none;
-            background: none;
-            border: none;
-            color: var(--light-text);
-            font-size: 1.5rem;
-            cursor: pointer;
-        }
-        
-        /* Hero Section */
-        .hero {
-            background: linear-gradient(rgba(10, 44, 93, 0.8), rgba(10, 44, 93, 0.8)), url('https://images.unsplash.com/photo-1552667466-07770ae110d0?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');
-            background-size: cover;
-            background-position: center;
-            color: var(--light-text);
-            padding: 5rem 0;
-            text-align: center;
-        }
-        
-        .hero h1 {
-            font-size: 2.8rem;
-            margin-bottom: 1.5rem;
-            color: var(--light-text);
-        }
-        
-        .hero p {
-            font-size: 1.2rem;
-            max-width: 700px;
-            margin: 0 auto 2rem;
-        }
-        
-        .btn {
-            display: inline-block;
-            background-color: var(--accent-blue);
-            color: var(--light-text);
-            padding: 0.8rem 1.8rem;
-            border-radius: 30px;
-            text-decoration: none;
-            font-weight: 600;
-            transition: all 0.3s;
-            border: none;
-            cursor: pointer;
-        }
-        
-        .btn:hover {
-            background-color: var(--primary-blue);
-            transform: translateY(-3px);
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-        }
-        
-        /* Section Styles */
-        section {
-            padding: 4rem 0;
-        }
-        
-        .section-title {
-            text-align: center;
-            margin-bottom: 3rem;
-            position: relative;
-        }
-        
-        .section-title:after {
-            content: '';
-            position: absolute;
-            width: 80px;
-            height: 3px;
-            background-color: var(--accent-blue);
-            bottom: -10px;
-            left: 50%;
-            transform: translateX(-50%);
-        }
-        
-        /* News Section */
-        .news-grid, .products-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-            gap: 2rem;
-        }
-        
-        .news-card, .product-card {
-            background-color: #fff;
-            border-radius: 8px;
-            overflow: hidden;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
-            transition: transform 0.3s;
-        }
-        
-        .news-card:hover, .product-card:hover {
-            transform: translateY(-5px);
-        }
-        
-        .news-img, .product-img {
-            width: 100%;
-            height: 200px;
-            object-fit: cover;
-        }
-        
-        .news-content, .product-content {
-            padding: 1.5rem;
-        }
-        
-        .news-date {
-            color: #777;
-            font-size: 0.9rem;
-            margin-bottom: 0.5rem;
-        }
-        
-        .news-title, .product-title {
-            font-size: 1.2rem;
-            margin-bottom: 0.8rem;
-        }
-        
-        .news-excerpt {
-            margin-bottom: 1rem;
-        }
-        
-        .read-more {
-            color: var(--accent-blue);
-            text-decoration: none;
-            font-weight: 600;
-            display: inline-flex;
-            align-items: center;
-        }
-        
-        .read-more:hover {
-            text-decoration: underline;
-        }
-        
-        /* Products Section */
-        .product-price {
-            color: var(--primary-blue);
-            font-weight: 700;
-            font-size: 1.2rem;
-            margin: 0.5rem 0;
-        }
-        
-        .add-to-cart {
-            background-color: var(--primary-blue);
-            color: white;
-            padding: 0.5rem 1rem;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            transition: background-color 0.3s;
-        }
-        
-        .add-to-cart:hover {
-            background-color: var(--secondary-blue);
-        }
-        
-        /* About Section */
-        .about-content {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 3rem;
-            align-items: center;
-        }
-        
-        .about-img {
-            width: 100%;
-            border-radius: 8px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-        }
-        
-        /* Contact Section */
-        .contact-container {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 3rem;
-        }
-        
-        .contact-info {
-            background-color: var(--light-blue);
-            padding: 2rem;
-            border-radius: 8px;
-        }
-        
-        .contact-details {
-            margin-bottom: 2rem;
-        }
-        
-        .contact-details p {
-            margin-bottom: 0.5rem;
-            display: flex;
-            align-items: center;
-        }
-        
-        .contact-form input,
-        .contact-form textarea,
-        .talent-form input,
-        .talent-form textarea,
-        .talent-form select {
-            width: 100%;
-            padding: 0.8rem;
-            margin-bottom: 1rem;
-            border: 1px solid var(--border-color);
-            border-radius: 4px;
-            font-family: 'Open Sans', sans-serif;
-        }
-        
-        .contact-form textarea,
-        .talent-form textarea {
-            min-height: 150px;
-            resize: vertical;
-        }
-        
-        /* Talent Promotion Form */
-        .talent-form {
-            background-color: var(--gray-bg);
-            padding: 2rem;
-            border-radius: 8px;
-        }
-        
-        .form-group {
-            margin-bottom: 1.5rem;
-        }
-        
-        /* Footer */
-        footer {
-            background-color: var(--primary-blue);
-            color: var(--light-text);
-            padding: 3rem 0 1rem;
-        }
-        
-        .footer-content {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 2rem;
-            margin-bottom: 2rem;
-        }
-        
-        .footer-column h3 {
-            color: var(--light-text);
-            margin-bottom: 1.5rem;
-            position: relative;
-        }
-        
-        .footer-column h3:after {
-            content: '';
-            position: absolute;
-            width: 40px;
-            height: 2px;
-            background-color: var(--accent-blue);
-            bottom: -8px;
-            left: 0;
-        }
-        
-        .footer-column ul {
-            list-style: none;
-        }
-        
-        .footer-column ul li {
-            margin-bottom: 0.8rem;
-        }
-        
-        .footer-column ul li a {
-            color: #ccc;
-            text-decoration: none;
-            transition: color 0.3s;
-        }
-        
-        .footer-column ul li a:hover {
-            color: var(--accent-blue);
-        }
-        
-        .social-links {
-            display: flex;
-            gap: 1rem;
-        }
-        
-        .social-links a {
-            color: var(--light-text);
-            background-color: rgba(255, 255, 255, 0.1);
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: all 0.3s;
-        }
-        
-        .social-links a:hover {
-            background-color: var(--accent-blue);
-            transform: translateY(-3px);
-        }
-        
-        .copyright {
-            text-align: center;
-            padding-top: 2rem;
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
-            font-size: 0.9rem;
-            color: #ccc;
-        }
-        
-        /* Page Styles */
-        .page-header {
-            background: linear-gradient(to right, var(--primary-blue), var(--secondary-blue));
-            color: var(--light-text);
-            padding: 3rem 0;
-            text-align: center;
-        }
-        
-        .page-content {
-            padding: 3rem 0;
-        }
-        
-        /* News Filter */
-        .news-filter {
-            display: flex;
-            justify-content: center;
-            margin-bottom: 2rem;
-            flex-wrap: wrap;
-            gap: 1rem;
-        }
-        
-        .filter-btn {
-            padding: 0.5rem 1.5rem;
-            background-color: var(--light-blue);
-            border: none;
-            border-radius: 30px;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-        
-        .filter-btn.active, .filter-btn:hover {
-            background-color: var(--accent-blue);
-            color: white;
-        }
-        
-        /* Loading Spinner */
-        .loader {
-            border: 5px solid var(--light-blue);
-            border-top: 5px solid var(--accent-blue);
-            border-radius: 50%;
-            width: 50px;
-            height: 50px;
-            animation: spin 1s linear infinite;
-            margin: 2rem auto;
-        }
-        
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-        
-        /* API Key Input */
-        .api-key-container {
-            background-color: var(--light-blue);
-            padding: 1.5rem;
-            border-radius: 8px;
-            margin-bottom: 2rem;
-            text-align: center;
-        }
-        
-        .api-key-input {
-            padding: 0.8rem;
-            width: 300px;
-            border: 1px solid var(--border-color);
-            border-radius: 4px;
-            margin-right: 1rem;
-        }
-        
-        /* Responsive Styles */
-        @media (max-width: 992px) {
-            .about-content,
-            .contact-container {
-                grid-template-columns: 1fr;
-            }
-            
-            .news-grid,
-            .products-grid {
-                grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-            }
-        }
-        
-        @media (max-width: 768px) {
-            .mobile-menu-btn {
-                display: block;
-            }
-            
-            nav {
-                position: fixed;
-                top: 70px;
-                left: -100%;
-                width: 80%;
-                height: calc(100vh - 70px);
-                background-color: var(--primary-blue);
-                transition: all 0.3s;
-                z-index: 99;
-            }
-            
-            nav.active {
-                left: 0;
-            }
-            
-            nav ul {
-                flex-direction: column;
-                padding: 2rem;
-            }
-            
-            nav ul li {
-                margin: 1rem 0;
-            }
-            
-            .hero h1 {
-                font-size: 2.2rem;
-            }
-            
-            .hero p {
-                font-size: 1rem;
-            }
-            
-            .footer-content {
-                grid-template-columns: 1fr;
-            }
-            
-            .api-key-input {
-                width: 100%;
-                margin-right: 0;
-                margin-bottom: 1rem;
-            }
-        }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>WalcottTinoTV Sports Brand</title>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    body { margin: 0; font-family: 'Roboto', sans-serif; background: #f0f8ff; color: #222; }
+    header { background: #1e3a8a; color: white; padding: 30px 20px; text-align: center; }
+    nav { background: #2563eb; display: flex; flex-wrap: wrap; justify-content: center; gap: 20px; padding: 15px; }
+    nav a { color: white; text-decoration: none; font-weight: bold; }
+    nav a:hover { text-decoration: underline; }
+    section { padding: 40px 20px; max-width: 1200px; margin: auto; }
+    h2 { color: #1e3a8a; margin-bottom: 20px; }
+    .container { display: flex; flex-wrap: wrap; gap: 20px; }
+      <p>Get the latest in global and local sports news, discover upcoming talents, and shop affordable, quality sportswear.</p>
+</section>
+
+<section id="news">
+  <h2>Latest Sports News</h2>
+  <div class="container" id="news-container">Loading latest sports news...</div>
+</section>
+
+<section id="products">
+  <h2>Sportswear Under 50</h2>
+  <div class="container">
+    <div class="item">
+      <img src="https://via.placeholder.com/300x200" alt="T-shirt">
+      <h3>Sporty T-Shirt</h3><p>25</p>
+    </div>
+    <div class="item">
+      <img src="https://via.placeholder.com/300x200" alt="Shorts">
+      <h3>Running Shorts</h3><p>30</p>
+    </div>
+    <div class="item">
+      <img src="https://via.placeholder.com/300x200" alt="Jersey">
+      <h3>Basketball Jersey</h3><p>45</p>
+    </div>
+  </div>
+</section>
+
+<section id="promotion">
+  <h2>Promote Your Talent</h2>
+  <form action="#" method="POST">
+    <input type="text" name="fullName" placeholder="Full Name" required>
+    <input type="tel" name="phone" placeholder="Phone Number" required>
+    <input type="email" name="email" placeholder="Email Address" required>
+    <textarea name="skills" rows="4" placeholder="Describe your skill sets" required></textarea>
+    <button type="submit">Submit</button>
+  </form>
+</section>
+
+<section id="about">
+.item { background: #fff; border: 1px solid #ccc; padding: 15px; border-radius: 8px; flex: 1 1 calc(33% - 40px); box-sizing: border-box; }
+    .item img { width: 100%; height: auto; border-radius: 6px; }
+    form { display: flex; flex-direction: column; gap: 15px; max-width: 600px; }
+    input, textarea { padding: 10px; border: 1px solid #ccc; border-radius: 4px; font-size: 1em; }
+    button { background: #1e3a8a; color: white; padding: 12px; border: none; border-radius: 4px; cursor: pointer; font-size: 1em; }
+    footer { background: #1e3a8a; color: white; text-align: center; padding: 20px; margin-top: 40px; }
+    .social a { color: #1e3a8a; margin-right: 15px; text-decoration: none; font-weight: bold; }
+    .social a:hover { text-decoration: underline; }
+    @media (max-width: 768px) {
+      .item { flex: 1 1 100%; }
+    }
+  </style>
 </head>
 <body>
-    <!-- Header -->
-    <header>
-        <div class="container header-container">
-            <a href="#" class="logo">Sport<span>Pro</span></a>
-            <button class="mobile-menu-btn">☰</button>
-            <nav id="main-nav">
-                <ul>
-                    <li><a href="#home">Home</a></li>
-                    <li><a href="#news">News</a></li>
-                    <li><a href="#products">Products</a></li>
-                    <li><a href="#talent">Talent Promotion</a></li>
-                    <li><a href="#about">About</a></li>
-                    <li><a href="#contact">Contact</a></li>
-                </ul>
-            </nav>
-        </div>
-    </header>
 
-    <!-- Main Content -->
-    <main>
-        <!-- Home Page -->
-        <div id="home">
-            <!-- Hero Section -->
-            <section class="hero">
-                <div class="container">
-                    <h1>Your Ultimate Sports Destination</h1>
-                    <p>Get the latest sports news, premium sportswear, and support local talent in sports and music</p>
-                    <a href="#news" class="btn">Explore Now</a>
-                </div>
-            </section>
+<header>
+  <h1>WalcottTinoTV Sports Brand</h1>
+  <p>Sports News | Local Talent | Affordable Sportswear</p>
+</header>
 
-            <!-- Featured News Section -->
-            <section id="news">
-                <div class="container">
-                    <h2 class="section-title">Latest Sports News</h2>
-                    
-                    <!-- NewsAPI Key Input -->
-                    <div class="api-key-container">
-                        <h3>Enter Your NewsAPI Key</h3>
-                        <p>To view live sports news, you need a free API key from <a href="https://newsapi.org/register" target="_blank">NewsAPI.org</a></p>
-                        <div style="margin-top: 1rem;">
-                            <input type="text" id="newsapi-key" class="api-key-input" placeholder="Enter your NewsAPI key">
-                            <button id="save-api-key" class="btn">Save Key</button>
-                        </div>
-                    </div>
-                    
-                    <div class="news-filter">
-                        <button class="filter-btn active" data-filter="all">All News</button>
-                        <button class="filter-btn" data-filter="football">Football</button>
-                        <button class="filter-btn" data-filter="basketball">Basketball</button>
-                        <button class="filter-btn" data-filter="boxing">Boxing</button>
-                        <button class="filter-btn" data-filter="wrestling">Wrestling</button>
-                        <button class="filter-btn" data-filter="racing">Racing</button>
-                    </div>
-                    <div class="news-grid" id="news-container">
-                        <!-- News will be loaded here by JavaScript -->
-                    </div>
-                    <div id="news-loader" class="loader" style="display: none;"></div>
-                    <div id="news-error" style="text-align: center; color: #e74c3c; display: none;">
-                        <p>Failed to load news. Please check your API key and try again.</p>
-                    </div>
-                </div>
-            </section>
+<nav>
+  <a href="#home">Home</a>
+  <a href="#news">News</a>
+  <a href="#products">Products</a>
+  <a href="#promotion">Promotion</a>
+  <a href="#about">About</a>
+  <a href="#contact">Contact</a>
+</nav>
 
-            <!-- Featured Products Section -->
-            <section id="products" style="background-color: var(--gray-bg);">
-                <div class="container">
-                    <h2 class="section-title">Featured Sportswear</h2>
-                    <div class="products-grid">
-                        <!-- Product 1 -->
-                        <div class="product-card">
-                            <img src="https://images.unsplash.com/photo-1529903384028-929ae5dccdf1?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80" alt="Training Jersey" class="product-img">
-                            <div class="product-content">
-                                <h3 class="product-title">Training Jersey</h3>
-                                <div class="product-price">$29.99</div>
-                                <p>High-quality training jersey with moisture-wicking technology</p>
-                                <button class="add-to-cart">Add to Cart</button>
-                            </div>
-                        </div>
-                        
-                        <!-- Product 2 -->
-                        <div class="product-card">
-                            <img src="https://images.unsplash.com/photo-1591047139829-d91aecb6caea?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80" alt="Running Shorts" class="product-img">
-                            <div class="product-content">
-                                <h3 class="product-title">Running Shorts</h3>
-                                <div class="product-price">$24.99</div>
-                                <p>Lightweight running shorts with built-in compression liner</p>
-                                <button class="add-to-cart">Add to Cart</button>
-                            </div>
-                        </div>
-                        
-                        <!-- Product 3 -->
-                        <div class="product-card">
-                            <img src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80" alt="Basketball Shoes" class="product-img">
-                            <div class="product-content">
-                                <h3 class="product-title">Basketball Shoes</h3>
-                                <div class="product-price">$49.99</div>
-                                <p>High-performance basketball shoes with superior ankle support</p>
-                                <button class="add-to-cart">Add to Cart</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </section>
+<section id="home">
+  <h2>Welcome</h2>      
+    <h2>About Us</h2>
+  <p>WalcottTinoTV is a passionate brand focused on promoting sports culture through reliable news, talent support, and accessible sportswear. Based in Ibadan, Nigeria, we are committed to bridging the gap between rising talents and opportunities.</p>
+</section>
 
-            <!-- About Section -->
-            <section id="about">
-                <div class="container">
-                    <h2 class="section-title">About SportPro</h2>
-                    <div class="about-content">
-                        <div>
-                            <img src="https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80" alt="About SportPro" class="about-img">
-                        </div>
-                        <div>
-                            <h3>We Are Passionate About Sports</h3>
-                            <p>SportPro is a premier sports brand dedicated to bringing you the latest in sports news, high-quality affordable sportswear, and a platform for promoting local talent in both sports and music industries.</p>
-                            <p>Founded in 2023, our mission is to create a community where sports enthusiasts can stay informed, equipped, and connected. We believe in the power of sports to transform lives and communities, and we're committed to supporting emerging talents across Africa.</p>
-                            <p>Our vision is to become Africa's leading sports brand, recognized for excellence in sports journalism, quality apparel, and talent development.</p>
-                        </div>
-                    </div>
-                </div>
-            </section>
+<section id="contact">
+  <h2>Contact Us</h2>
+  <p><strong>Phone:</strong> +2348137208793, +2349045548253</p>
+  <p><strong>Address:</strong> B5, Legacy Estate, Kolapo Ishola GRA, Akobo, Ibadan, Oyo State, Nigeria.</p>
+  <div class="social">
+    <a href="https://www.instagram.com/walcotttinotv?igsh=MW44Z2QwY2toN2YyNg==" target="_blank">Instagram</a>
+    <a href="https://www.facebook.com/share/1CSYTgmTX9/" target="_blank">Facebook</a>
+    <a href="https://x.com/walcotttv2025?t=A--G6KfJcBGf2kz_PAnzlw&s=09" target="_blank">X (Twitter)</a>
+  </div>
+</section>
 
-            <!-- Talent Promotion CTA -->
-            <section style="background: linear-gradient(to right, var(--primary-blue), var(--secondary-blue)); color: var(--light-text);">
-                <div class="container" style="text-align: center;">
-                    <h2 style="color: var(--light-text);">Showcase Your Talent</h2>
-                    <p style="max-width: 700px; margin: 0 auto 2rem;">Are you a talented athlete or musician? Register with us to get exposure and opportunities.</p>
-                    <a href="#talent" class="btn" style="background-color: var(--light-text); color: var(--primary-blue);">Apply Now</a>
-                </div>
-            </section>
+<footer>
+  <p>&copy; 2025 WalcottTinoTV Sports Brand. All rights reserved.</p>
+</footer>
 
-            <!-- Contact CTA -->
-            <section>
-                <div class="container" style="text-align: center;">
-                    <h2>Get In Touch</h2>
-                    <p>Have questions or want to learn more about our services? Contact us today.</p>
-                    <a href="#contact" class="btn">Contact Us</a>
-                </div>
-            </section>
-        </div>
+<script>
+  const apiKey = '3f48df677f1a4c6f3178add06eecb2d1';
+  const url = `https://gnews.io/api/v4/top-headlines?category=sports&lang=en&country=us&max=30&apikey=${apiKey}`;
+  const newsContainer = document.getElementById('news-container');
 
-        <!-- Talent Promotion Page -->
-        <div id="talent" class="page-content" style="display: none;">
-            <div class="page-header">
-                <div class="container">
-                    <h1>Talent Promotion</h1>
-                    <p>Showcase your skills and get discovered</p>
-                </div>
-            </div>
-            
-            <div class="container">
-                <div class="talent-form">
-                    <h2 class="section-title">Apply to Be Featured</h2>
-                    <p style="text-align: center; margin-bottom: 2rem;">We're always looking for talented athletes and musicians to promote. Fill out the form below to get started.</p>
-                    
-                    <form id="talent-application-form">
-                        <div class="form-group">
-                            <label for="full-name">Full Name</label>
-                            <input type="text" id="full-name" name="full-name" required>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label for="email">Email Address</label>
-                            <input type="email" id="email" name="email" required>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label for="phone">Phone Number</label>
-                            <input type="tel" id="phone" name="phone" required>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label for="sport">Sport or Music Genre</label>
-                            <input type="text" id="sport" name="sport" required>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label for="skill-level">Skill Level</label>
-                            <select id="skill-level" name="skill-level" required>
-                                <option value="">Select your level</option>
-                                <option value="beginner">Beginner</option>
-                                <option value="intermediate">Intermediate</option>
-                                <option value="advanced">Advanced</option>
-                                <option value="professional">Professional</option>
-                            </select>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label for="achievements">Notable Achievements</label>
-                            <textarea id="achievements" name="achievements" required></textarea>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label for="social-media">Social Media Links</label>
-                            <input type="text" id="social-media" name="social-media">
-                        </div>
-                        
-                        <button type="submit" class="btn">Submit Application</button>
-                    </form>
-                </div>
-            </div>
-        </div>
+  fetch(url)
+    .then(res => res.json())
+    .then(data => {
+      newsContainer.innerHTML = '';
+        data.articles.forEach(article => 
+        const div = document.createElement('div');
+        div.className = 'item';
+        div.innerHTML = `
+          <img src="{article.image || 'https://via.placeholder.com/300x200'}" alt="news">
+          <h3>article.title</h3>
+          <p>{article.description || ''}</p>
+          <a href="${article.url}" target="_blank">Read more</a>
+        `;
+        newsContainer.appendChild(div);
+      });
+    })
+    .catch(err => {
+      newsContainer.innerHTML = 'Failed to load news. Please check your API key or internet connection.';
+    });
+</script>
 
-        <!-- Contact Page -->
-        <div id="contact" class="page-content" style="display: none;">
-            <div class="page-header">
-                <div class="container">
-                    <h1>Contact Us</h1>
-                    <p>We'd love to hear from you</p>
-                </div>
-            </div>
-            
-            <div class="container">
-                <div class="contact-container">
-                    <div class="contact-info">
-                        <h2>Get In Touch</h2>
-                        <div class="contact-details">
-                            <p><i class="fas fa-map-marker-alt"></i> 123 Sports Avenue, Lagos, Nigeria</p>
-                            <p><i class="fas fa-phone"></i> +234 123 456 7890</p>
-                            <p><i class="fas fa-envelope"></i> info@sportpro.com</p>
-                            <p><i class="fas fa-clock"></i> Monday-Friday: 9am-5pm</p>
-                        </div>
-                        
-                        <h2>Follow Us</h2>
-                        <div class="social-links">
-                            <a href="#"><i class="fab fa-facebook-f"></i></a>
-                            <a href="#"><i class="fab fa-twitter"></i></a>
-                            <a href="#"><i class="fab fa-instagram"></i></a>
-                            <a href="#"><i class="fab fa-linkedin-in"></i></a>
-                        </div>
-                    </div>
-                    
-                    <div class="contact-form">
-                        <h2>Send Us a Message</h2>
-                        <form id="contact-form">
-                            <input type="text" placeholder="Your Name" required>
-                            <input type="email" placeholder="Your Email" required>
-                            <input type="text" placeholder="Subject">
-                            <textarea placeholder="Your Message" required></textarea>
-                            <button type="submit" class="btn">Send Message</button>
-                        </form>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </main>
-
-    <!-- Footer -->
-    <footer>
-        <div class="container">
-            <div class="footer-content">
-                <div class="footer-column">
-                    <h3>SportPro</h3>
-                    <p>Your ultimate destination for sports news, apparel, and talent promotion.</p>
-                </div>
-                <div class="footer-column">
-                    <h3>Quick Links</h3>
-                    <ul>
-                        <li><a href="#home">Home</a></li>
-                        <li><a href="#news">News</a></li>
-                        <li><a href="#products">Products</a></li>
-                        <li><a href="#talent">Talent Promotion</a></li>
-                        <li><a href="#about">About</a></li>
-                        <li><a href="#contact">Contact</a></li>
-                    </ul>
-                </div>
-                <div class="footer-column">
-                    <h3>Contact Us</h3>
-                    <p>123 Sports Avenue, Lagos, Nigeria</p>
-                    <p>+234 123 456 7890</p>
-                    <p>info@sportpro.com</p>
-                </div>
-                <div class="footer-column">
-                    <h3>Follow Us</h3>
-                    <div class="social-links">
-                        <a href="#"><i class="fab fa-facebook-f"></i></a>
-                        <a href="#"><i class="fab fa-twitter"></i></a>
-                        <a href="#"><i class="fab fa-instagram"></i></a>
-                        <a href="#"><i class="fab fa-linkedin-in"></i></a>
-                    </div>
-                </div>
-            </div>
-            <div class="copyright">
-                <p>&copy; 2023 SportPro. All rights reserved.</p>
-            </div>
-        </div>
-    </footer>
-
-    <script>
-        // Mobile menu toggle
-        const mobileMenuBtn = document.querySelector('.mobile-menu-btn');
-        const mainNav = document.getElementById('main-nav');
-        
-        mobileMenuBtn.addEventListener('click', () => {
-            mainNav.classList.toggle('active');
-        });
-        
-        // Navigation
-        document.querySelectorAll('nav a').forEach(link => {
-            link.addEventListener('click', function(e) {
-                e.preventDefault();
-                
-                // Hide all pages
-                document.querySelectorAll('.page-content').forEach(page => {
-                    page.style.display = 'none';
-                });
-                document.getElementById('home').style.display = 'block';
-                
-                // Show target page
-                const targetId = this.getAttribute('href').substring(1);
-                if (targetId !== 'home') {
-                    document.getElementById('home').style.display = 'none';
-                    document.getElementById(targetId).style.display = 'block';
-                }
-                
-                // Close mobile menu
-                mainNav.classList.remove('active');
-                
-                // Scroll to top
-                window.scrollTo(0, 0);
-            });
-        });
-        
-        // NewsAPI Integration
-        const newsContainer = document.getElementById('news-container');
-        const newsLoader = document.getElementById('news-loader');
-        const newsError = document.getElementById('news-error');
-        const filterButtons = document.querySelectorAll('.filter-btn');
-        const apiKeyInput = document.getElementById('newsapi-key');
-        const saveApiKeyBtn = document.getElementById('save-api-key');
-        
-        // Load API key from localStorage if available
-        window.addEventListener('DOMContentLoaded', () => {
-            const savedApiKey = localStorage.getItem('newsapi-key');
-            if (savedApiKey) {
-                apiKeyInput.value = savedApiKey;
-                fetchNews('all');
-            }
-        });
-        
-        // Save API key
-        saveApiKeyBtn.addEventListener('click', () => {
-            const apiKey = apiKeyInput.value.trim();
-            if (apiKey) {
-                localStorage.setItem('newsapi-key', apiKey);
-                fetchNews('all');
-            } else {
-                alert('Please enter a valid NewsAPI key');
-            }
-        });
-        
-        // Function to fetch news from NewsAPI
-        async function fetchNews(filter = 'all') {
-            const apiKey = localStorage.getItem('newsapi-key');
-            
-            if (!apiKey) {
-                newsContainer.innerHTML = '<p class="no-news">Please enter your NewsAPI key to load news</p>';
-                return;
-            }
-            
-            // Show loading indicator
-            newsLoader.style.display = 'block';
-            newsError.style.display = 'none';
-            newsContainer.innerHTML = '';
-            
-            try {
-                // Map our filter terms to NewsAPI query terms
-                const queryMap = {
-                    'all': 'sports OR football OR basketball OR boxing OR wrestling OR racing',
-                    'football': 'football OR soccer',
-                    'basketball': 'basketball OR NBA',
-                    'boxing': 'boxing',
-                    'wrestling': 'wrestling',
-                    'racing': 'racing OR formula 1 OR motorsports'
-                };
-                
-                const query = queryMap[filter] || queryMap['all'];
-                
-                // Add Nigerian/African sports sources for local content (20%)
-                const localSources = 'punchng.com OR guardian.ng OR premiumtimesng.com';
-                
-                // Fetch news from NewsAPI
-                const response = await fetch(`https://newsapi.org/v2/everything?q=${query} OR (${query} AND (${localSources}))&language=en&sortBy=publishedAt&pageSize=30&apiKey=${apiKey}`);
-                
-                if (!response.ok) {
-                    throw new Error('Failed to fetch news');
-                }
-                
-                const data = await response.json();
-                
-                if (data.articles && data.articles.length > 0) {
-                    displayNews(data.articles, filter);
-                } else {
-                    throw new Error('No news articles found');
-                }
-            } catch (error) {
-                console.error('Error fetching news:', error);
-                newsError.style.display = 'block';
-                newsContainer.innerHTML = '';
-            } finally {
-                newsLoader.style.display = 'none';
-            }
-        }
-        
-        // Function to display news
-        function displayNews(articles, filter) {
-            newsContainer.innerHTML = '';
-            
-            // Mix of global and local content (80% global, 20% local)
-            const localCount = Math.floor(articles.length * 0.2);
-            const globalCount = articles.length - localCount;
-            
-            // Categorize articles and add sample local content
-            const processedArticles = processArticles(articles, filter, localCount);
-            
-            processedArticles.forEach(article => {
-                const newsCard = document.createElement('div');
-                newsCard.className = 'news-card';
-                newsCard.innerHTML = `
-                    <img src="${article.urlToImage || getFallbackImage(article.category)}" alt="${article.title}" class="news-img">
-                    <div class="news-content">
-                        <div class="news-date">${formatDate(article.publishedAt)} | ${article.isLocal ? 'Local' : 'Global'} | ${article.category.charAt(0).toUpperCase() + article.category.slice(1)}</div>
-                        <h3 class="news-title">${article.title}</h3>
-                        <p class="news-excerpt">${article.description || 'No description available.'}</p>
-                        <a href="${article.url}" target="_blank" class="read-more">Read More →</a>
-                    </div>
-                `;
-                newsContainer.appendChild(newsCard);
-            });
-        }
-        
-        // Process articles and add local content
-        function processArticles(articles, filter, localCount) {
-            // Add category to each article based on filter
-            articles.forEach(article => {
-                article.category = filter;
-                article.isLocal = false;
-            });
-            
-            // Convert some articles to local content
-            for (let i = 0; i < localCount && i < articles.length; i++) {
-                articles[i].isLocal = true;
-                
-                // Modify title and content to make it local
-                if (filter === 'football') {
-                    articles[i].title = articles[i].title.replace(/Premier League|La Liga|Serie A|Bundesliga/g, 'Nigerian League');
-                    articles[i].title = articles[i].title.replace(/Manchester United|Chelsea|Arsenal|Liverpool/g, 'Super Eagles');
-                } else if (filter === 'basketball') {
-                    articles[i].title = articles[i].title.replace(/NBA|Lakers|Warriors|Bulls/g, 'Nigerian Basketball');
-                }
-            }
-            
-            // Add some sample local news if we don't have enough
-            if (localCount > 0 && articles.filter(a => a.isLocal).length < localCount) {
-                const localNews = getSampleLocalNews(filter);
-                articles = [...localNews, ...articles];
-            }
-            
-            return articles;
-        }
-        
-        // Get fallback image for articles without images
-        function getFallbackImage(category) {
-            const fallbackImages = {
-                'football': 'https://images.unsplash.com/photo-1574629810360-7efbbe195018?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80',
-                'basketball': 'https://images.unsplash.com/photo-1546519638-68e109498ffc?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80',
-                'boxing': 'https://images.uns
+</body>
+</html>
+```
