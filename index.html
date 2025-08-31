@@ -1,1010 +1,175 @@
+
+```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>walcotttinotv - Sports News & Apparel</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <script>
-        // API Keys
-        const FOOTBALL_API_KEY = '4da5df5d5d5d09167802a3803aebede3';
-        const GNEWS_API_KEY = '3f48df677f1a4c6f3178add06eecb2d1';
-        
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        primary: '#1e40af',
-                        secondary: '#1e3a8a',
-                        accent: '#3b82f6',
-                        light: '#eff6ff',
-                        dark: '#1f2937',
-                    },
-                    fontFamily: {
-                        sans: ['Inter', 'sans-serif'],
-                        heading: ['Barlow', 'sans-serif'],
-                    },
-                    animation: {
-                        'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
-                        'float': 'float 6s ease-in-out infinite',
-                    },
-                    keyframes: {
-                        float: {
-                            '0%, 100%': { transform: 'translateY(0)' },
-                            '50%': { transform: 'translateY(-10px)' },
-                        }
-                    }
-                }
-            }
-        }
-    </script>
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Barlow:wght@600;700;800&display=swap');
-        
-        body {
-            font-family: 'Inter', sans-serif;
-            scroll-behavior: smooth;
-        }
-        
-        h1, h2, h3, h4, h5, h6 {
-            font-family: 'Barlow', sans-serif;
-        }
-        
-        .news-card:hover .news-image {
-            transform: scale(1.05);
-        }
-        
-        .product-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 25px rgba(30, 64, 175, 0.2);
-        }
-        
-        .hero {
-            background: linear-gradient(rgba(30, 64, 175, 0.85), rgba(30, 58, 138, 0.85)), url('https://images.unsplash.com/photo-1540747913346-19e32dc3e97e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1600&q=80');
-            background-size: cover;
-            background-position: center;
-            background-attachment: fixed;
-        }
-        
-        .news-tab.active {
-            background-color: #3b82f6;
-            color: white;
-        }
-        
-        .form-input:focus {
-            outline: none;
-            box-shadow: 0 0 0 2px #3b82f6;
-        }
-        
-        .scrollbar-hide::-webkit-scrollbar {
-            display: none;
-        }
-        
-        .scrollbar-hide {
-            -ms-overflow-style: none;
-            scrollbar-width: none;
-        }
-        
-        .gradient-text {
-            background: linear-gradient(90deg, #3b82f6, #1e40af);
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
-        }
-        
-        .testimonial-card {
-            background: linear-gradient(145deg, #ffffff, #f3f4f6);
-            box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.1);
-        }
-        
-        .back-to-top {
-            position: fixed;
-            bottom: 2rem;
-            right: 2rem;
-            z-index: 99;
-            opacity: 0;
-            transition: all 0.3s;
-        }
-        
-        .back-to-top.visible {
-            opacity: 1;
-        }
-        
-        .cart-badge {
-            position: absolute;
-            top: -5px;
-            right: -5px;
-            background-color: #ef4444;
-            color: white;
-            border-radius: 50%;
-            width: 20px;
-            height: 20px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 12px;
-        }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Walcottinotv</title>
+  <style>
+    body { margin: 0; font-family: 'Segoe UI', sans-serif; background: #f3f4f6; color: #111827; }
+    header, footer { background: #1e40af; color: white; padding: 20px; text-align: center; }
+    nav { background: #2563eb; display: flex; flex-wrap: wrap; justify-content: center; gap: 15px; padding: 10px; }
+    nav a { color: white; text-decoration: none; font-weight: bold; }
+    nav a:hover { text-decoration: underline; }
+    section { padding: 20px; max-width: 1100px; margin: auto; }
+    .news-container, .products-container { display: flex; flex-wrap: wrap; gap: 20px; justify-content: center; }
+      .news-item, .product-item { background: white; border-radius: 8px; box-shadow: 0 2px 6px rgba(0,0,0,0.1); overflow: hidden; width: 300px; }
+    .news-item img, .product-item img { width: 100%; height: 180px; object-fit: cover; }
+    .news-item h3, .product-item h3 { margin: 10px; }
+    .news-item p, .product-item p { margin: 0 10px 10px; }
+    .news-item details, .news-item summary { margin: 10px; }
+    form { background: white; padding: 20px; border-radius: 8px; max-width: 500px; margin: auto; box-shadow: 0 2px 6px rgba(0,0,0,0.1); }
+    form input, form textarea { width: 100%; padding: 10px; margin: 10px 0; border: 1px solid #ccc; border-radius: 4px; }
+    form button { background: #2563eb; color: white; padding: 10px 20px; border: none; border-radius: 4px; }
+    form button:hover { background: #1e3a8a; }
+    .ad-banner { background: #dbeafe; color: #1e40af; padding: 15px; text-align: center; margin: 20px auto; border: 2px dashed #60a5fa; }
+    @media (max-width: 600px) { nav { flex-direction: column; } }
+  </style>
 </head>
-<body class="bg-gray-50">
-    <!-- Navigation -->
-    <nav class="bg-primary text-white shadow-lg sticky top-0 z-50">
-        <div class="container mx-auto px-4 py-3 flex justify-between items-center">
-            <div class="flex items-center space-x-2">
-                <i class="fas fa-running text-2xl"></i>
-                <a href="#" class="text-xl font-bold">WalcottinoTv</a>
-            </div>
-            <div class="hidden md:flex space-x-6 items-center">
-                <a href="#" class="hover:text-accent transition">Home</a>
-                <a href="#news" class="hover:text-accent transition">News</a>
-                <a href="#products" class="hover:text-accent transition">Products</a>
-                <a href="#promotion" class="hover:text-accent transition">Promotions</a>
-                <a href="#about" class="hover:text-accent transition">About</a>
-                <a href="#contact" class="hover:text-accent transition">Contact</a>
-                <div class="relative ml-4">
-                    <button id="cart-btn" class="text-white hover:text-accent transition">
-                        <i class="fas fa-shopping-cart text-xl"></i>
-                        <span id="cart-count" class="cart-badge hidden">0</span>
-                    </button>
-                </div>
-            </div>
-            <div class="flex items-center space-x-4 md:hidden">
-                <div class="relative">
-                    <button id="cart-btn-mobile" class="text-white mr-2">
-                        <i class="fas fa-shopping-cart text-xl"></i>
-                        <span id="cart-count-mobile" class="cart-badge hidden">0</span>
-                    </button>
-                </div>
-                <button id="menu-toggle" class="text-white focus:outline-none">
-                    <i class="fas fa-bars text-2xl"></i>
-                </button>
-            </div>
-        </div>
-        <!-- Mobile menu -->
-        <div id="mobile-menu" class="hidden md:hidden bg-secondary px-4 py-2">
-            <a href="#" class="block py-2 hover:text-accent transition">Home</a>
-            <a href="#news" class="block py-2 hover:text-accent transition">News</a>
-            <a href="#products" class="block py-2 hover:text-accent transition">Products</a>
-            <a href="#promotion" class="block py-2 hover:text-accent transition">Promotions</a>
-            <a href="#about" class="block py-2 hover:text-accent transition">About</a>
-            <a href="#contact" class="block py-2 hover:text-accent transition">Contact</a>
-        </div>
-    </nav>
+<body>
 
-    <!-- News Article Modal -->
-    <div id="news-modal" class="fixed inset-0 bg-black bg-opacity-75 z-50 hidden">
-        <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-full max-w-4xl max-h-[90vh] overflow-y-auto">
-            <div class="bg-white rounded-lg p-6">
-                <button id="close-news-modal" class="absolute top-4 right-4 text-gray-500 hover:text-gray-700">
-                    <i class="fas fa-times text-2xl"></i>
-                </button>
-                <div id="modal-content" class="p-4">
-                    <!-- News content will be loaded here -->
-                </div>
-            </div>
-        </div>
+<header>
+  <h1>Walcottinotv</h1>
+  <p>Your hub for sports news, talents & sportswear</p>
+</header>
+
+<nav>
+  <a href="#home">Home</a>
+  <a href="#news">News</a>
+  <a href="#products">Products</a>
+  <a href="#promotion">Promotion</a>
+  <a href="#about">About</a>
+  <a href="#contact">Contact</a>
+</nav>
+
+<div class="ad-banner">
+  <strong>AD SPACE:</strong> Your advertisement could be here.
+</div>
+
+<section id="home">
+  <h2>Welcome to Walcottinotv</h2>
+  <p>We deliver up-to-date sports stories, empower local talents, and sell premium sportswear at unbeatable prices.</p>
+</section>
+
+<section id="news">
+  <h2>Latest Sports News</h2>
+  <div class="news-container" id="news-container">
+    <p>Loading news...</p>
+  </div>
+</section>
+
+<div class="ad-banner">
+  <strong>AD SPACE:</strong> Partner with us to advertise your brand!
+</div>
+
+<section id="products">
+  <h2>Sportswear Under 50</h2>
+  <div class="products-container">
+    <div class="product-item">
+      <img src="https://via.placeholder.com/300x180" alt="Shirt">
+      <h3>Sports T-Shirt</h3>
+      <p>25</p>
+      <a href="#">Buy Now</a>
     </div>
-
-    <!-- Cart Sidebar -->
-    <div id="cart-sidebar" class="fixed top-0 right-0 h-full w-full md:w-96 bg-white shadow-lg transform translate-x-full transition-transform duration-300 ease-in-out z-50">
-        <div class="p-4 h-full flex flex-col">
-            <div class="flex justify-between items-center border-b pb-4">
-                <h3 class="text-xl font-bold">Your Cart</h3>
-                <button id="close-cart" class="text-gray-500 hover:text-gray-700">
-                    <i class="fas fa-times"></i>
-                </button>
-            </div>
-            <div id="cart-items" class="flex-1 overflow-y-auto py-4">
-                <!-- Cart items will be loaded here -->
-                <p class="text-gray-500 text-center py-8">Your cart is empty</p>
-            </div>
-            <div class="border-t pt-4">
-                <div class="flex justify-between mb-4">
-                    <span class="font-bold">Total:</span>
-                    <span id="cart-total" class="font-bold">$0.00</span>
-                </div>
-                <button id="checkout-btn" class="w-full bg-primary hover:bg-secondary text-white font-bold py-3 px-4 rounded-lg transition duration-300">
-                    Proceed to Checkout
-                </button>
-            </div>
-        </div>
+    <div class="product-item">
+      <img src="https://via.placeholder.com/300x180" alt="Shorts">
+      <h3>Running Shorts</h3>
+      <p>30</p>
+      <a href="#">Buy Now</a>
     </div>
+    <div class="product-item">
+      <img src="https://via.placeholder.com/300x180" alt="Jersey">
+      <h3>Basketball Jersey</h3>
+      <p>45</p>
+      <a href="#">Buy Now</a>
+    </div>
+  </div>
+</section>
 
-    <!-- Hero Section -->
-    <section class="hero text-white py-20 md:py-32 relative">
-        <div class="absolute top-0 left-0 w-full h-full overflow-hidden z-0">
-            <div class="absolute top-1/4 left-1/4 w-16 h-16 rounded-full bg-blue-400 opacity-20 animate-float"></div>
-            <div class="absolute top-1/3 right-1/4 w-24 h-24 rounded-full bg-blue-500 opacity-15 animate-float animation-delay-2000"></div>
-            <div class="absolute bottom-1/4 left-1/3 w-20 h-20 rounded-full bg-blue-300 opacity-10 animate-float animation-delay-3000"></div>
-        </div>
-        <div class="container mx-auto px-4 text-center relative z-10">
-            <h1 class="text-4xl md:text-6xl font-bold mb-6 leading-tight">
-                <span class="gradient-text">Your Ultimate</span> Sports Destination
-            </h1>
-            <p class="text-xl md:text-2xl mb-8 max-w-3xl mx-auto">
-                Latest sports news, premium sportswear, and a platform to showcase local talents in sports and music.
-            </p>
-            <div class="flex flex-col sm:flex-row justify-center gap-4">
-                <a href="#news" class="bg-accent hover:bg-blue-500 text-white font-bold py-3 px-6 rounded-lg transition duration-300 transform hover:scale-105 shadow-lg">
-                    Explore News
-                </a>
-                <a href="#products" class="bg-white hover:bg-gray-100 text-primary font-bold py-3 px-6 rounded-lg transition duration-300 transform hover:scale-105 shadow-lg">
-                    Shop Now
-                </a>
-            </div>
-        </div>
-    </section>
+<section id="promotion">
+    <h2>Promote Your Talent</h2>
+  <form action="https://formspree.io/f/xldwngjk" method="POST">
+    <input type="text" name="name" placeholder="Full Name" required>
+    <input type="tel" name="phone" placeholder="Phone Number" required>
+    <input type="email" name="_replyto" placeholder="Email Address" required>
+    <textarea name="skills" placeholder="Your Skill Set" required></textarea>
+    <button type="submit">Submit</button>
+  </form>
+</section>
 
+<section id="about">
+  <h2>About Us</h2>
+  <p>Walcottinotv is committed to promoting sports excellence, showcasing talents, and connecting fans with the best sportswear.</p>
+</section>
 
-    <!-- Ads Page Header -->
-    <section class="py-8 bg-white">
-        <div class="container mx-auto px-4">
-            <div class="bg-gray-100 p-6 rounded-lg">
-                <div class="text-center">
-                    <h2 class="text-2xl md:text-3xl font-bold text-primary mb-4">Advertisement Space</h2>
-                    <p class="text-gray-600 mb-6">Promote your business with our premium ad spaces</p>
-                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                        <div class="bg-white p-4 rounded-lg shadow-sm border border-gray-200 min-h-[200px] flex items-center justify-center">
-                            <p class="text-gray-500">Ad Space 1</p>
-                        </div>
-                        <div class="bg-white p-4 rounded-lg shadow-sm border border-gray-200 min-h-[200px] flex items-center justify-center">
-                            <p class="text-gray-500">Ad Space 2</p>
-                        </div>
-                        <div class="bg-white p-4 rounded-lg shadow-sm border border-gray-200 min-h-[200px] flex items-center justify-center">
-                            <p class="text-gray-500">Ad Space 3</p>
-                        </div>
-                    </div>
-                    <div class="mt-6">
-                        <a href="#contact" class="inline-block bg-primary hover:bg-secondary text-white font-bold py-3 px-6 rounded-lg transition duration-300">
-                            Contact for Advertising
-                        </a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
+<section id="contact">
+  <h2>Contact Us</h2>
+  <p><strong>Address:</strong> B5, Legacy Estate, Kolapo Ishola GRA, Akobo, Ibadan, Oyo State, Nigeria.</p>
+  <p><strong>Phone:</strong> +2348137208793, +2349045548253</p>
+  <p>
+    <a href="https://www.instagram.com/walcotttinotv" target="_blank">Instagram</a> |
+    <a href="https://www.facebook.com/share/1CSYTgmTX9/" target="_blank">Facebook</a> |
+    <a href="https://x.com/walcotttv2025" target="_blank">X (Twitter)</a>
+  </p>
+</section>
 
-    <!-- Featured News (Homepage) -->
-    <section class="py-12 bg-white">
-        <div class="container mx-auto px-4">
-            <div class="text-center mb-12">
-                <span class="text-accent font-bold">LATEST UPDATES</span>
-                <h2 class="text-3xl md:text-4xl font-bold text-primary mt-2">Sports News Headlines</h2>
-                <div class="w-20 h-1 bg-accent mx-auto mt-4"></div>
-            </div>
-            <div id="featured-news" class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                <!-- News will be loaded here by JavaScript -->
-                <div class="animate-pulse bg-gray-200 rounded-lg h-96"></div>
-                <div class="animate-pulse bg-gray-200 rounded-lg h-96"></div>
-                <div class="animate-pulse bg-gray-200 rounded-lg h-96"></div>
-            </div>
-            <div class="text-center mt-8">
-                <a href="#news" class="inline-block bg-primary hover:bg-secondary text-white font-bold py-3 px-6 rounded-lg transition duration-300 transform hover:scale-105 shadow-lg">
-                    View All News
-                </a>
-            </div>
-        </div>
-    </section>
+<footer>
+  &copy; 2025 Walcottinotv. All rights reserved.
+</footer>
 
-    <!-- Featured Products (Homepage) -->
-    <section id="products" class="py-12 bg-light">
-        <div class="container mx-auto px-4">
-            <div class="text-center mb-12">
-                <span class="text-accent font-bold">PREMIUM QUALITY</span>
-                <h2 class="text-3xl md:text-4xl font-bold text-primary mt-2">Featured Sportswear</h2>
-                <div class="w-20 h-1 bg-accent mx-auto mt-4"></div>
-            </div>
-            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
-                <!-- Product 1 -->
-                <div class="product-card bg-white rounded-lg overflow-hidden shadow-md transition duration-300 relative">
-                    <div class="relative overflow-hidden">
-                        <img src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80" 
-                             alt="Running Shoes" 
-                             class="w-full h-48 md:h-56 object-cover transition duration-500">
-                        <div class="absolute inset-0 bg-black bg-opacity-30 flex items-center justify-center opacity-0 hover:opacity-100 transition duration-300">
-                            <button class="quick-view-btn bg-white text-primary font-bold py-2 px-4 rounded-full transition duration-300 transform hover:scale-110" 
-                                    data-product="1">
-                                Quick View
-                            </button>
-                        </div>
-                        <span class="absolute top-2 right-2 bg-red-500 text-white text-xs font-bold px-2 py-1 rounded">SALE</span>
-                    </div>
-                    <div class="p-4">
-                        <div class="flex justify-between items-start">
-                            <h3 class="font-bold text-lg mb-2">Pro Running Shoes</h3>
-                            <button class="wishlist-btn text-gray-400 hover:text-red-500 transition" data-product="1">
-                                <i class="far fa-heart"></i>
-                            </button>
-                        </div>
-                        <div class="flex items-center mb-2">
-                            <div class="flex text-yellow-400">
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star-half-alt"></i>
-                            </div>
-                            <span class="text-gray-500 text-sm ml-2">(24)</span>
-                        </div>
-                        <p class="text-gray-600 mb-4 text-sm">Lightweight and comfortable for all terrains</p>
-                        <div class="flex justify-between items-center">
-                            <div>
-                                <span class="font-bold text-primary">$45.99</span>
-                                <span class="text-sm text-gray-500 line-through ml-2">$59.99</span>
-                            </div>
-                            <button class="add-to-cart bg-accent hover:bg-blue-500 text-white py-1 px-3 rounded transition duration-300" 
-                                    data-product='{"id":1,"name":"Pro Running Shoes","price":45.99,"image":"https://images.unsplash.com/photo-1542291026-7eec264c27ff?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80"}'>
-                                Add to Cart
-                            </button>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- Product 2 -->
-                <div class="product-card bg-white rounded-lg overflow-hidden shadow-md transition duration-300 relative">
-                    <div class="relative overflow-hidden">
-                        <img src="https://images.unsplash.com/photo-1525966222134-fcfa99b8ae52?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80" 
-                             alt="Basketball Jersey" 
-                             class="w-full h-48 md:h-56 object-cover transition duration-500">
-                        <div class="absolute inset-0 bg-black bg-opacity-30 flex items-center justify-center opacity-0 hover:opacity-100 transition duration-300">
-                            <button class="quick-view-btn bg-white text-primary font-bold py-2 px-4 rounded-full transition duration-300 transform hover:scale-110" 
-                                    data-product="2">
-                                Quick View
-                            </button>
-                        </div>
-                    </div>
-                    <div class="p-4">
-                        <div class="flex justify-between items-start">
-                            <h3 class="font-bold text-lg mb-2">Basketball Jersey</h3>
-                            <button class="wishlist-btn text-gray-400 hover:text-red-500 transition" data-product="2">
-                                <i class="far fa-heart"></i>
-                            </button>
-                        </div>
-                        <div class="flex items-center mb-2">
-                            <div class="flex text-yellow-400">
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                <i class="far fa-star"></i>
-                            </div>
-                            <span class="text-gray-500 text-sm ml-2">(18)</span>
-                        </div>
-                        <p class="text-gray-600 mb-4 text-sm">Breathable fabric with team logo</p>
-                        <div class="flex justify-between items-center">
-                            <span class="font-bold text-primary">$29.99</span>
-                            <button class="add-to-cart bg-accent hover:bg-blue-500 text-white py-1 px-3 rounded transition duration-300" 
-                                    data-product='{"id":2,"name":"Basketball Jersey","price":29.99,"image":"https://images.unsplash.com/photo-1525966222134-fcfa99b8ae52?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80"}'>
-                                Add to Cart
-                            </button>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- Product 3 -->
-                <div class="product-card bg-white rounded-lg overflow-hidden shadow-md transition duration-300 relative">
-                    <div class="relative overflow-hidden">
-                        <img src="https://images.unsplash.com/photo-1574629810360-7efbbe195018?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80" 
-                             alt="Boxing Gloves" 
-                             class="w-full h-48 md:h-56 object-cover transition duration-500">
-                        <div class="absolute inset-0 bg-black bg-opacity-30 flex items-center justify-center opacity-0 hover:opacity-100 transition duration-300">
-                            <button class="quick-view-btn bg-white text-primary font-bold py-2 px-4 rounded-full transition duration-300 transform hover:scale-110" 
-                                    data-product="3">
-                                Quick View
-                            </button>
-                        </div>
-                    </div>
-                    <div class="p-4">
-                        <div class="flex justify-between items-start">
-                            <h3 class="font-bold text-lg mb-2">Boxing Gloves</h3>
-                            <button class="wishlist-btn text-gray-400 hover:text-red-500 transition" data-product="3">
-                                <i class="far fa-heart"></i>
-                            </button>
-                        </div>
-                        <div class="flex items-center mb-2">
-                            <div class="flex text-yellow-400">
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                            </div>
-                            <span class="text-gray-500 text-sm ml-2">(32)</span>
-                        </div>
-                        <p class="text-gray-600 mb-4 text-sm">Premium leather with wrist support</p>
-                        <div class="flex justify-between items-center">
-                            <span class="font-bold text-primary">$39.99</span>
-                            <button class="add-to-cart bg-accent hover:bg-blue-500 text-white py-1 px-3 rounded transition duration-300" 
-                                    data-product='{"id":3,"name":"Boxing Gloves","price":39.99,"image":"https://images.unsplash.com/photo-1574629810360-7efbbe195018?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80"}'>
-                                Add to Cart
-                            </button>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- Product 4 -->
-                <div class="product-card bg-white rounded-lg overflow-hidden shadow-md transition duration-300 relative">
-                    <div class="relative overflow-hidden">
-                        <img src="https://images.unsplash.com/photo-1600185365483-26d7a4cc7519?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80" 
-                             alt="Football Cleats" 
-                             class="w-full h-48 md:h-56 object-cover transition duration-500">
-                        <div class="absolute inset-0 bg-black bg-opacity-30 flex items-center justify-center opacity-0 hover:opacity-100 transition duration-300">
-                            <button class="quick-view-btn bg-white text-primary font-bold py-2 px-4 rounded-full transition duration-300 transform hover:scale-110" 
-                                    data-product="4">
-                                Quick View
-                            </button>
-                        </div>
-                        <span class="absolute top-2 right-2 bg-green-500 text-white text-xs font-bold px-2 py-1 rounded">NEW</span>
-                    </div>
-                    <div class="p-4">
-                        <div class="flex justify-between items-start">
-                            <h3 class="font-bold text-lg mb-2">Football Cleats</h3>
-                            <button class="wishlist-btn text-gray-400 hover:text-red-500 transition" data-product="4">
-                                <i class="far fa-heart"></i>
-                            </button>
-                        </div>
-                        <div class="flex items-center mb-2">
-                            <div class="flex text-yellow-400">
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star-half-alt"></i>
-                            </div>
-                            <span class="text-gray-500 text-sm ml-2">(15)</span>
-                        </div>
-                        <p class="text-gray-600 mb-4 text-sm">High traction for optimal performance</p>
-                        <div class="flex justify-between items-center">
-                            <span class="font-bold text-primary">$49.99</span>
-                            <button class="add-to-cart bg-accent hover:bg-blue-500 text-white py-1 px-3 rounded transition duration-300" 
-                                    data-product='{"id":4,"name":"Football Cleats","price":49.99,"image":"https://images.unsplash.com/photo-1600185365483-26d7a4cc7519?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80"}'>
-                                Add to Cart
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="text-center mt-8">
-                <a href="#all-products" class="inline-block bg-primary hover:bg-secondary text-white font-bold py-3 px-6 rounded-lg transition duration-300 transform hover:scale-105 shadow-lg">
-                    View All Products
-                </a>
-            </div>
-        </div>
-    </section>
+<script>
+   const gnewsAPI = 'https://gnews.io/api/v4/top-headlines?category=sports&lang=en&max=10&apikey=3f48df677f1a4c6f3178add06eecb2d1';
+  const newsdataAPI = 'https://newsdata.io/api/1/news?apikey=pub_93ff78cb4de441528c168d484a264a89&category=sports&language=en';
 
+  const container = document.getElementById('news-container');
 
-    <!-- About Section (Homepage) -->
-    <section id="about" class="py-12 bg-light">
-        <div class="container mx-auto px-4">
-            <div class="flex flex-col md:flex-row items-center">
-                <div class="md:w-1/2 mb-8 md:mb-0 md:pr-8">
-                    <img src="https://images.unsplash.com/photo-1547347298-4074fc3086f0?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80" 
-                         alt="About walcotttinotv" 
-                         class="rounded-lg shadow-lg w-full transform hover:scale-105 transition duration-500">
-                </div>
-                <div class="md:w-1/2">
-                    <span class="text-accent font-bold">OUR STORY</span>
-                    <h2 class="text-3xl md:text-4xl font-bold mb-6 text-primary">About walcotttinotv</h2>
-                    <p class="text-gray-700 mb-4">walcotttinotv is a premier sports brand dedicated to bringing you the latest in sports news, high-quality sportswear, and a platform to showcase and promote local talents in both sports and music industries.</p>
-                    <p class="text-gray-700 mb-4">Founded in 2024, we've grown to become a trusted source for sports enthusiasts, providing comprehensive coverage of wrestling, bike racing, football, boxing, basketball, and more.</p>
-                    <p class="text-gray-700 mb-6">Our mission is to promote sports at all levels while offering a reliable, trusted platform to promote raw talents to the global level.</p>
-                    <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
-                        <div class="bg-white p-4 rounded-lg text-center shadow-sm hover:shadow-md transition duration-300">
-                            <i class="fas fa-newspaper text-3xl text-primary mb-2"></i>
-                            <h3 class="font-bold">Daily News</h3>
-                            <p class="text-sm text-gray-600">Updated every 48 hours</p>
-                        </div>
-                        <div class="bg-white p-4 rounded-lg text-center shadow-sm hover:shadow-md transition duration-300">
-                            <i class="fas fa-tshirt text-3xl text-primary mb-2"></i>
-                            <h3 class="font-bold">Quality Gear</h3>
-                            <p class="text-sm text-gray-600">Affordable prices</p>
-                        </div>
-                        <div class="bg-white p-4 rounded-lg text-center shadow-sm hover:shadow-md transition duration-300">
-                            <i class="fas fa-star text-3xl text-primary mb-2"></i>
-                            <h3 class="font-bold">Talent Promotion</h3>
-                            <p class="text-sm text-gray-600">Showcasing local stars</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
+  async function fetchGnews() {
+    try {
+      const res = await fetch(gnewsAPI);
+      const data = await res.json();
+      return data.articles.map(a => ({
+        title: a.title,
+        image: a.image || 'https://via.placeholder.com/300x180',
+        content: a.content || a.description || 'No summary available'
+      }));
+    } catch { return []; }
+  }
 
-    <!-- News Page -->
-    <section id="news" class="py-12 bg-white">
-        <div class="container mx-auto px-4">
-            <div class="text-center mb-12">
-                <span class="text-accent font-bold">SPORTS UPDATES</span>
-                <h2 class="text-3xl md:text-4xl font-bold text-primary mt-2">Latest Sports News</h2>
-                <div class="w-20 h-1 bg-accent mx-auto mt-4"></div>
-            </div>
-            
-            <div class="flex overflow-x-auto mb-8 pb-2 scrollbar-hide">
-                <div class="flex space-x-2">
-                    <button class="news-tab active px-4 py-2 rounded-full font-medium" data-category="general">All Sports</button>
-                    <button class="news-tab px-4 py-2 rounded-full font-medium" data-category="wrestling">Wrestling</button>
-                    <button class="news-tab px-4 py-2 rounded-full font-medium" data-category="basketball">Basketball</button>
-                    <button class="news-tab px-4 py-2 rounded-full font-medium" data-category="football">Football</button>
-                    <button class="news-tab px-4 py-2 rounded-full font-medium" data-category="boxing">Boxing</button>
-                    <button class="news-tab px-4 py-2 rounded-full font-medium" data-category="cycling">Bike Racing</button>
-                    <button class="news-tab px-4 py-2 rounded-full font-medium" data-category="local">Local News</button>
-                </div>
-            </div>
-            
-            <div id="news-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                <!-- News will be loaded here by JavaScript -->
-                <div class="animate-pulse bg-gray-200 rounded-lg h-80"></div>
-                <div class="animate-pulse bg-gray-200 rounded-lg h-80"></div>
-                <div class="animate-pulse bg-gray-200 rounded-lg h-80"></div>
-            </div>
-            
-            <div class="mt-8 flex justify-center">
-                <button id="load-more-news" class="bg-primary hover:bg-secondary text-white font-bold py-3 px-6 rounded-lg transition duration-300 transform hover:scale-105 shadow-lg">
-                    Load More News
-                </button>
-            </div>
-        </div>
-    </section>
+  async function fetchNewsData() {
+    try {
+      const res = await fetch(newsdataAPI);
+      const data = await res.json();
+      return data.results.map(a => ({
+        title: a.title,
+        image: a.image_url || 'https://via.placeholder.com/300x180',
+        content: a.description || 'No content available'
+      }));
+    } catch { return []; }
+  }
 
-    <!-- All Products Page -->
-    <section id="all-products" class="py-12 bg-light">
-        <div class="container mx-auto px-4">
-            <div class="text-center mb-12">
-                <span class="text-accent font-bold">OUR COLLECTION</span>
-                <h2 class="text-3xl md:text-4xl font-bold text-primary mt-2">Sportswear Collection</h2>
-                <div class="w-20 h-1 bg-accent mx-auto mt-4"></div>
-            </div>
-            
-            <div class="mb-8 flex flex-col md:flex-row justify-between items-center gap-4">
-                <div class="w-full md:w-64">
-                    <select class="form-input block w-full px-4 py-2 border border-gray-300 rounded-lg focus:border-accent">
-                        <option>All Categories</option>
-                        <option>Footwear</option>
-                        <option>Jerseys</option>
-                        <option>Equipment</option>
-                        <option>Accessories</option>
-                    </select>
-                </div>
-                <div class="w-full md:w-64">
-                    <select class="form-input block w-full px-4 py-2 border border-gray-300 rounded-lg focus:border-accent">
-                        <option>Sort by: Featured</option>
-                        <option>Price: Low to High</option>
-                        <option>Price: High to Low</option>
-                        <option>Newest Arrivals</option>
-                        <option>Best Selling</option>
-                    </select>
-                </div>
-                <div class="hidden md:block">
-                    <span class="text-gray-600">Showing 12 of 24 products</span>
-                </div>
-            </div>
-            
-            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
-                <!-- Product 1 -->
-                <div class="product-card bg-white rounded-lg overflow-hidden shadow-md transition duration-300 relative">
-                    <div class="relative overflow-hidden">
-                        <img src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80" 
-                             alt="Running Shoes" 
-                             class="w-full h-48 md:h-56 object-cover transition duration-500">
-                        <div class="absolute inset-0 bg-black bg-opacity-30 flex items-center justify-center opacity-0 hover:opacity-100 transition duration-300">
-                            <button class="quick-view-btn bg-white text-primary font-bold py-2 px-4 rounded-full transition duration-300 transform hover:scale-110" 
-                                    data-product="1">
-                                Quick View
-                            </button>
-                        </div>
-                        <span class="absolute top-2 right-2 bg-red-500 text-white text-xs font-bold px-2 py-1 rounded">SALE</span>
-                    </div>
-                    <div class="p-4">
-                        <div class="flex justify-between items-start">
-                            <h3 class="font-bold text-lg mb-2">Pro Running Shoes</h3>
-                            <button class="wishlist-btn text-gray-400 hover:text-red-500 transition" data-product="1">
-                                <i class="far fa-heart"></i>
-                            </button>
-                        </div>
-                        <div class="flex items-center mb-2">
-                            <div class="flex text-yellow-400">
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star-half-alt"></i>
-                            </div>
-                            <span class="text-gray-500 text-sm ml-2">(24)</span>
-                        </div>
-                        <p class="text-gray-600 mb-4 text-sm">Lightweight and comfortable for all terrains</p>
-                        <div class="flex justify-between items-center">
-                            <div>
-                                <span class="font-bold text-primary">$45.99</span>
-                                <span class="text-sm text-gray-500 line-through ml-2">$59.99</span>
-                            </div>
-                            <button class="add-to-cart bg-accent hover:bg-blue-500 text-white py-1 px-3 rounded transition duration-300" 
-                                    data-product='{"id":1,"name":"Pro Running Shoes","price":45.99,"image":"https://images.unsplash.com/photo-1542291026-7eec264c27ff?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80"}'>
-                                Add to Cart
-                            </button>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- Product 2 -->
-                <div class="product-card bg-white rounded-lg overflow-hidden shadow-md transition duration-300 relative">
-                    <div class="relative overflow-hidden">
-                        <img src="https://images.unsplash.com/photo-1525966222134-fcfa99b8ae52?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80" 
-                             alt="Basketball Jersey" 
-                             class="w-full h-48 md:h-56 object-cover transition duration-500">
-                        <div class="absolute inset-0 bg-black bg-opacity-30 flex items-center justify-center opacity-0 hover:opacity-100 transition duration-300">
-                            <button class="quick-view-btn bg-white text-primary font-bold py-2 px-4 rounded-full transition duration-300 transform hover:scale-110" 
-                                    data-product="2">
-                                Quick View
-                            </button>
-                        </div>
-                    </div>
-                    <div class="p-4">
-                        <div class="flex justify-between items-start">
-                            <h3 class="font-bold text-lg mb-2">Basketball Jersey</h3>
-                            <button class="wishlist-btn text-gray-400 hover:text-red-500 transition" data-product="2">
-                                <i class="far fa-heart"></i>
-                            </button>
-                        </div>
-                        <div class="flex items-center mb-2">
-                            <div class="flex text-yellow-400">
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                <i class="far fa-star"></i>
-                            </div>
-                            <span class="text-gray-500 text-sm ml-2">(18)</span>
-                        </div>
-                        <p class="text-gray-600 mb-4 text-sm">Breathable fabric with team logo</p>
-                        <div class="flex justify-between items-center">
-                            <span class="font-bold text-primary">$29.99</span>
-                            <button class="add-to-cart bg-accent hover:bg-blue-500 text-white py-1 px-3 rounded transition duration-300" 
-                                    data-product='{"id":2,"name":"Basketball Jersey","price":29.99,"image":"https://images.unsplash.com/photo-1525966222134-fcfa99b8ae52?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80"}'>
-                                Add to Cart
-                            </button>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- Product 3 -->
-                <div class="product-card bg-white rounded-lg overflow-hidden shadow-md transition duration-300 relative">
-                    <div class="relative overflow-hidden">
-                        <img src="https://images.unsplash.com/photo-1574629810360-7efbbe195018?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80" 
-                             alt="Boxing Gloves" 
-                             class="w-full h-48 md:h-56 object-cover transition duration-500">
-                        <div class="absolute inset-0 bg-black bg-opacity-30 flex items-center justify-center opacity-0 hover:opacity-100 transition duration-300">
-                            <button class="quick-view-btn bg-white text-primary font-bold py-2 px-4 rounded-full transition duration-300 transform hover:scale-110" 
-                                    data-product="3">
-                                Quick View
-                            </button>
-                        </div>
-                    </div>
-                    <div class="p-4">
-                        <div class="flex justify-between items-start">
-                            <h3 class="font-bold text-lg mb-2">Boxing Gloves</h3>
-                            <button class="wishlist-btn text-gray-400 hover:text-red-500 transition" data-product="3">
-                                <i class="far fa-heart"></i>
-                            </button>
-                        </div>
-                        <div class="flex items-center mb-2">
-                            <div class="flex text-yellow-400">
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                            </div>
-                            <span class="text-gray-500 text-sm ml-2">(32)</span>
-                        </div>
-                        <p class="text-gray-600 mb-4 text-sm">Premium leather with wrist support</p>
-                        <div class="flex justify-between items-center">
-                            <span class="font-bold text-primary">$39.99</span>
-                            <button class="add-to-cart bg-accent hover:bg-blue-500 text-white py-1 px-3 rounded transition duration-300" 
-                                    data-product='{"id":3,"name":"Boxing Gloves","price":39.99,"image":"https://images.unsplash.com/photo-1574629810360-7efbbe195018?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80"}'>
-                                Add to Cart
-                            </button>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- Product 4 -->
-                <div class="product-card bg-white rounded-lg overflow-hidden shadow-md transition duration-300 relative">
-                    <div class="relative overflow-hidden">
-                        <img src="https://images.unsplash.com/photo-1600185365483-26d7a4cc7519?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80" 
-                             alt="Football Cleats" 
-                             class="w-full h-48 md:h-56 object-cover transition duration-500">
-                        <div class="absolute inset-0 bg-black bg-opacity-30 flex items-center justify-center opacity-0 hover:opacity-100 transition duration-300">
-                            <button class="quick-view-btn bg-white text-primary font-bold py-2 px-4 rounded-full transition duration-300 transform hover:scale-110" 
-                                    data-product="4">
-                                Quick View
-                            </button>
-                        </div>
-                        <span class="absolute top-2 right-2 bg-green-500 text-white text-xs font-bold px-2 py-1 rounded">NEW</span>
-                    </div>
-                    <div class="p-4">
-                        <div class="flex justify-between items-start">
-                            <h3 class="font-bold text-lg mb-2">Football Cleats</h3>
-                            <button class="wishlist-btn text-gray-400 hover:text-red-500 transition" data-product="4">
-                                <i class="far fa-heart"></i>
-                            </button>
-                        </div>
-                        <div class="flex items-center mb-2">
-                            <div class="flex text-yellow-400">
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star-half-alt"></i>
-                            </div>
-                            <span class="text-gray-500 text-sm ml-2">(15)</span>
-                        </div>
-                        <p class="text-gray-600 mb-4 text-sm">High traction for optimal performance</p>
-                        <div class="flex justify-between items-center">
-                            <span class="font-bold text-primary">$49.99</span>
-                            <button class="add-to-cart bg-accent hover:bg-blue-500 text-white py-1 px-3 rounded transition duration-300" 
-                                    data-product='{"id":4,"name":"Football Cleats","price":49.99,"image":"https://images.unsplash.com/photo-1600185365483-26d7a4cc7519?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80"}'>
-                                Add to Cart
-                            </button>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- Product 5 -->
-                <div class="product-card bg-white rounded-lg overflow-hidden shadow-md transition duration-300 relative">
-                    <div class="relative overflow-hidden">
-                        <img src="https://images.unsplash.com/photo-1595341888016-a392ef81b7de?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80" 
-                             alt="Training Shorts" 
-                             class="w-full h-48 md:h-56 object-cover transition duration-500">
-                        <div class="absolute inset-0 bg-black bg-opacity-30 flex items-center justify-center opacity-0 hover:opacity-100 transition duration-300">
-                            <button class="quick-view-btn bg-white text-primary font-bold py-2 px-4 rounded-full transition duration-300 transform hover:scale-110" 
-                                    data-product="5">
-                                Quick View
-                            </button>
-                        </div>
-                    </div>
-                    <div class="p-4">
-                        <div class="flex justify-between items-start">
-                            <h3 class="font-bold text-lg mb-2">Training Shorts</h3>
-                            <button class="wishlist-btn text-gray-400 hover:text-red-500 transition" data-product="5">
-                                <i class="far fa-heart"></i>
-                            </button>
-                        </div>
-                        <div class="flex items-center mb-2">
-                            <div class="flex text-yellow-400">
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                <i class="far fa-star"></i>
-                            </div>
-                            <span class="text-gray-500 text-sm ml-2">(12)</span>
-                        </div>
-                        <p class="text-gray-600 mb-4 text-sm">Moisture-wicking fabric for comfort</p>
-                        <div class="flex justify-between items-center">
-                            <span class="font-bold text-primary">$24.99</span>
-                            <button class="add-to-cart bg-accent hover:bg-blue-500 text-white py-1 px-3 rounded transition duration-300" 
-                                    data-product='{"id":5,"name":"Training Shorts","price":24.99,"image":"https://images.unsplash.com/photo-1595341888016-a392ef81b7de?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80"}'>
-                                Add to Cart
-                            </button>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- Product 6 -->
-                <div class="product-card bg-white rounded-lg overflow-hidden shadow-md transition duration-300 relative">
-                    <div class="relative overflow-hidden">
-                        <img src="https://images.unsplash.com/photo-1517649763962-0c623066013b?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80" 
-                             alt="Cycling Jersey" 
-                             class="w-full h-48 md:h-56 object-cover transition duration-500">
-                        <div class="absolute inset-0 bg-black bg-opacity-30 flex items-center justify-center opacity-0 hover:opacity-100 transition duration-300">
-                            <button class="quick-view-btn bg-white text-primary font-bold py-2 px-4 rounded-full transition duration-300 transform hover:scale-110" 
-                                    data-product="6">
-                                Quick View
-                            </button>
-                        </div>
-                    </div>
-                    <div class="p-4">
-                        <div class="flex justify-between items-start">
-                            <h3 class="font-bold text-lg mb-2">Cycling Jersey</h3>
-                            <button class="wishlist-btn text-gray-400 hover:text-red-500 transition" data-product="6">
-                                <i class="far fa-heart"></i>
-                            </button>
-                        </div>
-                        <div class="flex items-center mb-2">
-                            <div class="flex text-yellow-400">
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star-half-alt"></i>
-                                <i class="far fa-star"></i>
-                            </div>
-                            <span class="text-gray-500 text-sm ml-2">(8)</span>
-                        </div>
-                        <p class="text-gray-600 mb-4 text-sm">Aerodynamic fit with back pockets</p>
-                        <div class="flex justify-between items-center">
-                            <span class="font-bold text-primary">$34.99</span>
-                            <button class="add-to-cart bg-accent hover:bg-blue-500 text-white py-1 px-3 rounded transition duration-300" 
-                                    data-product='{"id":6,"name":"Cycling Jersey","price":34.99,"image":"https://images.unsplash.com/photo-1517649763962-0c623066013b?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80"}'>
-                                Add to Cart
-                            </button>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- Product 7 -->
-                <div class="product-card bg-white rounded-lg overflow-hidden shadow-md transition duration-300 relative">
-                    <div class="relative overflow-hidden">
-                        <img src="https://images.unsplash.com/photo-1581009146145-de5d127f5feb?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80" 
-                             alt="Yoga Mat" 
-                             class="w-full h-48 md:h-56 object-cover transition duration-500">
-                        <div class="absolute inset-0 bg-black bg-opacity-30 flex items-center justify-center opacity-0 hover:opacity-100 transition duration-300">
-                            <button class="quick-view-btn bg-white text-primary font-bold py-2 px-4 rounded-full transition duration-300 transform hover:scale-110" 
-                                    data-product="7">
-                                Quick View
-                            </button>
-                        </div>
-                        <span class="absolute top-2 right-2 bg-green-500 text-white text-xs font-bold px-2 py-1 rounded">NEW</span>
-                    </div>
-                    <div class="p-4">
-                        <div class="flex justify-between items-start">
-                            <h3 class="font-bold text-lg mb-2">Premium Yoga Mat</h3>
-                            <button class="wishlist-btn text-gray-400 hover:text-red-500 transition" data-product="7">
-                                <i class="far fa-heart"></i>
-                            </button>
-                        </div>
-                        <div class="flex items-center mb-2">
-                            <div class="flex text-yellow-400">
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                            </div>
-                            <span class="text-gray-500 text-sm ml-2">(27)</span>
-                        </div>
-                        <p class="text-gray-600 mb-4 text-sm">Non-slip surface with carrying strap</p>
-                        <div class="flex justify-between items-center">
-                            <span class="font-bold text-primary">$32.99</span>
-                            <button class="add-to-cart bg-accent hover:bg-blue-500 text-white py-1 px-3 rounded transition duration-300" 
-                                    data-product='{"id":7,"name":"Premium Yoga Mat","price":32.99,"image":"https://images.unsplash.com/photo-1581009146145-de5d127f5feb?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80"}'>
-                                Add to Cart
-                            </button>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- Product 8 -->
-                <div class="product-card bg-white rounded-lg overflow-hidden shadow-md transition duration-300 relative">
-                    <div class="relative overflow-hidden">
-                        <img src="https://images.unsplash.com/photo-1531545510416-c81f6a0e19c9?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80" 
-                             alt="Gym Bag" 
-                             class="w-full h-48 md:h-56 object-cover transition duration-500">
-                        <div class="absolute inset-0 bg-black bg-opacity-30 flex items-center justify-center opacity-0 hover:opacity-100 transition duration-300">
-                            <button class="quick-view-btn bg-white text-primary font-bold py-2 px-4 rounded-full transition duration-300 transform hover:scale-110" 
-                                    data-product="8">
-                                Quick View
-                            </button>
-                        </div>
-                        <span class="absolute top-2 right-2 bg-red-500 text-white text-xs font-bold px-2 py-1 rounded">SALE</span>
-                    </div>
-                    <div class="p-4">
-                        <div class="flex justify-between items-start">
-                            <h3 class="font-bold text-lg mb-2">Gym Duffel Bag</h3>
-                            <button class="wishlist-btn text-gray-400 hover:text-red-500 transition" data-product="8">
-                                <i class="far fa-heart"></i>
-                            </button>
-                        </div>
-                        <div class="flex items-center mb-2">
-                            <div class="flex text-yellow-400">
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star-half-alt"></i>
-                                <i class="far fa-star"></i>
-                            </div>
-                            <span class="text-gray-500 text-sm ml-2">(14)</span>
-                        </div>
-                        <p class="text-gray-600 mb-4 text-sm">Spacious with separate shoe compartment</p>
-                        <div class="flex justify-between items-center">
-                            <div>
-                                <span class="font-bold text-primary">$28.99</span>
-                                <span class="text-sm text-gray-500 line-through ml-2">$39.99</span>
-                            </div>
-                            <button class="add-to-cart bg-accent hover:bg-blue-500 text-white py-1 px-3 rounded transition duration-300" 
-                                    data-product='{"id":8,"name":"Gym Duffel Bag","price":28.99,"image":"https://images.unsplash.com/photo-1531545510416-c81f6a0e19c9?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80"}'>
-                                Add to Cart
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="mt-8 flex justify-center">
-                <button class="bg-primary hover:bg-secondary text-white font-bold py-3 px-6 rounded-lg transition duration-300 transform hover:scale-105 shadow-lg">
-                    Load More Products
-                </button>
-            </div>
-        </div>
-    </section>
+  async function loadNews() {
+    const [gnews, newsdata] = await Promise.all([fetchGnews(), fetchNewsData()]);
+    const allNews = [...gnews, ...newsdata].slice(0, 30);
 
-    <!-- Promotion Page -->
-    <section id="promotion" class="py-12 bg-white">
-        <div class="container mx-auto px-4">
-            <div class="max-w-4xl mx-auto">
-                <div class="text-center mb-12">
-                    <span class="text-accent font-bold">SHOWCASE YOUR TALENT</span>
-                    <h2 class="text-3xl md:text-4xl font-bold text-primary mt-2">Promote Your Talent</h2>
-                    <div class="w-20 h-1 bg-accent mx-auto mt-4"></div>
-                </div>
-                <p class="text-center text-gray-700 mb-8">Are you a talented athlete or musician looking for exposure? Fill out the form below and get featured on our platform.</p>
-                
-                <form id="talent-form" action="https://formspree.io/f/xldwngjk" method="POST" class="bg-light p-6 md:p-8 rounded-lg shadow-md">
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <div>
-                            <label for="full-name" class="block text-gray-700 font-medium mb-2">Full Name</label>
-                            <input type="text" id="full-name" class="form-input w-full px-4 py-2 border border-gray-300 rounded-lg focus:border-accent" required>
-                        </div>
-                        <div>
-                            <label for="email" class="block text-gray-700 font-medium mb-2">Email Address</label>
-                            <input type="email" id="email" class="form-input w-full px-4 py-2 border border-gray-300 rounded-lg focus:border-accent" required>
-                        </div>
-                        <div>
-                            <label for="phone" class="block text-gray-700 font-medium mb-2">Phone Number</label>
-                            <input type="tel" id="phone" class="form-input w-full px-4 py-2 border border-gray-300 rounded-lg focus:border-accent" required>
-                        </div>
-                        <div>
-                            <label for="age" class="block text-gray-700 font-medium mb-2">Age</label>
-                            <input type="number" id="age" class="form-input w-full px-4 py-2 border border-gray-300 rounded-lg focus:border-accent" required>
-                        </div>
-                        <div>
-                            <label for="talent-type" class="block text-gray-700 font-medium mb-2">Talent Type</label>
-                            <select id="talent-type" class="form-input w-full px-4 py-2 border border-gray-300 rounded-lg focus:border-accent" required>
-                                <option value="">Select your talent</option>
-                                <option value="wrestling">Wrestling</option>
-                                <option value="football">Football</option>
-                                <option value="basketball">Basketball</option>
-                                <option value="boxing">Boxing</option>
-                                <option value="cycling">Bike Racing</option>
-                                <option value="music">Music</option>
-                                <option value="other">Other</option>
-                            </select>
-                        </div>
-                        <div id="other-talent-container" class="hidden">
-                            <label for="other-talent" class="block text-gray-700 font-medium mb-2">Specify Talent</label>
-                            <input type="text" id="other-talent" class="form-input w-full px-4 py-2 border border-gray-300 rounded-lg focus:border-accent">
-                        </div>
-                        <div class="md:col-span-2">
-                            <label for="skills" class="block text-gray-700 font-medium mb-2">Skills/Experience</label>
-                            <textarea id="skills" rows="4" class="form-input w-full px-4 py-2 border border-gray-300 rounded-lg focus:border-accent" required></textarea>
-                        </div>
-                        <div class="md:col-span-2">
-                            <label for="achievements" class="block text-gray-700 font-medium mb-2">Achievements (if any)</label>
-                            <textarea id="achievements" rows="3" class="form-input w-full px-4 py-2 border border-gray-300 rounded-lg focus:border-accent"></textarea>
-                        </div>
-                        <div class="md:col-span-2">
-                            <label class="flex items-center">
-                                <input type="checkbox" class="form-checkbox text-accent" required>
-                                <span class="ml-2 text-gray-700">I agree to the terms and conditions</span>
-                            </label>
-                        </div>
-                    </div>
-                    
-                    <div class="mt-8 text-center">
-                        <button type="submit" class="bg-primary hover:bg-secondary text-white font-bold py-3 px-8 rounded-lg transition duration-300 transform hover:scale-105 shadow-lg">
-                            Submit Application
-                        </button>
-                    </div>
-                </form>
-                
-                <div id="success-message" class="hidden mt-6 p-4 bg-green-100 border border-green-200 text-green-700 rounded-lg text-center">
-                    <i class="fas fa-check-circle text-2xl mb-2 text-green-500"></i>
-                    <p class="font-bold">Application Submitted Successfully!</p>
-                    <p>We'll review your information and get back to you soon.</p>
-                </div>
-            </div>
-        </div>
-    </section>
+    container.innerHTML = '';
+    allNews.forEach(item => {
+       const div = document.createElement('div');
+      div.className = 'news-item';
+      div.innerHTML = `
+        <img src="item.image" alt="news">
+        <h3>{item.title}</h3>
+        <details>
+          <summary style="color:#2563eb; cursor:pointer;">Read more</summary>
+          <p style="padding:10px;">${item.content}</p>
+        </details>
+      `;
+      container.appendChild(div);
+    });
+  }
+
+  loadNews();
+</script>
 
 </body>
-</html>
+</html> 
