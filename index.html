@@ -1,175 +1,825 @@
-
-```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Walcottinotv</title>
+  <title>Walcottinotv - Sports Hub</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
-    body { margin: 0; font-family: 'Segoe UI', sans-serif; background: #f3f4f6; color: #111827; }
-    header, footer { background: #1e40af; color: white; padding: 20px; text-align: center; }
-    nav { background: #2563eb; display: flex; flex-wrap: wrap; justify-content: center; gap: 15px; padding: 10px; }
-    nav a { color: white; text-decoration: none; font-weight: bold; }
-    nav a:hover { text-decoration: underline; }
-    section { padding: 20px; max-width: 1100px; margin: auto; }
-    .news-container, .products-container { display: flex; flex-wrap: wrap; gap: 20px; justify-content: center; }
-      .news-item, .product-item { background: white; border-radius: 8px; box-shadow: 0 2px 6px rgba(0,0,0,0.1); overflow: hidden; width: 300px; }
-    .news-item img, .product-item img { width: 100%; height: 180px; object-fit: cover; }
-    .news-item h3, .product-item h3 { margin: 10px; }
-    .news-item p, .product-item p { margin: 0 10px 10px; }
-    .news-item details, .news-item summary { margin: 10px; }
-    form { background: white; padding: 20px; border-radius: 8px; max-width: 500px; margin: auto; box-shadow: 0 2px 6px rgba(0,0,0,0.1); }
-    form input, form textarea { width: 100%; padding: 10px; margin: 10px 0; border: 1px solid #ccc; border-radius: 4px; }
-    form button { background: #2563eb; color: white; padding: 10px 20px; border: none; border-radius: 4px; }
-    form button:hover { background: #1e3a8a; }
-    .ad-banner { background: #dbeafe; color: #1e40af; padding: 15px; text-align: center; margin: 20px auto; border: 2px dashed #60a5fa; }
-    @media (max-width: 600px) { nav { flex-direction: column; } }
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+    body {
+      font-family: 'Poppins', sans-serif;
+      background-color: #f8fafc;
+    }
+    .gradient-header {
+      background: linear-gradient(135deg, #1e40af 0%, #2563eb 100%);
+    }
+    .news-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+    }
+    .product-card:hover {
+      transform: scale(1.03);
+    }
+    .ad-banner {
+      background: repeating-linear-gradient(
+        45deg,
+        #dbeafe,
+        #dbeafe 10px,
+        #bfdbfe 10px,
+        #bfdbfe 20px
+      );
+    }
+    .loading-spinner {
+      border-top-color: #2563eb;
+      animation: spin 1s linear infinite;
+    }
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
   </style>
 </head>
-<body>
-
-<header>
-  <h1>Walcottinotv</h1>
-  <p>Your hub for sports news, talents & sportswear</p>
-</header>
-
-<nav>
-  <a href="#home">Home</a>
-  <a href="#news">News</a>
-  <a href="#products">Products</a>
-  <a href="#promotion">Promotion</a>
-  <a href="#about">About</a>
-  <a href="#contact">Contact</a>
-</nav>
-
-<div class="ad-banner">
-  <strong>AD SPACE:</strong> Your advertisement could be here.
-</div>
-
-<section id="home">
-  <h2>Welcome to Walcottinotv</h2>
-  <p>We deliver up-to-date sports stories, empower local talents, and sell premium sportswear at unbeatable prices.</p>
-</section>
-
-<section id="news">
-  <h2>Latest Sports News</h2>
-  <div class="news-container" id="news-container">
-    <p>Loading news...</p>
-  </div>
-</section>
-
-<div class="ad-banner">
-  <strong>AD SPACE:</strong> Partner with us to advertise your brand!
-</div>
-
-<section id="products">
-  <h2>Sportswear Under 50</h2>
-  <div class="products-container">
-    <div class="product-item">
-      <img src="https://via.placeholder.com/300x180" alt="Shirt">
-      <h3>Sports T-Shirt</h3>
-      <p>25</p>
-      <a href="#">Buy Now</a>
+<body class="antialiased">
+  <!-- Header -->
+  <header class="gradient-header text-white py-8 px-4 text-center">
+    <div class="max-w-6xl mx-auto">
+      <h1 class="text-4xl md:text-5xl font-bold mb-2">Walcottinotv</h1>
+      <p class="text-xl md:text-2xl font-light">Your ultimate hub for sports news, talents & premium sportswear</p>
     </div>
-    <div class="product-item">
-      <img src="https://via.placeholder.com/300x180" alt="Shorts">
-      <h3>Running Shorts</h3>
-      <p>30</p>
-      <a href="#">Buy Now</a>
+  </header>
+
+  <!-- Navigation -->
+  <nav class="bg-blue-600 text-white sticky top-0 z-10 shadow-lg">
+    <div class="max-w-6xl mx-auto px-4">
+      <div class="flex flex-wrap justify-center md:justify-between items-center py-3 gap-4 md:gap-6">
+        <a href="#home" class="hover:text-blue-200 transition flex items-center gap-2">
+          <i class="fas fa-home"></i> Home
+        </a>
+        <div class="group relative">
+          <a href="#news" class="hover:text-blue-200 transition flex items-center gap-2">
+            <i class="fas fa-newspaper"></i> News <i class="fas fa-chevron-down text-xs"></i>
+          </a>
+          <div class="absolute left-0 mt-2 w-48 bg-white shadow-lg rounded-md py-2 z-20 hidden group-hover:block">
+            <a href="#soccer-news" class="block px-4 py-2 text-gray-800 hover:bg-blue-50">Soccer</a>
+            <a href="#basketball-news" class="block px-4 py-2 text-gray-800 hover:bg-blue-50">Basketball</a>
+            <a href="#athletics-news" class="block px-4 py-2 text-gray-800 hover:bg-blue-50">Athletics</a>
+            <a href="#tennis-news" class="block px-4 py-2 text-gray-800 hover:bg-blue-50">Tennis</a>
+          </div>
+        </div>
+        <a href="#products" class="hover:text-blue-200 transition flex items-center gap-2">
+          <i class="fas fa-tshirt"></i> Products
+        </a>
+        <a href="#promotion" class="hover:text-blue-200 transition flex items-center gap-2">
+          <i class="fas fa-bullhorn"></i> Promotion
+        </a>
+        <a href="#about" class="hover:text-blue-200 transition flex items-center gap-2">
+          <i class="fas fa-info-circle"></i> About
+        </a>
+        <a href="#contact" class="hover:text-blue-200 transition flex items-center gap-2">
+          <i class="fas fa-envelope"></i> Contact
+        </a>
+      </div>
     </div>
-    <div class="product-item">
-      <img src="https://via.placeholder.com/300x180" alt="Jersey">
-      <h3>Basketball Jersey</h3>
-      <p>45</p>
-      <a href="#">Buy Now</a>
+  </nav>
+
+  <!-- Ad Banner -->
+  <div class="ad-banner border-2 border-dashed border-blue-400 text-blue-800 font-bold py-4 px-6 text-center my-6 max-w-6xl mx-4 md:mx-auto rounded-lg">
+    <div class="flex items-center justify-center gap-4">
+      <i class="fas fa-ad text-2xl"></i>
+      <span>Your brand could be featured here! Contact us for advertising opportunities.</span>
     </div>
   </div>
-</section>
 
-<section id="promotion">
-    <h2>Promote Your Talent</h2>
-  <form action="https://formspree.io/f/xldwngjk" method="POST">
-    <input type="text" name="name" placeholder="Full Name" required>
-    <input type="tel" name="phone" placeholder="Phone Number" required>
-    <input type="email" name="_replyto" placeholder="Email Address" required>
-    <textarea name="skills" placeholder="Your Skill Set" required></textarea>
-    <button type="submit">Submit</button>
-  </form>
-</section>
+  <!-- Home Section -->
+  <section id="home" class="py-12 px-4 max-w-6xl mx-auto">
+    <div class="bg-white rounded-xl shadow-md overflow-hidden p-6 md:p-8">
+      <div class="md:flex items-center gap-8">
+        <div class="md:w-1/2 mb-6 md:mb-0">
+          <h2 class="text-3xl font-bold text-gray-800 mb-4">Welcome to Walcottinotv</h2>
+          <p class="text-gray-600 mb-6">We deliver up-to-date sports stories, empower local talents, and sell premium sportswear at unbeatable prices. Our mission is to connect sports enthusiasts with the best resources and opportunities.</p>
+          <div class="flex flex-wrap gap-4">
+            <a href="#news" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg transition flex items-center gap-2">
+              <i class="fas fa-arrow-right"></i> Explore News
+            </a>
+            <a href="#products" class="border border-blue-600 text-blue-600 hover:bg-blue-50 px-6 py-2 rounded-lg transition flex items-center gap-2">
+              <i class="fas fa-shopping-bag"></i> Shop Now
+            </a>
+          </div>
+        </div>
+        <div class="md:w-1/2">
+          <img src="https://images.unsplash.com/photo-1543357481-d8f0b38b9db4?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80" 
+               alt="Sports equipment" 
+               class="w-full h-auto rounded-lg shadow-md">
+        </div>
+      </div>
+    </div>
+  </section>
 
-<section id="about">
-  <h2>About Us</h2>
-  <p>Walcottinotv is committed to promoting sports excellence, showcasing talents, and connecting fans with the best sportswear.</p>
-</section>
+  <!-- News Section -->
+  <section id="news" class="py-12 px-4 bg-gray-50">
+    <div class="max-w-6xl mx-auto">
+      <div class="text-center mb-12">
+        <h2 class="text-3xl font-bold text-gray-800 mb-2">Latest Sports News</h2>
+        <div class="w-24 h-1 bg-blue-600 mx-auto"></div>
+      </div>
+      
+      <div id="news-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <!-- Loading state -->
+        <div class="col-span-full flex justify-center items-center py-12">
+          <div class="loading-spinner h-12 w-12 border-4 border-blue-200 rounded-full"></div>
+          <span class="ml-4 text-gray-600">Loading sports news...</span>
+        </div>
+      </div>
+      
+      <div class="text-center mt-8">
+        <button id="load-more-news" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg transition flex items-center gap-2 mx-auto">
+          <i class="fas fa-sync-alt"></i> Load More News
+        </button>
+      </div>
+    </div>
+  </section>
 
-<section id="contact">
-  <h2>Contact Us</h2>
-  <p><strong>Address:</strong> B5, Legacy Estate, Kolapo Ishola GRA, Akobo, Ibadan, Oyo State, Nigeria.</p>
-  <p><strong>Phone:</strong> +2348137208793, +2349045548253</p>
-  <p>
-    <a href="https://www.instagram.com/walcotttinotv" target="_blank">Instagram</a> |
-    <a href="https://www.facebook.com/share/1CSYTgmTX9/" target="_blank">Facebook</a> |
-    <a href="https://x.com/walcotttv2025" target="_blank">X (Twitter)</a>
-  </p>
-</section>
+  <!-- Ad Banner -->
+  <div class="ad-banner border-2 border-dashed border-blue-400 text-blue-800 font-bold py-4 px-6 text-center my-6 max-w-6xl mx-4 md:mx-auto rounded-lg">
+    <div class="flex items-center justify-center gap-4">
+      <i class="fas fa-star text-2xl"></i>
+      <span>Premium advertising spot available! Reach thousands of sports enthusiasts daily.</span>
+    </div>
+  </div>
 
-<footer>
-  &copy; 2025 Walcottinotv. All rights reserved.
-</footer>
+  <!-- Products Section -->
+  <section id="products" class="py-12 px-4">
+    <div class="max-w-6xl mx-auto">
+      <div class="text-center mb-12">
+        <h2 class="text-3xl font-bold text-gray-800 mb-2">Premium Sportswear Under ₦50</h2>
+        <p class="text-gray-600 max-w-2xl mx-auto">High-quality sports apparel at affordable prices to boost your performance and style.</p>
+        <div class="w-24 h-1 bg-blue-600 mx-auto mt-4"></div>
+      </div>
+      
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+        <!-- Product 1 -->
+        <div class="product-card bg-white rounded-xl shadow-md overflow-hidden transition duration-300">
+          <div class="relative">
+            <img src="https://images.unsplash.com/photo-1529374255404-311a2a4f1fd9?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1459&q=80" 
+                 alt="Sports T-Shirt" 
+                 class="w-full h-64 object-cover">
+            <div class="absolute top-2 right-2 bg-red-500 text-white text-xs font-bold px-2 py-1 rounded-full">
+              SALE
+            </div>
+          </div>
+          <div class="p-6">
+            <h3 class="text-xl font-semibold text-gray-800 mb-1">Performance T-Shirt</h3>
+            <div class="flex items-center mb-3">
+              <div class="flex text-yellow-400">
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star-half-alt"></i>
+              </div>
+              <span class="text-gray-600 text-sm ml-2">(24 reviews)</span>
+            </div>
+            <div class="flex items-center justify-between">
+              <span class="text-2xl font-bold text-gray-800">₦25</span>
+              <button class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition flex items-center gap-2">
+                <i class="fas fa-shopping-cart"></i> Add to Cart
+              </button>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Product 2 -->
+        <div class="product-card bg-white rounded-xl shadow-md overflow-hidden transition duration-300">
+          <img src="https://images.unsplash.com/photo-1595341595379-cf2a1e4f7f2a?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80" 
+               alt="Running Shorts" 
+               class="w-full h-64 object-cover">
+          <div class="p-6">
+            <h3 class="text-xl font-semibold text-gray-800 mb-1">Running Shorts</h3>
+            <div class="flex items-center mb-3">
+              <div class="flex text-yellow-400">
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+              </div>
+              <span class="text-gray-600 text-sm ml-2">(36 reviews)</span>
+            </div>
+            <div class="flex items-center justify-between">
+              <span class="text-2xl font-bold text-gray-800">₦30</span>
+              <button class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition flex items-center gap-2">
+                <i class="fas fa-shopping-cart"></i> Add to Cart
+              </button>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Product 3 -->
+        <div class="product-card bg-white rounded-xl shadow-md overflow-hidden transition duration-300">
+          <div class="relative">
+            <img src="https://images.unsplash.com/photo-1614624532983-4fe033e101e1?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80" 
+                 alt="Basketball Jersey" 
+                 class="w-full h-64 object-cover">
+            <div class="absolute top-2 right-2 bg-green-500 text-white text-xs font-bold px-2 py-1 rounded-full">
+              NEW
+            </div>
+          </div>
+          <div class="p-6">
+            <h3 class="text-xl font-semibold text-gray-800 mb-1">Basketball Jersey</h3>
+            <div class="flex items-center mb-3">
+              <div class="flex text-yellow-400">
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+                <i class="far fa-star"></i>
+              </div>
+              <span class="text-gray-600 text-sm ml-2">(18 reviews)</span>
+            </div>
+            <div class="flex items-center justify-between">
+              <span class="text-2xl font-bold text-gray-800">₦45</span>
+              <button class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition flex items-center gap-2">
+                <i class="fas fa-shopping-cart"></i> Add to Cart
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="text-center mt-12">
+        <a href="#" class="inline-block border-2 border-blue-600 text-blue-600 hover:bg-blue-600 hover:text-white px-6 py-3 rounded-lg transition font-semibold">
+          View All Products <i class="fas fa-arrow-right ml-2"></i>
+        </a>
+      </div>
+    </div>
+  </section>
 
-<script>
-   const gnewsAPI = 'https://gnews.io/api/v4/top-headlines?category=sports&lang=en&max=10&apikey=3f48df677f1a4c6f3178add06eecb2d1';
-  const newsdataAPI = 'https://newsdata.io/api/1/news?apikey=pub_93ff78cb4de441528c168d484a264a89&category=sports&language=en';
+  <!-- Promotion Section -->
+  <section id="promotion" class="py-12 px-4 bg-gray-50">
+    <div class="max-w-4xl mx-auto">
+      <div class="text-center mb-12">
+        <h2 class="text-3xl font-bold text-gray-800 mb-2">Promote Your Talent</h2>
+        <p class="text-gray-600">Get discovered by scouts, teams, and sponsors. Showcase your skills to the world.</p>
+        <div class="w-24 h-1 bg-blue-600 mx-auto mt-4"></div>
+      </div>
+      
+      <div class="bg-white rounded-xl shadow-lg overflow-hidden">
+        <div class="md:flex">
+          <div class="md:w-1/2 bg-blue-600 text-white p-8 md:p-12">
+            <h3 class="text-2xl font-bold mb-4">Why Register With Us?</h3>
+            <ul class="space-y-4">
+              <li class="flex items-start gap-3">
+                <i class="fas fa-check-circle mt-1"></i>
+                <span>Exposure to professional scouts and teams</span>
+              </li>
+              <li class="flex items-start gap-3">
+                <i class="fas fa-check-circle mt-1"></i>
+                <span>Featured in our talent showcase</span>
+              </li>
+              <li class="flex items-start gap-3">
+                <i class="fas fa-check-circle mt-1"></i>
+                <span>Opportunity for sponsorships</span>
+              </li>
+              <li class="flex items-start gap-3">
+                <i class="fas fa-check-circle mt-1"></i>
+                <span>Access to exclusive training programs</span>
+              </li>
+            </ul>
+          </div>
+          
+          <div class="md:w-1/2 p-8 md:p-12">
+            <form action="https://formspree.io/f/xldwngjk" method="POST" class="space-y-6">
+              <div>
+                <label for="name" class="block text-gray-700 font-medium mb-2">Full Name</label>
+                <input type="text" id="name" name="name" required 
+                       class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+              </div>
+              
+              <div>
+                <label for="phone" class="block text-gray-700 font-medium mb-2">Phone Number</label>
+                <input type="tel" id="phone" name="phone" required 
+                       class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+              </div>
+              
+              <div>
+                <label for="email" class="block text-gray-700 font-medium mb-2">Email Address</label>
+                <input type="email" id="email" name="_replyto" required 
+                       class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+              </div>
+              
+              <div>
+                <label for="skills" class="block text-gray-700 font-medium mb-2">Your Skill Set</label>
+                <textarea id="skills" name="skills" rows="4" required 
+                          class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"></textarea>
+              </div>
+              
+              <div>
+                <label for="sport" class="block text-gray-700 font-medium mb-2">Primary Sport</label>
+                <select id="sport" name="sport" 
+                        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                  <option value="soccer">Soccer</option>
+                  <option value="basketball">Basketball</option>
+                  <option value="athletics">Athletics</option>
+                  <option value="tennis">Tennis</option>
+                  <option value="music">Music</option>
+                  <option value="other">Other</option>
+                </select>
+              </div>
+              
+              <button type="submit" 
+                      class="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-4 rounded-lg transition flex items-center justify-center gap-2">
+                <i class="fas fa-paper-plane"></i> Submit Your Talent
+              </button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
 
-  const container = document.getElementById('news-container');
+  <!-- About Section -->
+  <section id="about" class="py-12 px-4">
+    <div class="max-w-6xl mx-auto">
+      <div class="text-center mb-12">
+        <h2 class="text-3xl font-bold text-gray-800 mb-2">About Walcottinotv</h2>
+        <div class="w-24 h-1 bg-blue-600 mx-auto"></div>
+      </div>
+      
+      <div class="bg-white rounded-xl shadow-md overflow-hidden">
+        <div class="md:flex">
+          <div class="md:w-1/2 p-8 md:p-12">
+            <h3 class="text-2xl font-semibold text-gray-800 mb-4">Our Story</h3>
+            <p class="text-gray-600 mb-6">Founded in 2020, Walcottinotv began as a passion project to connect sports enthusiasts with quality content and products. What started as a small blog has grown into a comprehensive sports platform serving thousands of users across Nigeria.</p>
+            
+            <h3 class="text-2xl font-semibold text-gray-800 mb-4">Our Mission</h3>
+            <p class="text-gray-600 mb-6">We're committed to promoting sports excellence at all levels, from grassroots to professional. Our platform showcases emerging talents, provides the latest sports news, and offers affordable, high-quality sportswear to help athletes perform at their best.</p>
+            
+            <div class="bg-blue-50 p-6 rounded-lg">
+              <h4 class="text-xl font-semibold text-gray-800 mb-3">Our Values</h4>
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div class="flex items-start gap-3">
+                  <i class="fas fa-medal text-blue-600 mt-1"></i>
+                  <div>
+                    <h5 class="font-medium text-gray-800">Excellence</h5>
+                    <p class="text-gray-600 text-sm">We strive for the highest standards in everything we do.</p>
+                  </div>
+                </div>
+                <div class="flex items-start gap-3">
+                  <i class="fas fa-users text-blue-600 mt-1"></i>
+                  <div>
+                    <h5 class="font-medium text-gray-800">Community</h5>
+                    <p class="text-gray-600 text-sm">Building a supportive sports community is at our core.</p>
+                  </div>
+                </div>
+                <div class="flex items-start gap-3">
+                  <i class="fas fa-lightbulb text-blue-600 mt-1"></i>
+                  <div>
+                    <h5 class="font-medium text-gray-800">Innovation</h5>
+                    <p class="text-gray-600 text-sm">We continuously evolve to serve our audience better.</p>
+                  </div>
+                </div>
+                <div class="flex items-start gap-3">
+                  <i class="fas fa-handshake text-blue-600 mt-1"></i>
+                  <div>
+                    <h5 class="font-medium text-gray-800">Integrity</h5>
+                    <p class="text-gray-600 text-sm">Honesty and transparency guide all our actions.</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <div class="md:w-1/2 bg-gray-100 p-8 md:p-12 flex items-center">
+            <div class="space-y-8">
+              <div class="flex items-start gap-6">
+                <div class="bg-blue-600 text-white p-4 rounded-full">
+                  <i class="fas fa-trophy text-2xl"></i>
+                </div>
+                <div>
+                  <h3 class="text-xl font-semibold text-gray-800 mb-2">100+ Featured Talents</h3>
+                  <p class="text-gray-600">We've helped showcase over 100 athletes to scouts and teams nationwide.</p>
+                </div>
+              </div>
+              
+              <div class="flex items-start gap-6">
+                <div class="bg-blue-600 text-white p-4 rounded-full">
+                  <i class="fas fa-newspaper text-2xl"></i>
+                </div>
+                <div>
+                  <h3 class="text-xl font-semibold text-gray-800 mb-2">Daily Sports Updates</h3>
+                  <p class="text-gray-600">Our team delivers fresh sports content every day to keep you informed.</p>
+                </div>
+              </div>
+              
+              <div class="flex items-start gap-6">
+                <div class="bg-blue-600 text-white p-4 rounded-full">
+                  <i class="fas fa-tshirt text-2xl"></i>
+                </div>
+                <div>
+                  <h3 class="text-xl font-semibold text-gray-800 mb-2">Quality Sportswear</h3>
+                  <p class="text-gray-600">We source only premium quality apparel at affordable prices.</p>
+                </div>
+              </div>
+              
+              <div class="flex items-start gap-6">
+                <div class="bg-blue-600 text-white p-4 rounded-full">
+                  <i class="fas fa-users text-2xl"></i>
+                </div>
+                <div>
+                  <h3 class="text-xl font-semibold text-gray-800 mb-2">Growing Community</h3>
+                  <p class="text-gray-600">Join thousands of sports enthusiasts who trust our platform.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
 
-  async function fetchGnews() {
-    try {
-      const res = await fetch(gnewsAPI);
-      const data = await res.json();
-      return data.articles.map(a => ({
-        title: a.title,
-        image: a.image || 'https://via.placeholder.com/300x180',
-        content: a.content || a.description || 'No summary available'
-      }));
-    } catch { return []; }
-  }
+  <!-- Contact Section -->
+  <section id="contact" class="py-12 px-4 bg-gray-50">
+    <div class="max-w-6xl mx-auto">
+      <div class="text-center mb-12">
+        <h2 class="text-3xl font-bold text-gray-800 mb-2">Contact Us</h2>
+        <p class="text-gray-600">We'd love to hear from you! Reach out for inquiries, partnerships, or feedback.</p>
+        <div class="w-24 h-1 bg-blue-600 mx-auto mt-4"></div>
+      </div>
+      
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+        <div class="bg-white rounded-xl shadow-md overflow-hidden p-8">
+          <h3 class="text-2xl font-semibold text-gray-800 mb-6">Get In Touch</h3>
+          
+          <div class="space-y-6">
+            <div class="flex items-start gap-4">
+              <div class="bg-blue-100 text-blue-600 p-3 rounded-full">
+                <i class="fas fa-map-marker-alt"></i>
+              </div>
+              <div>
+                <h4 class="font-medium text-gray-800">Address</h4>
+                <p class="text-gray-600">B5, Legacy Estate, Kolapo Ishola GRA, Akobo, Ibadan, Oyo State, Nigeria.</p>
+              </div>
+            </div>
+            
+            <div class="flex items-start gap-4">
+              <div class="bg-blue-100 text-blue-600 p-3 rounded-full">
+                <i class="fas fa-phone-alt"></i>
+              </div>
+              <div>
+                <h4 class="font-medium text-gray-800">Phone</h4>
+                <p class="text-gray-600">+2348137208793</p>
+                <p class="text-gray-600">+2349045548253</p>
+              </div>
+            </div>
+            
+            <div class="flex items-start gap-4">
+              <div class="bg-blue-100 text-blue-600 p-3 rounded-full">
+                <i class="fas fa-envelope"></i>
+              </div>
+              <div>
+                <h4 class="font-medium text-gray-800">Email</h4>
+                <p class="text-gray-600">walcottinotv@gmail.com</p>
+              </div>
+            </div>
+            
+            <div class="flex items-start gap-4">
+              <div class="bg-blue-100 text-blue-600 p-3 rounded-full">
+                <i class="fas fa-clock"></i>
+              </div>
+              <div>
+                <h4 class="font-medium text-gray-800">Business Hours</h4>
+                <p class="text-gray-600">Monday - Friday: 9:00 AM - 5:00 PM</p>
+                <p class="text-gray-600">Saturday: 10:00 AM - 3:00 PM</p>
+              </div>
+            </div>
+          </div>
+          
+          <div class="mt-8">
+            <h4 class="font-medium text-gray-800 mb-4">Follow Us</h4>
+            <div class="flex gap-4">
+              <a href="https://www.instagram.com/walcotttinotv" target="_blank" class="bg-blue-600 text-white p-3 rounded-full hover:bg-blue-700 transition">
+                <i class="fab fa-instagram"></i>
+              </a>
+              <a href="https://www.facebook.com/share/1CSYTgmTX9/" target="_blank" class="bg-blue-600 text-white p-3 rounded-full hover:bg-blue-700 transition">
+                <i class="fab fa-facebook-f"></i>
+              </a>
+              <a href="https://x.com/walcotttv2025" target="_blank" class="bg-blue-600 text-white p-3 rounded-full hover:bg-blue-700 transition">
+                <i class="fab fa-twitter"></i>
+              </a>
+            </div>
+          </div>
+        </div>
+        
+        <div class="bg-white rounded-xl shadow-md overflow-hidden p-8">
+          <h3 class="text-2xl font-semibold text-gray-800 mb-6">Send Us a Message</h3>
+          
+          <form class="space-y-4">
+            <div>
+              <label for="contact-name" class="block text-gray-700 font-medium mb-2">Your Name</label>
+              <input type="text" id="contact-name" 
+                     class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+            </div>
+            
+            <div>
+              <label for="contact-email" class="block text-gray-700 font-medium mb-2">Email Address</label>
+              <input type="email" id="contact-email" 
+                     class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+            </div>
+            
+            <div>
+              <label for="contact-subject" class="block text-gray-700 font-medium mb-2">Subject</label>
+              <input type="text" id="contact-subject" 
+                     class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+            </div>
+            
+            <div>
+              <label for="contact-message" class="block text-gray-700 font-medium mb-2">Message</label>
+              <textarea id="contact-message" rows="4" 
+                        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"></textarea>
+            </div>
+            
+            <button type="submit" 
+                    class="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-4 rounded-lg transition flex items-center justify-center gap-2">
+              <i class="fas fa-paper-plane"></i> Send Message
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </section>
 
-  async function fetchNewsData() {
-    try {
-      const res = await fetch(newsdataAPI);
-      const data = await res.json();
-      return data.results.map(a => ({
-        title: a.title,
-        image: a.image_url || 'https://via.placeholder.com/300x180',
-        content: a.description || 'No content available'
-      }));
-    } catch { return []; }
-  }
+  <!-- Newsletter -->
+  <div class="bg-blue-600 text-white py-12 px-4">
+    <div class="max-w-4xl mx-auto text-center">
+      <h3 class="text-2xl font-bold mb-4">Stay Updated With Our Newsletter</h3>
+      <p class="mb-6 max-w-2xl mx-auto">Subscribe to receive the latest sports news, product updates, and exclusive offers directly to your inbox.</p>
+      
+      <form class="flex flex-col sm:flex-row gap-2 max-w-md mx-auto">
+        <input type="email" placeholder="walcottinotv@gmail.com" 
+               class="flex-grow px-4 py-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-300 text-gray-800">
+        <button type="submit" 
+                class="bg-white text-blue-600 font-semibold px-6 py-3 rounded-lg hover:bg-gray-100 transition">
+          Subscribe
+        </button>
+      </form>
+    </div>
+  </div>
 
-  async function loadNews() {
-    const [gnews, newsdata] = await Promise.all([fetchGnews(), fetchNewsData()]);
-    const allNews = [...gnews, ...newsdata].slice(0, 30);
+  <!-- Footer -->
+  <footer class="bg-gray-900 text-white py-8 px-4">
+    <div class="max-w-6xl mx-auto">
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
+        <div>
+          <h4 class="text-xl font-bold mb-4">Walcottinotv</h4>
+          <p class="text-gray-400">Your ultimate hub for sports news, talents & premium sportswear.</p>
+        </div>
+        
+        <div>
+          <h4 class="text-lg font-semibold mb-4">Quick Links</h4>
+          <ul class="space-y-2">
+            <li><a href="#home" class="text-gray-400 hover:text-white transition">Home</a></li>
+            <li><a href="#news" class="text-gray-400 hover:text-white transition">News</a></li>
+            <li><a href="#products" class="text-gray-400 hover:text-white transition">Products</a></li>
+            <li><a href="#promotion" class="text-gray-400 hover:text-white transition">Promotion</a></li>
+          </ul>
+        </div>
+        
+        <div>
+          <h4 class="text-lg font-semibold mb-4">Support</h4>
+          <ul class="space-y-2">
+            <li><a href="#" class="text-gray-400 hover:text-white transition">FAQs</a></li>
+            <li><a href="#" class="text-gray-400 hover:text-white transition">Shipping Policy</a></li>
+            <li><a href="#" class="text-gray-400 hover:text-white transition">Returns & Refunds</a></li>
+            <li><a href="#contact" class="text-gray-400 hover:text-white transition">Contact Us</a></li>
+          </ul>
+        </div>
+        
+        <div>
+          <h4 class="text-lg font-semibold mb-4">Legal</h4>
+          <ul class="space-y-2">
+            <li><a href="#" class="text-gray-400 hover:text-white transition">Terms of Service</a></li>
+            <li><a href="#" class="text-gray-400 hover:text-white transition">Privacy Policy</a></li>
+            <li><a href="#" class="text-gray-400 hover:text-white transition">Cookie Policy</a></li>
+          </ul>
+        </div>
+      </div>
+      
+      <div class="border-t border-gray-800 pt-6 flex flex-col md:flex-row justify-between items-center">
+        <p class="text-gray-400 mb-4 md:mb-0">&copy; 2025 Walcottinotv. All rights reserved.</p>
+        <div class="flex gap-4">
+          <a href="#" class="text-gray-400 hover:text-white transition">
+            <i class="fab fa-instagram"></i>
+          </a>
+          <a href="#" class="text-gray-400 hover:text-white transition">
+            <i class="fab fa-facebook-f"></i>
+          </a>
+          <a href="#" class="text-gray-400 hover:text-white transition">
+            <i class="fab fa-twitter"></i>
+          </a>
+        </div>
+      </div>
+    </div>
+  </footer>
 
-    container.innerHTML = '';
-    allNews.forEach(item => {
-       const div = document.createElement('div');
-      div.className = 'news-item';
-      div.innerHTML = `
-        <img src="item.image" alt="news">
-        <h3>{item.title}</h3>
-        <details>
-          <summary style="color:#2563eb; cursor:pointer;">Read more</summary>
-          <p style="padding:10px;">${item.content}</p>
-        </details>
+  <!-- Back to Top Button -->
+  <button id="back-to-top" class="fixed bottom-8 right-8 bg-blue-600 text-white p-3 rounded-full shadow-lg hover:bg-blue-700 transition opacity-0 invisible">
+    <i class="fas fa-arrow-up"></i>
+  </button>
+
+  <script>
+    // News API Integration
+    const gnewsAPI = 'https://gnews.io/api/v4/top-headlines?category=sports&lang=en&max=10&apikey=3f48df677f1a4c6f3178add06eecb2d1';
+    const newsdataAPI = 'https://newsdata.io/api/1/news?apikey=pub_93ff78cb4de441528c168d484a264a89&category=sports&language=en';
+    
+    const container = document.getElementById('news-container');
+    const loadMoreBtn = document.getElementById('load-more-news');
+    let currentPage = 1;
+    const newsPerPage = 6;
+    let allNews = [];
+    
+    async function fetchGnews() {
+      try {
+        const res = await fetch(gnewsAPI);
+        const data = await res.json();
+        return data.articles.map(a => ({
+          title: a.title,
+          image: a.image || 'https://images.unsplash.com/photo-1543357481-d8f0b38b9db4?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80',
+          content: a.content || a.description || 'No summary available',
+          source: a.source?.name || 'Unknown Source',
+          date: a.publishedAt ? new Date(a.publishedAt).toLocaleDateString() : 'N/A'
+        }));
+      } catch (err) {
+        console.error('Error fetching GNews:', err);
+        return [];
+      }
+    }
+    
+    async function fetchNewsData() {
+      try {
+        const res = await fetch(newsdataAPI);
+        const data = await res.json();
+        return data.results.map(a => ({
+          title: a.title,
+          image: a.image_url || 'https://images.unsplash.com/photo-1543357481-d8f0b38b9db4?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80',
+          content: a.description || 'No content available',
+          source: a.source_id || 'Unknown Source',
+          date: a.pubDate ? new Date(a.pubDate).toLocaleDateString() : 'N/A'
+        }));
+      } catch (err) {
+        console.error('Error fetching NewsData:', err);
+        return [];
+      }
+    }
+    
+    function renderNews(newsItems) {
+      container.innerHTML = '';
+      
+      if (newsItems.length === 0) {
+        container.innerHTML = `
+          <div class="col-span-full text-center py-12">
+            <i class="fas fa-exclamation-triangle text-4xl text-yellow-500 mb-4"></i>
+            <h3 class="text-xl font-medium text-gray-700">No news available at the moment</h3>
+            <p class="text-gray-500 mt-2">Please check back later or try refreshing the page.</p>
+          </div>
+        `;
+        return;
+      }
+      
+      newsItems.forEach(item => {
+        const div = document.createElement('div');
+        div.className = 'news-card bg-white rounded-xl shadow-md overflow-hidden transition duration-300 h-full flex flex-col';
+        div.innerHTML = `
+          <img src="${item.image}" alt="${item.title}" class="w-full h-48 object-cover">
+          <div class="p-6 flex-grow flex flex-col">
+            <div class="flex justify-between items-start mb-2">
+              <h3 class="text-lg font-semibold text-gray-800">${item.title}</h3>
+            </div>
+            <div class="flex items-center text-sm text-gray-500 mb-4">
+              <span class="mr-3"><i class="fas fa-newspaper mr-1"></i> ${item.source}</span>
+              <span><i class="fas fa-calendar-alt mr-1"></i> ${item.date}</span>
+            </div>
+            <p class="text-gray-600 mb-4 line-clamp-3">${item.content}</p>
+            <button class="mt-auto read-more-btn bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition self-start">
+              Read More <i class="fas fa-arrow-right ml-1"></i>
+            </button>
+          </div>
+        `;
+        
+        div.querySelector('.read-more-btn').addEventListener('click', () => {
+          alert(`Full article content:\n\n${item.content}\n\nSource: ${item.source}`);
+        });
+        
+        container.appendChild(div);
+      });
+    }
+    
+    async function loadNews() {
+      container.innerHTML = `
+        <div class="col-span-full flex justify-center items-center py-12">
+          <div class="loading-spinner h-12 w-12 border-4 border-blue-200 rounded-full"></div>
+          <span class="ml-4 text-gray-600">Loading sports news...</span>
+        </div>
       `;
-      container.appendChild(div);
+      
+      const [gnews, newsdata] = await Promise.all([fetchGnews(), fetchNewsData()]);
+      allNews = [...gnews, ...newsdata];
+      
+      renderNews(allNews.slice(0, newsPerPage));
+      currentPage = 1;
+      
+      if (allNews.length > newsPerPage) {
+        loadMoreBtn.classList.remove('hidden');
+      } else {
+        loadMoreBtn.classList.add('hidden');
+      }
+    }
+    
+    loadMoreBtn.addEventListener('click', () => {
+      const nextPage = currentPage + 1;
+      const startIndex = (nextPage - 1) * newsPerPage;
+      const endIndex = startIndex + newsPerPage;
+      
+      if (startIndex >= allNews.length) {
+        loadMoreBtn.classList.add('hidden');
+        return;
+      }
+      
+      const moreNews = allNews.slice(startIndex, endIndex);
+      moreNews.forEach(item => {
+        const div = document.createElement('div');
+        div.className = 'news-card bg-white rounded-xl shadow-md overflow-hidden transition duration-300 h-full flex flex-col';
+        div.innerHTML = `
+          <img src="${item.image}" alt="${item.title}" class="w-full h-48 object-cover">
+          <div class="p-6 flex-grow flex flex-col">
+            <div class="flex justify-between items-start mb-2">
+              <h3 class="text-lg font-semibold text-gray-800">${item.title}</h3>
+            </div>
+            <div class="flex items-center text-sm text-gray-500 mb-4">
+              <span class="mr-3"><i class="fas fa-newspaper mr-1"></i> ${item.source}</span>
+              <span><i class="fas fa-calendar-alt mr-1"></i> ${item.date}</span>
+            </div>
+            <p class="text-gray-600 mb-4 line-clamp-3">${item.content}</p>
+            <button class="mt-auto read-more-btn bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition self-start">
+              Read More <i class="fas fa-arrow-right ml-1"></i>
+            </button>
+          </div>
+        `;
+        
+        div.querySelector('.read-more-btn').addEventListener('click', () => {
+          alert(`Full article content:\n\n${item.content}\n\nSource: ${item.source}`);
+        });
+        
+        container.appendChild(div);
+      });
+      
+      currentPage = nextPage;
+      
+      if (endIndex >= allNews.length) {
+        loadMoreBtn.classList.add('hidden');
+      }
     });
-  }
-
-  loadNews();
-</script>
-
+    
+    // Back to Top Button
+    const backToTopBtn = document.getElementById('back-to-top');
+    
+    window.addEventListener('scroll', () => {
+      if (window.pageYOffset > 300) {
+        backToTopBtn.classList.remove('opacity-0', 'invisible');
+        backToTopBtn.classList.add('opacity-100', 'visible');
+      } else {
+        backToTopBtn.classList.remove('opacity-100', 'visible');
+        backToTopBtn.classList.add('opacity-0', 'invisible');
+      }
+    });
+    
+    backToTopBtn.addEventListener('click', () => {
+      window.scrollTo({
+        top: 0,
+        behavior: 'smooth'
+      });
+    });
+    
+    // Smooth scrolling for navigation links
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', function(e) {
+        e.preventDefault();
+        
+        const targetId = this.getAttribute('href');
+        const targetElement = document.querySelector(targetId);
+        
+        if (targetElement) {
+          window.scrollTo({
+            top: targetElement.offsetTop - 80,
+            behavior: 'smooth'
+          });
+        }
+      });
+    });
+    
+    // Initialize the page
+    loadNews();
+  </script>
 </body>
-</html> 
+</html>
