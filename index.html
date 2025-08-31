@@ -1,742 +1,275 @@
-
+```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>walcotttinotv - Sports News & Apparel</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        primary: '#1e40af',
-                        secondary: '#1e3a8a',
-                        accent: '#3b82f6',
-                        light: '#eff6ff',
-                    },
-                    fontFamily: {
-                        sans: ['Inter', 'sans-serif'],
-                    },
-                }
-            }
-        }
-    </script>
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
-        
-        body {
-            font-family: 'Inter', sans-serif;
-            scroll-behavior: smooth;
-        }
-        
-        .news-card:hover .news-image {
-            transform: scale(1.05);
-        }
-        
-        .product-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
-        }
-        
-        .hero {
-            background: linear-gradient(rgba(30, 64, 175, 0.8), rgba(30, 58, 138, 0.8)), url('https://images.unsplash.com/photo-1540747913346-19e32dc3e97e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1600&q=80');
-            background-size: cover;
-            background-position: center;
-        }
-        
-        .news-tab.active {
-            background-color: #3b82f6;
-            color: white;
-        }
-        
-        .form-input:focus {
-            outline: none;
-            box-shadow: 0 0 0 2px #3b82f6;
-        }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Walcottinotv</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background: #f3f4f6;
+      color: #111827;
+    }
+    header, footer {
+      background: #1e40af;
+      color: white;
+      padding: 20px;
+      text-align: center;
+    }
+    nav {
+      background: #2563eb;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 15px;
+      padding: 10px;
+    }
+    nav a {
+      color: white;
+      text-decoration: none;
+      font-weight: bold;
+    }
+    nav a:hover {
+      text-decoration: underline;
+    }
+    section {
+      padding: 20px;
+      max-width: 1100px;
+      margin: auto;
+    }
+    .news-container, .products-container {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+      justify-content: center;
+    }
+    text-align: center;
+      margin: 20px auto;
+      border: 2px dashed #60a5fa;
+    }
+    @media (max-width: 600px) {
+      nav {
+        flex-direction: column;
+      }
+    }
+  </style>
 </head>
-<body class="bg-gray-50">
-    <!-- Navigation -->
-    <nav class="bg-primary text-white shadow-lg">
-        <div class="container mx-auto px-4 py-3 flex justify-between items-center">
-            <div class="flex items-center space-x-2">
-                <i class="fas fa-running text-2xl"></i>
-                <a href="#" class="text-xl font-bold">WalcottinoTv</a>
-            </div>
-            <div class="hidden md:flex space-x-6">
-                <a href="#" class="hover:text-accent transition">Home</a>
-                <a href="#news" class="hover:text-accent transition">News</a>
-                <a href="#products" class="hover:text-accent transition">Products</a>
-                <a href="#promotion" class="hover:text-accent transition">Promotions</a>
-                <a href="#about" class="hover:text-accent transition">About</a>
-                <a href="#contact" class="hover:text-accent transition">Contact</a>
-            </div>
-            <div class="md:hidden">
-                <button id="menu-toggle" class="text-white focus:outline-none">
-                    <i class="fas fa-bars text-2xl"></i>
-                </button>
-            </div>
-        </div>
-        <!-- Mobile menu -->
-        <div id="mobile-menu" class="hidden md:hidden bg-secondary px-4 py-2">
-            <a href="#" class="block py-2 hover:text-accent transition">Home</a>
-            <a href="#news" class="block py-2 hover:text-accent transition">News</a>
-            <a href="#products" class="block py-2 hover:text-accent transition">Products</a>
-            <a href="#promotion" class="block py-2 hover:text-accent transition">Promotions</a>
-            <a href="#about" class="block py-2 hover:text-accent transition">About</a>
-            <a href="#contact" class="block py-2 hover:text-accent transition">Contact</a>
-        </div>
-    </nav>
+<body>
 
-    <!-- Hero Section -->
-    <section class="hero text-white py-20 md:py-32">
-        <div class="container mx-auto px-4 text-center">
-            <h1 class="text-4xl md:text-6xl font-bold mb-6">Your Ultimate Sports Destination</h1>
-            <p class="text-xl md:text-2xl mb-8 max-w-3xl mx-auto">Latest sports news, premium sportswear, and a platform to showcase local talents in sports and music.</p>
-            <div class="flex flex-col sm:flex-row justify-center gap-4">
-                <a href="#news" class="bg-accent hover:bg-blue-500 text-white font-bold py-3 px-6 rounded-lg transition duration-300">Explore News</a>
-                <a href="#products" class="bg-white hover:bg-gray-100 text-primary font-bold py-3 px-6 rounded-lg transition duration-300">Shop Now</a>
-            </div>
-        </div>
-    </section>
+  <header>
+    <h1>Walcottinotv</h1>
+    <p>Your hub for sports news, talents & sportswear</p>
+  </header>
 
-    <!-- Featured News (Homepage) -->
-    <section class="py-12 bg-white">
-        <div class="container mx-auto px-4">
-            <h2 class="text-3xl font-bold text-center mb-12 text-primary">Latest Sports News</h2>
-            <div id="featured-news" class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                <!-- News will be loaded here by JavaScript -->
-            </div>
-            <div class="text-center mt-8">
-                <a href="#news" class="inline-block bg-primary hover:bg-secondary text-white font-bold py-3 px-6 rounded-lg transition duration-300">View All News</a>
-            </div>
-        </div>
-    </section>
+  <nav>
+    <a href="#home">Home</a>
+    <a href="#news">News</a>
+    <a href="#products">Products</a>
+    <a href="#promotion">Promotion</a>
+    <a href="#about">About</a>
+    <a href="#contact">Contact</a>
+  </nav>
 
-    <!-- Featured Products (Homepage) -->
-    <section id="products" class="py-12 bg-light">
-        <div class="container mx-auto px-4">
-            <h2 class="text-3xl font-bold text-center mb-12 text-primary">Featured Sportswear</h2>
-            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
-                <!-- Product 1 -->
-                <div class="product-card bg-white rounded-lg overflow-hidden shadow-md transition duration-300">
-                    <img src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80" alt="Running Shoes" class="w-full h-48 object-cover">
-                    <div class="p-4">
-                        <h3 class="font-bold text-lg mb-2">Pro Running Shoes</h3>
-                        <p class="text-gray-600 mb-4">Lightweight and comfortable for all terrains</p>
-                        <div class="flex justify-between items-center">
-                            <span class="font-bold text-primary">$45.99</span>
-                            <button class="bg-accent hover:bg-blue-500 text-white py-1 px-3 rounded transition duration-300">Add to Cart</button>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- Product 2 -->
-                <div class="product-card bg-white rounded-lg overflow-hidden shadow-md transition duration-300">
-                    <img src="https://images.unsplash.com/photo-1525966222134-fcfa99b8ae52?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80" alt="Basketball Jersey" class="w-full h-48 object-cover">
-                    <div class="p-4">
-                        <h3 class="font-bold text-lg mb-2">Basketball Jersey</h3>
-                        <p class="text-gray-600 mb-4">Breathable fabric with team logo</p>
-                        <div class="flex justify-between items-center">
-                            <span class="font-bold text-primary">$29.99</span>
-                            <button class="bg-accent hover:bg-blue-500 text-white py-1 px-3 rounded transition duration-300">Add to Cart</button>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- Product 3 -->
-                <div class="product-card bg-white rounded-lg overflow-hidden shadow-md transition duration-300">
-                    <img src="https://images.unsplash.com/photo-1574629810360-7efbbe195018?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80" alt="Boxing Gloves" class="w-full h-48 object-cover">
-                    <div class="p-4">
-                        <h3 class="font-bold text-lg mb-2">Boxing Gloves</h3>
-                        <p class="text-gray-600 mb-4">Premium leather with wrist support</p>
-                        <div class="flex justify-between items-center">
-                            <span class="font-bold text-primary">$39.99</span>
-                            <button class="bg-accent hover:bg-blue-500 text-white py-1 px-3 rounded transition duration-300">Add to Cart</button>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- Product 4 -->
-                <div class="product-card bg-white rounded-lg overflow-hidden shadow-md transition duration-300">
-                    <img src="https://images.unsplash.com/photo-1600185365483-26d7a4cc7519?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80" alt="Football Cleats" class="w-full h-48 object-cover">
-                    <div class="p-4">
-                        <h3 class="font-bold text-lg mb-2">Football Cleats</h3>
-                        <p class="text-gray-600 mb-4">High traction for optimal performance</p>
-                        <div class="flex justify-between items-center">
-                            <span class="font-bold text-primary">$49.99</span>
-                            <button class="bg-accent hover:bg-blue-500 text-white py-1 px-3 rounded transition duration-300">Add to Cart</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="text-center mt-8">
-                <a href="#all-products" class="inline-block bg-primary hover:bg-secondary text-white font-bold py-3 px-6 rounded-lg transition duration-300">View All Products</a>
-            </div>
-        </div>
-    </section>
+  <div class="ad-banner">
+    <strong>AD SPACE:</strong> Your advertisement could be here.
+  </div>
 
-    <!-- About Section (Homepage) -->
-    <section id="about" class="py-12 bg-white">
-        <div class="container mx-auto px-4">
-            <div class="flex flex-col md:flex-row items-center">
-                <div class="md:w-1/2 mb-8 md:mb-0 md:pr-8">
-                    <img src="https://images.unsplash.com/photo-1547347298-4074fc3086f0?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80" alt="About SportX" class="rounded-lg shadow-lg w-full">
-                </div>
-                <div class="md:w-1/2">
-                    <h2 class="text-3xl font-bold mb-6 text-primary">About walcotttinotv</h2>
-                    <p class="text-gray-700 mb-4">walcotttinotv is a premier sports brand dedicated to bringing you the latest in sports news, high-quality sportswear, and a platform to showcase and Promote local talents in both sports and music industries.</p>
-                    <p class="text-gray-700 mb-4">Founded in 2024, we've grown to become a trusted source for sports enthusiasts, providing comprehensive coverage of wrestling, bike racing, football, boxing, basketball, and more.</p>
-                    <p class="text-gray-700 mb-6">Our mission is to promote sports at all levels while offering a reliable, trusted platform to promote raw talents to the global level.</p>
-                    <div class="flex space-x-4">
-                        <div class="bg-light p-4 rounded-lg text-center">
-                            <i class="fas fa-newspaper text-3xl text-primary mb-2"></i>
-                            <h3 class="font-bold">Daily News</h3>
-                            <p class="text-sm">Updated every 48 hours</p>
-                        </div>
-                        <div class="bg-light p-4 rounded-lg text-center">
-                            <i class="fas fa-tshirt text-3xl text-primary mb-2"></i>
-                            <h3 class="font-bold">Quality Gear</h3>
-                            <p class="text-sm">Affordable prices</p>
-                        </div>
-                        <div class="bg-light p-4 rounded-lg text-center">
-                            <i class="fas fa-star text-3xl text-primary mb-2"></i>
-                            <h3 class="font-bold">Talent Promotion</h3>
-                            <p class="text-sm">Showcasing local stars</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
+  <section id="home">
+    <h2>Welcome to Walcottinotv</h2>
+    <p>We deliver up-to-date sports stories, empower local talents, and sell premium sportswear at unbeatable prices.</p>
+  </section>
 
-    <!-- News Page -->
-    <section id="news" class="py-12 bg-light">
-        <div class="container mx-auto px-4">
-            <h2 class="text-3xl font-bold text-center mb-12 text-primary">Sports News</h2>
-            
-            <div class="flex overflow-x-auto mb-8 pb-2 scrollbar-hide">
-                <div class="flex space-x-2">
-                    <button class="news-tab active px-4 py-2 rounded-full font-medium" data-category="general">All Sports</button>
-                    <button class="news-tab px-4 py-2 rounded-full font-medium" data-category="wrestling">Wrestling</button>
-                    <button class="news-tab px-4 py-2 rounded-full font-medium" data-category="basketball">Basketball</button>
-                    <button class="news-tab px-4 py-2 rounded-full font-medium" data-category="football">Football</button>
-                    <button class="news-tab px-4 py-2 rounded-full font-medium" data-category="boxing">Boxing</button>
-                    <button class="news-tab px-4 py-2 rounded-full font-medium" data-category="cycling">Bike Racing</button>
-                    <button class="news-tab px-4 py-2 rounded-full font-medium" data-category="local">Local News</button>
-                </div>
-            </div>
-            
-            <div id="news-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                <!-- News will be loaded here by JavaScript -->
-            </div>
-            
-            <div class="mt-8 flex justify-center">
-                <button id="load-more-news" class="bg-primary hover:bg-secondary text-white font-bold py-3 px-6 rounded-lg transition duration-300">Load More News</button>
-            </div>
-        </div>
-    </section>
+  <section id="news">
+    <h2>Latest Sports News</h2>
+    <div class="news-container" id="news-container">
+      <p>Loading news...</p>
+    </div>
+  </section>
 
-    <!-- All Products Page -->
-    <section id="all-products" class="py-12 bg-white">
-        <div class="container mx-auto px-4">
-            <h2 class="text-3xl font-bold text-center mb-12 text-primary">Our Sportswear Collection</h2>
-            
-            <div class="mb-8 flex justify-between items-center">
-                <div class="relative w-full md:w-64">
-                    <select class="form-input block w-full px-4 py-2 border border-gray-300 rounded-lg focus:border-accent">
-                        <option>All Categories</option>
-                        <option>Footwear</option>
-                        <option>Jerseys</option>
-                        <option>Equipment</option>
-                        <option>Accessories</option>
-                    </select>
-                </div>
-                <div class="hidden md:block">
-                    <span class="text-gray-600">Showing 12 of 24 products</span>
-                </div>
-            </div>
-            
-            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
-                <!-- Product 1 -->
-                <div class="product-card bg-white rounded-lg overflow-hidden shadow-md transition duration-300">
-                    <div class="relative">
-                        <img src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80" alt="Running Shoes" class="w-full h-48 object-cover">
-                        <span class="absolute top-2 right-2 bg-red-500 text-white text-xs font-bold px-2 py-1 rounded">SALE</span>
-                    </div>
-                    <div class="p-4">
-                        <h3 class="font-bold text-lg mb-2">Pro Running Shoes</h3>
-                        <p class="text-gray-600 mb-4">Lightweight and comfortable for all terrains</p>
-                        <div class="flex justify-between items-center">
-                            <div>
-                                <span class="font-bold text-primary">$45.99</span>
-                                <span class="text-sm text-gray-500 line-through ml-2">$59.99</span>
-                            </div>
-                            <button class="bg-accent hover:bg-blue-500 text-white py-1 px-3 rounded transition duration-300">Add to Cart</button>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- Product 2 -->
-                <div class="product-card bg-white rounded-lg overflow-hidden shadow-md transition duration-300">
-                    <img src="https://images.unsplash.com/photo-1525966222134-fcfa99b8ae52?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80" alt="Basketball Jersey" class="w-full h-48 object-cover">
-                    <div class="p-4">
-                        <h3 class="font-bold text-lg mb-2">Basketball Jersey</h3>
-                        <p class="text-gray-600 mb-4">Breathable fabric with team logo</p>
-                        <div class="flex justify-between items-center">
-                            <span class="font-bold text-primary">$29.99</span>
-                            <button class="bg-accent hover:bg-blue-500 text-white py-1 px-3 rounded transition duration-300">Add to Cart</button>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- Product 3 -->
-                <div class="product-card bg-white rounded-lg overflow-hidden shadow-md transition duration-300">
-                    <img src="https://images.unsplash.com/photo-1574629810360-7efbbe195018?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80" alt="Boxing Gloves" class="w-full h-48 object-cover">
-                    <div class="p-4">
-                        <h3 class="font-bold text-lg mb-2">Boxing Gloves</h3>
-                        <p class="text-gray-600 mb-4">Premium leather with wrist support</p>
-                        <div class="flex justify-between items-center">
-                            <span class="font-bold text-primary">$39.99</span>
-                            <button class="bg-accent hover:bg-blue-500 text-white py-1 px-3 rounded transition duration-300">Add to Cart</button>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- Product 4 -->
-                <div class="product-card bg-white rounded-lg overflow-hidden shadow-md transition duration-300">
-                    <img src="https://images.unsplash.com/photo-1600185365483-26d7a4cc7519?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80" alt="Football Cleats" class="w-full h-48 object-cover">
-                    <div class="p-4">
-                        <h3 class="font-bold text-lg mb-2">Football Cleats</h3>
-                        <p class="text-gray-600 mb-4">High traction for optimal performance</p>
-                        <div class="flex justify-between items-center">
-                            <span class="font-bold text-primary">$49.99</span>
-                            <button class="bg-accent hover:bg-blue-500 text-white py-1 px-3 rounded transition duration-300">Add to Cart</button>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- Product 5 -->
-                <div class="product-card bg-white rounded-lg overflow-hidden shadow-md transition duration-300">
-                    <img src="https://images.unsplash.com/photo-1595341888016-a392ef81b7de?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80" alt="Training Shorts" class="w-full h-48 object-cover">
-                    <div class="p-4">
-                        <h3 class="font-bold text-lg mb-2">Training Shorts</h3>
-                        <p class="text-gray-600 mb-4">Moisture-wicking fabric for comfort</p>
-                        <div class="flex justify-between items-center">
-                            <span class="font-bold text-primary">$24.99</span>
-                            <button class="bg-accent hover:bg-blue-500 text-white py-1 px-3 rounded transition duration-300">Add to Cart</button>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- Product 6 -->
-                <div class="product-card bg-white rounded-lg overflow-hidden shadow-md transition duration-300">
-                    <img src="https://images.unsplash.com/photo-1517649763962-0c623066013b?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80" alt="Cycling Jersey" class="w-full h-48 object-cover">
-                    <div class="p-4">
-                        <h3 class="font-bold text-lg mb-2">Cycling Jersey</h3>
-                        <p class="text-gray-600 mb-4">Aerodynamic fit with back pockets</p>
-                        <div class="flex justify-between items-center">
-                            <span class="font-bold text-primary">$34.99</span>
-                            <button class="bg-accent hover:bg-blue-500 text-white py-1 px-3 rounded transition duration-300">Add to Cart</button>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- Product 7 -->
-                <div class="product-card bg-white rounded-lg overflow-hidden shadow-md transition duration-300">
-                    <div class="relative">
-                        <img src="https://images.unsplash.com/photo-1581009146145-de5d127f5feb?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80" alt="Yoga Mat" class="w-full h-48 object-cover">
-                        <span class="absolute top-2 right-2 bg-green-500 text-white text-xs font-bold px-2 py-1 rounded">NEW</span>
-                    </div>
-                    <div class="p-4">
-                        <h3 class="font-bold text-lg mb-2">Premium Yoga Mat</h3>
-                        <p class="text-gray-600 mb-4">Non-slip surface with carrying strap</p>
-                        <div class="flex justify-between items-center">
-                            <span class="font-bold text-primary">$32.99</span>
-                            <button class="bg-accent hover:bg-blue-500 text-white py-1 px-3 rounded transition duration-300">Add to Cart</button>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- Product 8 -->
-                <div class="product-card bg-white rounded-lg overflow-hidden shadow-md transition duration-300">
-                    <img src="https://images.unsplash.com/photo-1531545510416-c81f6a0e19c9?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80" alt="Gym Bag" class="w-full h-48 object-cover">
-                    <div class="p-4">
-                        <h3 class="font-bold text-lg mb-2">Gym Duffel Bag</h3>
-                        <p class="text-gray-600 mb-4">Spacious with separate shoe compartment</p>
-                        <div class="flex justify-between items-center">
-                            <span class="font-bold text-primary">$28.99</span>
-                            <button class="bg-accent hover:bg-blue-500 text-white py-1 px-3 rounded transition duration-300">Add to Cart</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="mt-8 flex justify-center">
-                <button class="bg-primary hover:bg-secondary text-white font-bold py-3 px-6 rounded-lg transition duration-300">Load More Products</button>
-            </div>
-        </div>
-    </section>
+  <div class="ad-banner">
+    <strong>AD SPACE:</strong> Partner with us to advertise your brand!
+  </div>
 
-    <!-- Promotion Page -->
-    <section id="promotion" class="py-12 bg-light">
-        <div class="container mx-auto px-4">
-            <div class="max-w-4xl mx-auto">
-                <h2 class="text-3xl font-bold text-center mb-6 text-primary">Promote Your Talent</h2>
-                <p class="text-center text-gray-700 mb-8">Are you a talented athlete or musician looking for exposure? Fill out the form below and get featured on our platform.</p>
-                
-                <form id="talent-form" class="bg-white p-6 md:p-8 rounded-lg shadow-md">
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <div>
-                            <label for="full-name" class="block text-gray-700 font-medium mb-2">Full Name</label>
-                            <input type="text" id="full-name" class="form-input w-full px-4 py-2 border border-gray-300 rounded-lg focus:border-accent" required>
-                        </div>
-                        <div>
-                            <label for="email" class="block text-gray-700 font-medium mb-2">Email Address</label>
-                            <input type="email" id="email" class="form-input w-full px-4 py-2 border border-gray-300 rounded-lg focus:border-accent" required>
-                        </div>
-                        <div>
-                            <label for="phone" class="block text-gray-700 font-medium mb-2">Phone Number</label>
-                            <input type="tel" id="phone" class="form-input w-full px-4 py-2 border border-gray-300 rounded-lg focus:border-accent" required>
-                        </div>
-                        <div>
-                            <label for="age" class="block text-gray-700 font-medium mb-2">Age</label>
-                            <input type="number" id="age" class="form-input w-full px-4 py-2 border border-gray-300 rounded-lg focus:border-accent" required>
-                        </div>
-                        <div>
-                            <label for="talent-type" class="block text-gray-700 font-medium mb-2">Talent Type</label>
-                            <select id="talent-type" class="form-input w-full px-4 py-2 border border-gray-300 rounded-lg focus:border-accent" required>
-                                <option value="">Select your talent</option>
-                                <option value="wrestling">Wrestling</option>
-                                <option value="football">Football</option>
-                                <option value="basketball">Basketball</option>
-                                <option value="boxing">Boxing</option>
-                                <option value="cycling">Bike Racing</option>
-                                <option value="music">Music</option>
-                                <option value="other">Other</option>
-                            </select>
-                        </div>
-                        <div id="other-talent-container" class="hidden">
-                            <label for="other-talent" class="block text-gray-700 font-medium mb-2">Specify Talent</label>
-                            <input type="text" id="other-talent" class="form-input w-full px-4 py-2 border border-gray-300 rounded-lg focus:border-accent">
-                        </div>
-                        <div class="md:col-span-2">
-                            <label for="skills" class="block text-gray-700 font-medium mb-2">Skills/Experience</label>
-                            <textarea id="skills" rows="4" class="form-input w-full px-4 py-2 border border-gray-300 rounded-lg focus:border-accent" required></textarea>
-                        </div>
-                        <div class="md:col-span-2">
-                            <label for="achievements" class="block text-gray-700 font-medium mb-2">Achievements (if any)</label>
-                            <textarea id="achievements" rows="3" class="form-input w-full px-4 py-2 border border-gray-300 rounded-lg focus:border-accent"></textarea>
-                        </div>
-                        <div class="md:col-span-2">
-                            <label class="flex items-center">
-                                <input type="checkbox" class="form-checkbox text-accent" required>
-                                <span class="ml-2 text-gray-700">I agree to the terms and conditions</span>
-                            </label>
-                        </div>
-                    </div>
-                    
-                    <div class="mt-8 text-center">
-                        <button type="submit" class="bg-primary hover:bg-secondary text-white font-bold py-3 px-8 rounded-lg transition duration-300">Submit Application</button>
-                    </div>
-                </form>
-                
-                <div id="success-message" class="hidden mt-6 p-4 bg-green-100 text-green-700 rounded-lg text-center">
-                    <i class="fas fa-check-circle text-2xl mb-2"></i>
-                    <p class="font-bold">Application Submitted Successfully!</p>
-                    <p>We'll review your information and get back to you soon.</p>
-                </div>
-            </div>
-        </div>
-    </section>
+  <section id="products">
+    <h2>Sportswear Under $50</h2>
+    <div class="products-container">
+      <div class="product-item">
+        <img src="https://via.placeholder.com/300x180" alt="Shirt">  
+        .news-item, .product-item {
+      background: white;
+      border-radius: 8px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+      overflow: hidden;
+      width: 300px;
+    }
+    .news-item img, .product-item img {
+      width: 100%;
+      height: 180px;
+      object-fit: cover;
+    }
+    .news-item h3, .product-item h3 {
+      margin: 10px;
+    }
+    .news-item p, .product-item p {
+      margin: 0 10px 10px;
+    }
+    .news-item a, .product-item a {
+      display: block;
+      margin: 10px;
+      color: #2563eb;
+      font-weight: bold;
+      text-decoration: none;
+    }
+    .news-item a:hover, .product-item a:hover {
+      text-decoration: underline;
+    }
+    form {
+      background: white;
+      padding: 20px;
+      border-radius: 8px;
+      max-width: 500px;
+      margin: auto;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    }
+    form input, form textarea {
+      width: 100%;
+      padding: 10px;
+      margin: 10px 0;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+    form button {
+      background: #2563eb;
+      color: white;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 4px;
+    }
+    form button:hover {
+      background: #1e3a8a;
+    }
+    .ad-banner {
+      background: #dbeafe;
+      color: #1e40af;
+      padding: 15px;  
+       <h3>Sports T-Shirt</h3>
+        <p>25</p>
+        <a href="#">Buy Now</a>
+      </div>
+      <div class="product-item">
+        <img src="https://via.placeholder.com/300x180" alt="Shorts">
+        <h3>Running Shorts</h3>
+        <p>30</p>
+        <a href="#">Buy Now</a>
+      </div>
+      <div class="product-item">
+        <img src="https://via.placeholder.com/300x180" alt="Jersey">
+        <h3>Basketball Jersey</h3>
+        <p>45</p>
+        <a href="#">Buy Now</a>
+      </div>
+    </div>
+  </section>
 
-    <!-- Contact Page -->
-    <section id="contact" class="py-12 bg-white">
-        <div class="container mx-auto px-4">
-            <h2 class="text-3xl font-bold text-center mb-12 text-primary">Contact Us</h2>
-            
-            <div class="flex flex-col md:flex-row gap-8 max-w-6xl mx-auto">
-                <div class="md:w-1/2">
-                    <div class="bg-light p-6 rounded-lg shadow-md h-full">
-                        <h3 class="text-xl font-bold mb-4 text-primary">Get In Touch</h3>
-                        <p class="text-gray-700 mb-6">Have questions or feedback? Reach out to us using the information below or fill out the contact form.</p>
-                        
-                        <div class="space-y-4">
-                            <div class="flex items-start">
-                                <i class="fas fa-map-marker-alt text-accent mt-1 mr-4"></i>
-                                <div>
-                                    <h4 class="font-bold">Address</h4>
-                                    <p class="text-gray-700">B5, Legacy Estate, Kolapo Ishola GRA, Akobo, Ibadan, Oyo State, Nigeria.</p>
-                                </div>
-                            </div>
-                            
-                            <div class="flex items-start">
-                                <i class="fas fa-phone-alt text-accent mt-1 mr-4"></i>
-                                <div>
-                                    <h4 class="font-bold">Phone</h4>
-                                    <p class="text-gray-700">+2348137208793, +2349045548253</p>
-                                </div>
-                            </div>
-                            
-                            <div class="flex items-start">
-                                <i class="fas fa-envelope text-accent mt-1 mr-4"></i>
-                                <div>
-                                    <h4 class="font-bold">Email</h4>
-                                    <p class="text-gray-700">walcottinotv@gmail.com</p>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <div class="mt-8">
-                            <h4 class="font-bold mb-4">Follow Us</h4>
-                            <div class="flex space-x-4">
-                                <a href="https://www.instagram.com/walcotttinotv?igsh=MW44Z2QwY2toN2YyNg==" target="_blank" class="bg-primary hover:bg-secondary text-white w-10 h-10 rounded-full flex items-center justify-center transition duration-300">
-                                    <i class="fab fa-instagram"></i>
-                                </a>
-                                <a href="https://www.facebook.com/share/1CSYTgmTX9/" target="_blank" class="bg-primary hover:bg-secondary text-white w-10 h-10 rounded-full flex items-center justify-center transition duration-300">
-                                    <i class="fab fa-facebook-f"></i>
-                                </a>
-                                <a href="https://x.com/walcotttv2025?t=A--G6KfJcBGf2kz_PAnzlw&s=09" target="_blank" class="bg-primary hover:bg-secondary text-white w-10 h-10 rounded-full flex items-center justify-center transition duration-300">
-                                    <i class="fab fa-twitter"></i>
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="md:w-1/2">
-                    <div class="bg-light p-6 rounded-lg shadow-md h-full">
-                        <h3 class="text-xl font-bold mb-4 text-primary">Send Us a Message</h3>
-                        <form id="contact-form">
-                            <div class="space-y-4">
-                                <div>
-                                    <label for="contact-name" class="block text-gray-700 font-medium mb-2">Your Name</label>
-                                    <input type="text" id="contact-name" class="form-input w-full px-4 py-2 border border-gray-300 rounded-lg focus:border-accent" required>
-                                </div>
-                                <div>
-                                    <label for="contact-email" class="block text-gray-700 font-medium mb-2">Email Address</label>
-                                    <input type="email" id="contact-email" class="form-input w-full px-4 py-2 border border-gray-300 rounded-lg focus:border-accent" required>
-                                </div>
-                                <div>
-                                    <label for="contact-subject" class="block text-gray-700 font-medium mb-2">Subject</label>
-                                    <input type="text" id="contact-subject" class="form-input w-full px-4 py-2 border border-gray-300 rounded-lg focus:border-accent" required>
-                                </div>
-                                <div>
-                                    <label for="contact-message" class="block text-gray-700 font-medium mb-2">Message</label>
-                                    <textarea id="contact-message" rows="5" class="form-input w-full px-4 py-2 border border-gray-300 rounded-lg focus:border-accent" required></textarea>
-                                </div>
-                            </div>
-                            
-                            <div class="mt-6">
-                                <button type="submit" class="bg-primary hover:bg-secondary text-white font-bold py-3 px-6 rounded-lg transition duration-300 w-full">Send Message</button>
-                            </div>
-                        </form>
-                        
-                        <div id="contact-success" class="hidden mt-4 p-4 bg-green-100 text-green-700 rounded-lg text-center">
-                            <i class="fas fa-check-circle text-2xl mb-2"></i>
-                            <p class="font-bold">Message Sent Successfully!</p>
-                            <p>We'll get back to you as soon as possible.</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
+  <section id="promotion">
+    <h2>Promote Your Talent</h2>
+    <form action="https://formspree.io/f/xldwngjk" method="POST">
+      <input type="text" name="name" placeholder="Full Name" required>
+      <input type="tel" name="phone" placeholder="Phone Number" required>
+      <input type="email" name="_replyto" placeholder="Email Address" required>
+      <textarea name="skills" placeholder="Your Skill Set" required></textarea>
+      <button type="submit">Submit</button>
+    </form>
+  </section>
 
-    <!-- Footer -->
-    <footer class="bg-primary text-white py-8">
-        <div class="container mx-auto px-4">
-            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
-                <div>
-                    <div class="flex items-center space-x-2 mb-4">
-                        <i class="fas fa-running text-2xl"></i>
-                        <span class="text-xl font-bold">walcotttinotv</span>
-                    </div>
-                    <p class="text-gray-300">Your ultimate destination for sports news, apparel, and talent promotion.</p>
-                </div>
-                
-                <div>
-                    <h3 class="text-lg font-bold mb-4">Quick Links</h3>
-                    <ul class="space-y-2">
-                        <li><a href="#" class="text-gray-300 hover:text-white transition">Home</a></li>
-                        <li><a href="#news" class="text-gray-300 hover:text-white transition">News</a></li>
-                        <li><a href="#products" class="text-gray-300 hover:text-white transition">Products</a></li>
-                        <li><a href="#promotion" class="text-gray-300 hover:text-white transition">Promotions</a></li>
-                    </ul>
-                </div>
-                
-                <div>
-                    <h3 class="text-lg font-bold mb-4">Company</h3>
-                    <ul class="space-y-2">
-                        <li><a href="#about" class="text-gray-300 hover:text-white transition">About Us</a></li>
-                        <li><a href="#contact" class="text-gray-300 hover:text-white transition">Contact</a></li>
-                        <li><a href="#" class="text-gray-300 hover:text-white transition">Privacy Policy</a></li>
-                        <li><a href="#" class="text-gray-300 hover:text-white transition">Terms of Service</a></li>
-                    </ul>
-                </div>
-                
-                <div>
-                    <h3 class="text-lg font-bold mb-4">Newsletter</h3>
-                    <p class="text-gray-300 mb-4">Subscribe to our newsletter for the latest updates.</p>
-                    <form class="flex">
-                        <input type="email" placeholder="walcotttinotv@gmail.com" class="px-4 py-2 w-full rounded-l-lg text-gray-800 focus:outline-none">
-                        <button type="submit" class="bg-accent hover:bg-blue-500 px-4 py-2 rounded-r-lg transition duration-300">
-                            <i class="fas fa-paper-plane"></i>
-                        </button>
-                    </form>
-                </div>
-            </div>
-            
-            <div class="border-t border-gray-700 mt-8 pt-6 flex flex-col md:flex-row justify-between items-center">
-                <p class="text-gray-300 text-sm">© 2024 walcotttinotv. All rights reserved.</p>
-                <div class="flex space-x-4 mt-4 md:mt-0">
-                    <a href="https://www.instagram.com/walcotttinotv?igsh=MW44Z2QwY2toN2YyNg==" target="_blank" class="text-gray-300 hover:text-white transition">
-                        <i class="fab fa-instagram"></i>
-                    </a>
-                    <a href="https://www.facebook.com/share/1CSYTgmTX9/" target="_blank" class="text-gray-300 hover:text-white transition">
-                        <i class="fab fa-facebook-f"></i>
-                    </a>
-                    <a href="https://x.com/walcotttv2025?t=A--G6KfJcBGf2kz_PAnzlw&s=09" target="_blank" class="text-gray-300 hover:text-white transition">
-                        <i class="fab fa-twitter"></i>
-                    </a>
-                </div>
-            </div>
-        </div>
-    </footer>
+  <section id="about">
+    <h2>About Us</h2>
+    <p>Walcottinotv is committed to promoting sports excellence, showcasing talents, and connecting fans with the best sportswear.</p>
+  </section>
 
-    <script>
-        // Mobile menu toggle
-        document.getElementById('menu-toggle').addEventListener('click', function() {
-            document.getElementById('mobile-menu').classList.toggle('hidden');
+  <section id="contact">
+    <h2>Contact Us</h2>   
+     <p><strong>Address:</strong> B5, Legacy Estate, Kolapo Ishola GRA, Akobo, Ibadan, Oyo State, Nigeria.</p>
+    <p><strong>Phone:</strong> +2348137208793, +2349045548253</p>
+    <p>
+      <a href="https://www.instagram.com/walcotttinotv" target="_blank">Instagram</a> |
+      <a href="https://www.facebook.com/share/1CSYTgmTX9/" target="_blank">Facebook</a> |
+      <a href="https://x.com/walcotttv2025" target="_blank">X (Twitter)</a>
+    </p>
+  </section>
+
+  <footer>
+    &copy; 2025 Walcottinotv. All rights reserved.
+  </footer>
+
+  <script>
+    const gnewsAPI = 'https://gnews.io/api/v4/top-headlines?category=sports&lang=en&max=15&apikey=3f48df677f1a4c6f3178add06eecb2d1';
+    const footballAPI = 'https://v3.football.api-sports.io/news';
+    const newsContainer = document.getElementById('news-container');
+
+    async function fetchGNews() {
+      try {
+        const res = await fetch(gnewsAPI);
+        const data = await res.json();
+        return data.articles.map(article => ({
+          title: article.title,
+          image: article.image,
+          description: article.description,
+          content: article.content
+        }));
+      } catch (e) {
+        return [];
+      }
+    }
+
+    async function fetchFootballNews() {
+      try {
+        const res = await fetch(footballAPI, { 
+       headers: { 'x-apisports-key': '4da5df5d5d5d09167802a3803aebede3' }
         });
+        const data = await res.json();
+        return data.response.map(item => ({
+          title: item.title,
+          image: item.image || 'https://via.placeholder.com/300x180',
+          description: item.summary || '',
+          content: item.summary || ''
+        }));
+      } catch (e) {
+        return [];
+      }
+    }
 
-        // News tab functionality
-        const newsTabs = document.querySelectorAll('.news-tab');
-        newsTabs.forEach(tab => {
-            tab.addEventListener('click', function() {
-                newsTabs.forEach(t => t.classList.remove('active'));
-                this.classList.add('active');
-                const category = this.dataset.category;
-                fetchNews(category);
-            });
-        });
+    async function loadNews() {
+      const [gnews, footballNews] = await Promise.all([fetchGNews(), fetchFootballNews()]);
+      const allNews = [...gnews, ...footballNews].slice(0, 
+          html
+      const allNews = [...gnews, ...footballNews].slice(0, 30);
 
-        // Talent form other field toggle
-        document.getElementById('talent-type').addEventListener('change', function() {
-            const otherContainer = document.getElementById('other-talent-container');
-            if (this.value === 'other') {
-                otherContainer.classList.remove('hidden');
-            } else {
-                otherContainer.classList.add('hidden');
-            }
-        });
+      newsContainer.innerHTML = '';
+      allNews.forEach(item => {
+        const div = document.createElement('div');
+        div.className = 'news-item';
+        div.innerHTML = `
+          <img src="item.image" alt="news" />
+          <h3>{item.title}</h3>
+          <p>item.description</p>
+          <details>
+            <summary style="color:#2563eb; cursor:pointer;">Read more</summary>
+            <p style="padding:10px;">{item.content || 'Full content not available.'}</p>
+          </details>
+        `;
+        newsContainer.appendChild(div);
+      });
+    }
 
-        // Form submissions
-        document.getElementById('talent-form').addEventListener('submit', function(e) {
-            e.preventDefault();
-            // In a real app, you would send this data to your server
-            this.reset();
-            document.getElementById('success-message').classList.remove('hidden');
-            setTimeout(() => {
-                document.getElementById('success-message').classList.add('hidden');
-            }, 5000);
-        });
+    loadNews();
+  </script>
 
-        document.getElementById('contact-form').addEventListener('submit', function(e) {
-            e.preventDefault();
-            // In a real app, you would send this data to your server
-            this.reset();
-            document.getElementById('contact-success').classList.remove('hidden');
-            setTimeout(() => {
-                document.getElementById('contact-success').classList.add('hidden');
-            }, 5000);
-        });
-
-        // Load more news button
-        document.getElementById('load-more-news').addEventListener('click', function() {
-            // In a real app, this would load more news from the API
-            alert('Loading more news...');
-        });
-
-        // Fetch news from GNews API
-        async function fetchNews(category = 'general') {
-            const apiKey = '3f48df677f1a4c6f3178add06eecb2d1';
-            let query = 'sports';
-            
-            // Adjust query based on category
-            if (category === 'wrestling') query = 'wrestling';
-            else if (category === 'basketball') query = 'basketball';
-            else if (category === 'football') query = 'football';
-            else if (category === 'boxing') query = 'boxing';
-            else if (category === 'cycling') query = 'bike racing OR cycling';
-            else if (category === 'local') query = 'Nigeria sports';
-            
-            try {
-                const response = await fetch(`https://gnews.io/api/v4/search?q=${query}&lang=en&country=us&max=10&apikey=${apiKey}`);
-                const data = await response.json();
-                
-                const newsContainer = document.getElementById('news-container');
-                const featuredNewsContainer = document.getElementById('featured-news');
-                
-                // Clear existing news
-                newsContainer.innerHTML = '';
-                
-                // Display news
-                data.articles.forEach((article, index) => {
-                    const newsCard = document.createElement('div');
-                    newsCard.className = 'news-card bg-white rounded-lg overflow-hidden shadow-md';
-                    newsCard.innerHTML = `
-                        <div class="overflow-hidden h-48">
-                            <img src="${article.image || 'https://via.placeholder.com/400x200?text=No+Image'}" alt="${article.title}" class="news-image w-full h-full object-cover transition duration-300">
-                        </div>
-                        <div class="p-4">
-                            <span class="text-xs text-gray-500">${new Date(article.publishedAt).toLocaleDateString()}</span>
-                            <h3 class="font-bold text-lg mb-2">${article.title}</h3>
-                            <p class="text-gray-600 mb-4">${article.description || 'No description available.'}</p>
-                            <a href="${article.url}" target="_blank" class="text-accent font-medium hover:underline">Read more</a>
-                        </div>
-                    `;
-                    
-                    newsContainer.appendChild(newsCard);
-                    
-                    // Add first 3 articles to featured news on homepage
-                    if (index < 3 && featuredNewsContainer) {
-                        const featuredCard = document.createElement('div');
-                        featuredCard.className = 'news-card bg-white rounded-lg overflow-hidden shadow-md';
-                        featuredCard.innerHTML = `
-                            <div class="overflow-hidden h-48">
-                                <img src="${article.image || 'https://via.placeholder.com/400x200?text=No+Image'}" alt="${article.title}" class="news-image w-full h-full object-cover transition duration-300">
-                            </div>
-                            <div class="p-4">
-                                <span class="text-xs text-gray-500">${new Date(article.publishedAt).toLocaleDateString()}</span>
-                                <h3 class="font-bold text-lg mb-2">${article.title}</h3>
-                                <p class="text-gray-600 mb-4">${article.description || 'No description available.'}</p>
-                                <a href="${article.url}" target="_blank" class="text-accent font-medium hover:underline">Read more</a>
-                            </div>
-                        `;
-                        featuredNewsContainer.appendChild(featuredCard);
-                    }
-                });
-                
-                // If no articles found
-                if (data.articles.length === 0) {
-                    newsContainer.innerHTML = '<p class="text-center col-span-3 py-8 text-gray-600">No news articles found for this category.</p>';
-                }
-                
-            } catch (error) {
-                console.error('Error fetching news:', error);
-                const newsContainer = document.getElementById('news-container');
-                newsContainer.innerHTML = '<p class="text-center col-span-3 py-8 text-red-500">Failed to load news. Please try again later.</p>';
-            }
-        }
-
-        // Fetch news when page loads
-        document.addEventListener('DOMContentLoaded', function() {
-            fetchNews();
-        });
-    </script>
 </body>
 </html>
+
+
+---
+                                              
